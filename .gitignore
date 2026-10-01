@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+.DS_Store
+Thumbs.db
+deletions.jsonl
+smoke_result.txt
+user_rules.yaml
+assets/build_info.txt
+*.spec

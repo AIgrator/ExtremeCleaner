@@ -1,0 +1,122 @@
+# CLI AI agents: session histories (YOUR context). All manual review — never auto-deleted.
+# Paths verified from official docs/sources. Settings/keys live next to sessions — don't hand-delete.
+- id: qwen-sessions
+  name: Qwen Code sessions
+  path: "%USERPROFILE%/.qwen/projects"
+  kind: manual
+  category: devtools
+  program: Qwen Code
+  safe: careful
+  tier: userdata
+  describe: "Per-project chats (JSONL). settings.json stays outside — untouched. file-history auto-cleans after 30d"
+  os: [windows]
+- id: qwen-history
+  name: Qwen Code rewind backups
+  path: "%USERPROFILE%/.qwen/file-history"
+  kind: manual
+  category: devtools
+  program: Qwen Code
+  safe: careful
+  tier: userdata
+  describe: "Session backups for /rewind (cleanupPeriodDays, default 30d)"
+  os: [windows]
+- id: gemini-sessions
+  name: Gemini CLI sessions
+  path: "%USERPROFILE%/.gemini/tmp"
+  kind: manual
+  category: devtools
+  program: Gemini CLI
+  safe: careful
+  tier: userdata
+  describe: "Per-project chats + shell history. Auto-retention 30d (sessionRetention). settings.json untouched"
+  os: [windows]
+- id: codex-sessions
+  name: Codex CLI sessions
+  path: "%USERPROFILE%/.codex/sessions"
+  kind: manual
+  category: devtools
+  program: Codex CLI
+  safe: careful
+  tier: userdata
+  describe: "Rollout JSONL (+zst). Official flow: codex archive <id>; old: find -mtime +30 -delete"
+  os: [windows]
+- id: copilot-sessions
+  name: Copilot CLI sessions
+  path: "%USERPROFILE%/.copilot/session-state"
+  kind: manual
+  category: devtools
+  program: Copilot CLI
+  safe: careful
+  tier: userdata
+  describe: "YAML+JSONL session state"
+  os: [windows]
+- id: kimi-sessions
+  name: Kimi CLI sessions
+  path: "%USERPROFILE%/.kimi/sessions"
+  kind: manual
+  category: devtools
+  program: Kimi CLI
+  safe: careful
+  tier: userdata
+  describe: "wire.jsonl event streams per working dir; kimi export <id> for backup"
+  os: [windows]
+- id: kimi-data
+  name: Kimi CLI data
+  path: "%USERPROFILE%/.kimi-code"
+  kind: manual
+  category: devtools
+  program: Kimi CLI
+  safe: careful
+  tier: userdata
+  describe: "config.toml + session_index + logs. Review before touching config"
+  os: [windows]
+- id: cline-tasks
+  name: Cline tasks
+  path: "%APPDATA%/Code/User/globalStorage/saoudrizwan.claude-dev/tasks"
+  kind: manual
+  category: devtools
+  program: Cline
+  safe: careful
+  tier: userdata
+  describe: "Per-task histories in VS Code globalStorage"
+  os: [windows]
+- id: roo-tasks
+  name: Roo Code tasks
+  path: "%APPDATA%/Code/User/globalStorage/rooveterinaryinc.roo-cline/tasks"
+  kind: manual
+  category: devtools
+  program: Roo Code
+  safe: careful
+  tier: userdata
+  describe: "Per-task histories in VS Code globalStorage"
+  os: [windows]
+- id: kilo-ide-tasks
+  name: Kilo IDE tasks
+  path: "%APPDATA%/Code/User/globalStorage/kilocode.kilo-code/tasks"
+  kind: manual
+  category: devtools
+  program: Kilo Code
+  safe: careful
+  tier: userdata
+  describe: "Legacy v5 leftovers can be GBs and are never auto-cleaned (official issue)"
+  os: [windows]
+- id: kiro-data
+  name: Kiro data (~/.kiro)
+  path: "%USERPROFILE%/.kiro"
+  kind: manual
+  category: devtools
+  program: Kiro
+  safe: careful
+  tier: userdata
+  describe: "SQLite session DB + agents. Review, don't wipe blindly"
+  os: [windows]
+- id: antigravity-data
+  name: Antigravity data
+  path: "%USERPROFILE%/.gemini/antigravity"
+  kind: manual
+  category: devtools
+  program: Antigravity
+  safe: careful
+  tier: userdata
+  describe: "PB + brain artifacts of Google's agent IDE"
+  os: [windows]

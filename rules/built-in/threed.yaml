@@ -1,0 +1,34 @@
+# 3D & CAD: asset indexes, journals, render caches. Projects/presets never listed here.
+- id: blender-cache
+  name: Blender asset index cache
+  path: "%LOCALAPPDATA%/Blender Foundation/Blender/Cache"
+  kind: clean_contents
+  category: threed
+  program: Blender
+  safe: safe
+  tier: safe
+  describe: "Asset library index only (official docs). Autosaves/temp live in your temp dir — check Render output paths yourself"
+  os: [windows]
+- id: revit-journals
+  name: Revit journals/dumps
+  path: "%LOCALAPPDATA%/Autodesk/Revit"
+  kind: clean_selected
+  subpaths: ["*/Journals"]
+  category: threed
+  program: Autodesk
+  safe: safe
+  tier: safe
+  describe: "TXT journal per launch + worker logs + DMP crashes (official Autodesk docs). Close Revit first"
+  processes: [revit.exe]
+  os: [windows]
+- id: daz-cache
+  name: DAZ Studio temp caches
+  path: "%APPDATA%/DAZ 3D"
+  kind: clean_selected
+  subpaths: ["Studio4/temp", "dson/cache"]
+  category: threed
+  program: DAZ 3D
+  safe: safe
+  tier: safe
+  describe: "Official support recipe: delete files inside these two folders. Content library untouched"
+  os: [windows]

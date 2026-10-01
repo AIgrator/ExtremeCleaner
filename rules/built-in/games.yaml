@@ -1,0 +1,263 @@
+# Games: shader/pipeline caches. Safe, rebuilt on next launch (first start slower).
+- id: steam-shadercache
+  name: Steam shader cache
+  path: "C:/Program Files (x86)/Steam/steamapps/shadercache"
+  kind: clean_contents
+  category: games
+  safe: safe
+  describe: "Vulkan precompiled shaders; single files up to tens of GB. Optionally disable shader preload in Steam settings"
+  os: [windows]
+- id: steam-installed
+  name: Installed Steam games (via manifests)
+  path: ""
+  kind: clean_selected
+  discover: steam
+  category: games
+  program: Steam
+  safe: careful
+  tier: userdata
+  describe: "Exact list from libraryfolders.vdf + appmanifests (no 100GB walk). Uninstall via Steam; saves stay in Steam Cloud/userdata"
+  os: [windows]
+- id: gog-installed
+  name: Installed GOG games (via galaxy.db)
+  path: ""
+  kind: clean_selected
+  discover: gog
+  category: games
+  program: GOG
+  safe: careful
+  tier: userdata
+  describe: "Read from Galaxy database (missing-tolerant across Galaxy versions). Uninstall via Galaxy; DRM-free games run standalone"
+  os: [windows]
+- id: epic-installed
+  name: Installed Epic games (via manifests)
+  path: ""
+  kind: clean_selected
+  discover: epic
+  category: games
+  program: Epic
+  safe: careful
+  tier: userdata
+  describe: "Read from *.item manifests (no disk walk). Uninstall via Epic launcher"
+  os: [windows]
+- id: fivem-cache
+  name: FiveM cache/logs
+  path: ""
+  kind: clean_contents
+  category: games
+  program: FiveM
+  safe: safe
+  tier: safe
+  describe: "Quit FiveM+GTA first (official troubleshooting). NEVER touch game-storage/nui-storage — reinstall otherwise"
+  os: [windows]
+  options:
+    - id: cache
+      name: Resource caches
+      path: "%LOCALAPPDATA%/FiveM/FiveM.app/data"
+      kind: clean_selected
+      subpaths: [cache, server-cache, server-cache-priv]
+      safe: safe
+      describe: "Per-server assets, redownload on connect"
+    - id: logs
+      name: Logs
+      path: "%LOCALAPPDATA%/FiveM/FiveM.app"
+      kind: clean_selected
+      subpaths: [logs, crashes]
+      safe: safe
+      describe: ""
+- id: pubg-data
+  name: PUBG leftovers (TslGame)
+  path: "%LOCALAPPDATA%/TslGame"
+  kind: manual
+  category: games
+  program: PUBG
+  safe: careful
+  tier: userdata
+  describe: "Replays in Saved/Demos (GBs), configs. Official clean-reinstall guide deletes this whole folder"
+  os: [windows]
+- id: ea-app
+  name: EA App cache/logs
+  path: ""
+  kind: clean_contents
+  category: games
+  program: Electronic Arts
+  safe: safe
+  tier: safe
+  describe: "Quit EA App first (or use Help > App Recovery > Clear Cache). Games and cloud saves untouched"
+  os: [windows]
+  options:
+    - id: programdata
+      name: ProgramData cache
+      path: "%ProgramData%/EA Desktop"
+      kind: clean_contents
+      safe: safe
+      describe: ""
+    - id: localdata
+      name: Local cache
+      path: "%LOCALAPPDATA%/EA Desktop"
+      kind: clean_contents
+      safe: safe
+      describe: ""
+    - id: logs
+      name: Logs
+      path: "%LOCALAPPDATA%/Electronic Arts/EA Desktop/Logs"
+      kind: clean_contents
+      safe: safe
+      describe: ""
+    - id: launchhelper
+      name: Launch helper cache
+      path: "%LOCALAPPDATA%/EALaunchHelper/cache"
+      kind: clean_contents
+      safe: safe
+      describe: ""
+- id: playnite-data
+  name: Playnite library data
+  path: "%APPDATA%/Playnite"
+  kind: manual
+  category: games
+  program: Playnite
+  safe: careful
+  tier: userdata
+  describe: "Local library DB + cover art (GBs for big collections). Zero telemetry, all local — review yourself"
+  os: [windows]
+- id: minecraft-data
+  tier: safe
+  name: Minecraft data (~/.minecraft)
+  path: ""
+  kind: clean_contents
+  category: games
+  program: Minecraft
+  safe: careful
+  describe: "Launcher redownloads versions/assets. Worlds/saves live here too — NEVER touch saves/"
+  os: [windows]
+  options:
+    - id: versions
+      name: Game versions
+      path: "%APPDATA%/.minecraft/versions"
+      kind: clean_contents
+      safe: careful
+      describe: "Old client jars; launcher refetches on play"
+    - id: assets
+      name: Assets (sounds/textures)
+      path: "%APPDATA%/.minecraft/assets"
+      kind: clean_contents
+      safe: careful
+      describe: "Redownloaded indexes/objects"
+    - id: logs
+      name: Logs
+      path: "%APPDATA%/.minecraft/logs"
+      kind: clean_contents
+      safe: safe
+      describe: "Plain crash/debug logs"
+- id: epic-launcher
+  tier: safe
+  name: Epic Games launcher data
+  path: ""
+  kind: clean_contents
+  category: games
+  program: Epic
+  safe: careful
+  describe: "Quit Epic launcher first"
+  os: [windows]
+  options:
+    - id: webcache
+      name: Web caches
+      path: "%LOCALAPPDATA%/EpicGamesLauncher/Saved"
+      kind: clean_selected
+      subpaths: [webcache, webcache_4430, logs]
+      safe: safe
+      describe: "Chromium caches + logs"
+    - id: vault
+      name: Vault cache (marketplace)
+      path: "%LOCALAPPDATA%/EpicGamesLauncher/VaultCache"
+      kind: clean_contents
+      safe: careful
+      describe: "Downloaded marketplace content copies; projects referencing them refetch"
+- id: steam-shadercache-x86-alt
+  name: Steam shader cache (alt drive layout)
+  path: "%ProgramFiles%/Steam/steamapps/shadercache"
+  kind: clean_contents
+  category: games
+  safe: safe
+  describe: "Same cache, 64-bit Program Files layout"
+  os: [windows]
+
+- id: blizzard-cache
+  name: Battle.net launcher cache
+  path: "%LOCALAPPDATA%/Battle.net"
+  kind: clean_selected
+  subpaths: [BrowserCaches, Errors]
+  category: games
+  program: Blizzard
+  safe: safe
+  describe: "Quit launcher first; game installs untouched"
+  os: [windows]
+- id: blizzard-telemetry
+  name: Battle.net telemetry
+  path: "%APPDATA%/Battle.net/Telemetry"
+  kind: clean_contents
+  category: games
+  program: Blizzard
+  safe: safe
+  describe: "Upload telemetry, safe to drop"
+  os: [windows]
+- id: gog-galaxy
+  name: GOG Galaxy maintenance
+  path: "%ProgramData%/GOG.com/Galaxy"
+  kind: clean_selected
+  subpaths: [logs, webcache, temp, crashdumps]
+  category: games
+  program: GOG
+  safe: safe
+  describe: "Logs/webcache/updater temp; may need admin for ProgramData"
+  os: [windows]
+- id: ubisoft-connect
+  name: Ubisoft Connect cache/logs
+  path: "%ProgramFiles%/Ubisoft/Ubisoft Game Launcher"
+  kind: clean_selected
+  subpaths: [Logs, Cache]
+  category: games
+  program: Ubisoft
+  safe: safe
+  describe: "Program Files location — needs admin; game installs untouched"
+  os: [windows]
+- id: ubisoft-installers
+  tier: safe
+  name: Ubisoft cached installers
+  path: "%ProgramFiles%/Ubisoft/Ubisoft Game Launcher/Cache/Installers"
+  kind: clean_contents
+  category: games
+  program: Ubisoft
+  safe: careful
+  describe: "Redownloaded on repair/verify; needs admin"
+  os: [windows]
+- id: wargaming-cache
+  name: Wargaming.net cache
+  path: "%APPDATA%/Wargaming.net/WorldofTanks"
+  kind: clean_selected
+  subpaths: ["*_Cache", "Profile/Cef_Cache"]
+  category: games
+  program: Wargaming
+  safe: safe
+  describe: "Launcher/CEF caches; settings and game untouched"
+  os: [windows]
+- id: twitch-cache
+  name: Twitch app cache/dumps
+  path: "%APPDATA%/Twitch/Electron"
+  kind: clean_selected
+  subpaths: ["*cache", "Dumps"]
+  category: games
+  program: Twitch
+  safe: safe
+  describe: "Quit Twitch first"
+  os: [windows]
+- id: moonlight-cache
+  name: Moonlight boxart cache
+  path: "%LOCALAPPDATA%/Moonlight Game Streaming Project/Moonlight"
+  kind: clean_selected
+  subpaths: [cache]
+  category: games
+  program: Moonlight
+  safe: safe
+  describe: "Game boxart, refetched from host"
+  os: [windows]

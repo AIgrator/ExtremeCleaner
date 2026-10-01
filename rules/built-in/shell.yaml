@@ -1,0 +1,11 @@
+# Windows shell places everyone expects from a cleaner.
+- id: recycle-bin
+  name: Recycle Bin (C:)
+  path: "C:/$Recycle.Bin"
+  kind: empty_bin
+  category: cache
+  pin: true
+  safe: careful
+  tier: safe
+  describe: "Files YOU deleted yourself. Emptying is irreversible — confirm each time"
+  os: [windows]

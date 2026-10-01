@@ -1,0 +1,119 @@
+# Hypervisors & emulators: VM logs are trash; snapshots/checkpoints/vhdx are user data.
+# Golden rule: snapshots delete ONLY via the VM manager (merge) — never by hand,
+# or newer snapshots and current state break. vhdx never shrinks itself — compact.
+- id: virtualbox-discovered
+  program: VirtualBox
+  name: VirtualBox VMs (any folder, via registry)
+  path: ""
+  kind: clean_selected
+  discover: virtualbox
+  category: hypervisors
+  safe: careful
+  describe: "VM folders may live anywhere — ~/.VirtualBox/VirtualBox.xml knows all. Logs safe, snapshots via manager only."
+  os: [windows]
+- id: virtualbox-home-logs
+  program: VirtualBox
+  name: VirtualBox service logs
+  path: ""
+  kind: old_versions
+  parent: "%USERPROFILE%/.VirtualBox"
+  match: "*.log*"
+  keep: []
+  category: hypervisors
+  safe: safe
+  describe: "VBoxSVC/selectorwindow rotation, safe to drop"
+  os: [windows]
+- id: virtualbox-logs
+  program: VirtualBox
+  name: VirtualBox VM logs
+  path: "%USERPROFILE%/VirtualBox VMs"
+  kind: clean_selected
+  subpaths: ["*/Logs/*", "*.log"]
+  category: hypervisors
+  safe: safe
+  describe: "Per-VM Logs/*.log, rotate freely"
+  os: [windows]
+- id: virtualbox-snapshots
+  program: VirtualBox
+  name: VirtualBox snapshots
+  path: "%USERPROFILE%/VirtualBox VMs"
+  kind: run_command
+  command: "VirtualBox Manager > Snapshots > Delete (merges). NEVER delete files by hand"
+  category: hypervisors
+  safe: careful
+  describe: "SIZE ONLY + in-manager delete. Deleting by hand breaks newer snapshots and current state"
+  os: [windows]
+- id: vmware-logs
+  program: VMware
+  name: VMware VM logs
+  path: "%USERPROFILE%/Documents/Virtual Machines"
+  kind: clean_selected
+  subpaths: ["*/*.log"]
+  category: hypervisors
+  safe: safe
+  describe: "vmware*.log per VM, rotate freely"
+  os: [windows]
+- id: vmware-snapshots
+  program: VMware
+  name: VMware snapshots
+  path: "%USERPROFILE%/Documents/Virtual Machines"
+  kind: run_command
+  command: "VM > Snapshot > Snapshot Manager > Delete"
+  category: hypervisors
+  safe: careful
+  describe: "SIZE ONLY + in-manager delete (.vmsn + delta vmdk)"
+  os: [windows]
+- id: hyperv-checkpoints
+  name: Hyper-V checkpoints
+  path: "C:/ProgramData/Microsoft/Windows/Hyper-V"
+  kind: run_command
+  command: "Hyper-V Manager > Checkpoints > Delete Checkpoint (merges vhdx)"
+  category: hypervisors
+  safe: careful
+  describe: "SIZE ONLY + in-manager delete. Needs admin to even read; errors in scan are normal"
+  os: [windows]
+- id: docker-prune
+  program: Docker
+  name: Docker unused data
+  path: "%LOCALAPPDATA%/Docker"
+  kind: run_command
+  command: "docker system prune"
+  category: hypervisors
+  safe: careful
+  describe: "SIZE IS APPROX (real data in vhdx). Removes stopped containers, unused networks, dangling images"
+  os: [windows]
+- id: docker-data-vhdx
+  program: Docker
+  name: Docker Desktop data disk (vhdx)
+  path: ""
+  kind: run_command
+  command: "wsl --shutdown, then Optimize-VHD/diskpart compact (admin) — vhdx never shrinks itself"
+  category: hypervisors
+  safe: careful
+  describe: "SIZE ONLY + compact. Deleting vhdx kills all images/volumes"
+  os: [windows]
+  options:
+    - id: data-layout
+      name: Data disk (wsl/data layout)
+      path: "%LOCALAPPDATA%/Docker/wsl/data"
+      kind: run_command
+      command: "wsl --shutdown, then compact ext4.vhdx"
+      safe: careful
+      describe: "Older Docker Desktop layout"
+    - id: disk-layout
+      name: Data disk (wsl/disk layout)
+      path: "%LOCALAPPDATA%/Docker/wsl/disk"
+      kind: run_command
+      command: "wsl --shutdown, then compact docker_data.vhdx"
+      safe: careful
+      describe: "Newer Docker Desktop layout"
+- id: android-avd
+  name: Android emulator images (AVD)
+  path: "%USERPROFILE%/.android/avd"
+  kind: run_command
+  command: "Device Manager > ... > Wipe Data (reset) or Delete unused device. NEVER delete files by hand"
+  category: hypervisors
+  safe: careful
+  docs: "https://developer.android.com/studio/run/managing-avds.html"
+  describe: "SIZE ONLY + in-manager wipe. 3-20 GB per device (your Medium_Phone grew to ~9 GB)"
+  os: [windows]

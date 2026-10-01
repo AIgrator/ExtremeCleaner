@@ -1,0 +1,8 @@
+# Drop your own *.yaml files here. Example:
+# - id: my-rust-target
+#   name: My Rust target/
+#   path: "D:/code/myapp/target"
+#   kind: clean_contents
+#   safe: safe
+#   describe: "cargo rebuilds it"
+#   os: [windows]

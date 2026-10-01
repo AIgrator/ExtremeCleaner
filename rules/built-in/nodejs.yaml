@@ -1,0 +1,11 @@
+# Node.js stack (Windows paths; same idea on linux/darwin with ~/.npm)
+- id: npm-cache
+  name: NPM cache
+  path: "%LOCALAPPDATA%/npm-cache"
+  kind: run_command
+  command: "npm cache clean --force"
+  exec: true
+  group: Node.js
+  safe: safe
+  describe: "Redownloaded on next install, projects not affected"
+  os: [windows]

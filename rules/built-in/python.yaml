@@ -1,0 +1,11 @@
+# Python stack
+- id: pip-cache
+  name: pip cache
+  path: "%LOCALAPPDATA%/pip/cache"
+  kind: run_command
+  command: "pip cache purge"
+  exec: true
+  group: Python
+  safe: safe
+  describe: "Safe, redownloaded on next pip install"
+  os: [windows]

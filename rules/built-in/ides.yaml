@@ -1,0 +1,175 @@
+# More IDEs and dev-adjacent apps. Category: devtools (office goes to other).
+- id: eclipse-workspace
+  name: Eclipse workspace metadata
+  path: "%USERPROFILE%/eclipse-workspace/.metadata"
+  kind: run_command
+  command: "eclipse -clean, then Project > Clean; Remote Systems > File Cache > Clear Cached Files"
+  category: devtools
+  safe: careful
+  describe: "SIZE ONLY + in-IDE cleanup. NEVER delete .metadata wholesale — project refs and contents die"
+  os: [windows]
+- id: netbeans-cache
+  name: NetBeans cache
+  path: "%LOCALAPPDATA%/NetBeans/Cache"
+  kind: clean_contents
+  category: devtools
+  safe: safe
+  describe: "Close NetBeans first; versioned subdirs, fixes duplicate-classes glitches too"
+  processes: [netbeans.exe]
+  os: [windows]
+- id: postman-cache
+  name: Postman cache (Electron)
+  path: "%APPDATA%/Postman"
+  kind: clean_selected
+  subpaths: [Cache, Code Cache, GPUCache]
+  category: devtools
+  safe: safe
+  tier: safe
+  describe: "Quit Postman first. Chromium caches, 1GB+ over time"
+  os: [windows]
+- id: postman-partitions
+  name: Postman responses (Partitions)
+  path: "%APPDATA%/Postman/Partitions"
+  kind: clean_contents
+  category: devtools
+  safe: careful
+  tier: userdata
+  describe: "YOUR cached HTTP responses/workspace logs. Program never deletes this — open the folder and decide yourself"
+  os: [windows]
+- id: figma-cache
+  name: Figma desktop cache
+  path: "%APPDATA%/Figma"
+  kind: clean_selected
+  subpaths: [Cache, GPUCache]
+  category: devtools
+  safe: safe
+  describe: "Quit Figma first (official: delete Desktop/DesktopProfile/font_cache too). Cloud drafts untouched"
+  os: [windows]
+- id: zed-cache
+  name: Zed editor cache
+  path: "%LOCALAPPDATA%/Zed"
+  kind: clean_selected
+  subpaths: [node, logs]
+  category: devtools
+  safe: safe
+  describe: "node/ = npm tarballs (4GB cases), logs = language-server diagnostics. Settings/extensions kept"
+  os: [windows]
+- id: office-filecache
+  name: Office file cache (M365)
+  path: "%LOCALAPPDATA%/Microsoft/Office/16.0/OfficeFileCache"
+  kind: run_command
+  command: "Word/Excel > File > Options > Save > Cache Settings > Delete cached files"
+  category: other
+  safe: careful
+  describe: "SIZE ONLY + in-app cleanup. 10GB+ of SharePoint/OneDrive recent files. NEVER by hand — Office errors"
+  os: [windows]
+- id: itunes-backups
+  name: iPhone backups (iTunes)
+  path: "%APPDATA%/Apple Computer/MobileSync/Backup"
+  kind: run_command
+  command: "iTunes/Apple Devices > Preferences > Devices > Delete old backups"
+  category: other
+  safe: careful
+  describe: "SIZE ONLY + in-app delete. Full device images, tens of GB — keep at least the latest"
+  os: [windows]
+
+- id: libreoffice-cache
+  name: LibreOffice cache/temp
+  path: "%APPDATA%/LibreOffice"
+  kind: clean_selected
+  subpaths: ["*/cache", "*/crash", "*/User/temp"]
+  category: other
+  program: LibreOffice
+  safe: safe
+  describe: "Close LibreOffice first; docs kept (backup/ untouched)"
+  processes: [soffice.exe]
+  os: [windows]
+- id: onenote-cache
+  name: OneNote Store cache
+  path: "%LOCALAPPDATA%/Packages/Microsoft.Office.OneNote_8wekyb3d8bbwe/LocalState/AppData/Local/Office/16.0/WebServiceCache"
+  kind: clean_contents
+  category: other
+  program: Microsoft
+  safe: careful
+  describe: "Only WebServiceCache — never wipe the whole package or notes resync from scratch"
+  os: [windows]
+- id: outlook-temp
+  name: Outlook attachment temp
+  path: "%LOCALAPPDATA%/Microsoft/Windows/INetCache/Content.Outlook"
+  kind: clean_contents
+  category: other
+  program: Microsoft
+  safe: careful
+  describe: "Copies of opened attachments; originals stay in mailbox"
+  os: [windows]
+- id: dropbox-logs
+  name: Dropbox logs
+  path: "%APPDATA%/Dropbox"
+  kind: clean_selected
+  subpaths: [logs]
+  category: other
+  program: Dropbox
+  safe: safe
+  describe: "Logs only — NEVER touch Filecache.db/SigStore.db (sync state)"
+  os: [windows]
+- id: nextcloud-cache
+  name: Nextcloud cache/logs
+  path: ""
+  kind: clean_contents
+  category: other
+  program: Nextcloud
+  safe: safe
+  describe: "Quit client first"
+  os: [windows]
+  options:
+    - id: logs
+      name: Logs
+      path: "%APPDATA%/Nextcloud/Logs"
+      kind: clean_contents
+      safe: safe
+      describe: "Sync client logs"
+    - id: qml
+      name: QML cache
+      path: "%LOCALAPPDATA%/Nextcloud/Cache"
+      kind: clean_contents
+      safe: safe
+      describe: "Interface cache"
+- id: megasync-logs
+  name: MEGA logs/dumps
+  path: "%LOCALAPPDATA%/Mega Limited/MEGAsync"
+  kind: clean_selected
+  subpaths: [logs, crashDumps]
+  category: other
+  program: MEGA
+  safe: safe
+  describe: "Logs only"
+  os: [windows]
+- id: sharex-cache
+  name: ShareX Store cache
+  path: "%LOCALAPPDATA%/Packages/19568ShareX.ShareX_egrzcvs15399j/LocalCache"
+  kind: clean_contents
+  category: other
+  program: ShareX
+  safe: careful
+  describe: "Store version only; classic/portable installs live elsewhere"
+  os: [windows]
+- id: anydesk-traces
+  name: AnyDesk traces
+  path: "%APPDATA%/AnyDesk"
+  kind: clean_selected
+  subpaths: ["ad.trace", "connection_trace.txt"]
+  category: other
+  program: AnyDesk
+  safe: safe
+  describe: "Debug traces, can grow big"
+  os: [windows]
+- id: winrar-tmp
+  name: WinRAR temp files
+  path: "%ProgramFiles%/WinRAR"
+  kind: clean_selected
+  subpaths: ["*.tmp"]
+  category: other
+  program: WinRAR
+  safe: safe
+  describe: "Leftover extraction temps; Program Files needs admin"
+  os: [windows]

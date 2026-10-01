@@ -1,0 +1,158 @@
+# Messengers: media previews and Electron caches bloat to GBs.
+# Rule of thumb: Cache/Code Cache/GPUCache = safe; sessions/keys (tdata!) = never.
+- id: discord-cache
+  name: Discord cache
+  path: "%APPDATA%/discord"
+  kind: clean_selected
+  subpaths: [Cache, Code Cache, GPUCache]
+  category: messengers
+  safe: safe
+  describe: "Close Discord first (incl. tray); messages/servers kept"
+  processes: [discord.exe]
+  os: [windows]
+- id: slack-cache
+  name: Slack cache
+  path: "%APPDATA%/Slack"
+  kind: clean_selected
+  subpaths: [Cache, Code Cache, GPUCache]
+  category: messengers
+  safe: safe
+  describe: "Close Slack first; workspaces kept"
+  processes: [slack.exe]
+  os: [windows]
+- id: skype-cache
+  name: Skype media cache
+  path: "%APPDATA%/Microsoft/Skype for Desktop"
+  kind: clean_selected
+  subpaths: [Cache, Code Cache, GPUCache, Media cache]
+  category: messengers
+  safe: safe
+  describe: "Sent/received photos and voice previews, redownloaded"
+  os: [windows]
+- id: teams-classic-cache
+  program: Teams
+  name: Teams Classic cache
+  path: "%APPDATA%/Microsoft/Teams"
+  kind: clean_selected
+  subpaths: [Cache, blob_storage, databases, GPUCache, IndexedDB, Local Storage, tmp]
+  category: messengers
+  safe: careful
+  describe: "Quit Teams first; chat history intact"
+  os: [windows]
+- id: teams-new-cache
+  program: Teams
+  name: Teams New cache (UWP)
+  path: "%LOCALAPPDATA%/Packages/MSTeams_8wekyb3d8bbwe/LocalCache/Microsoft/MSTeams"
+  kind: clean_contents
+  category: messengers
+  safe: careful
+  describe: "Only LocalCache subfolder — never wipe the whole Packages/MSTeams dir or Teams won't start"
+  os: [windows]
+- id: telegram-cache
+  name: Telegram Desktop media cache
+  path: "%APPDATA%/Telegram Desktop"
+  kind: run_command
+  command: "Telegram > Settings > Advanced > Data and Storage > Manage local storage"
+  category: messengers
+  safe: careful
+  docs: "https://www.youtube.com/watch?v=mokz4RL0zuE"
+  describe: "SIZE ONLY + in-app cleanup. NEVER delete tdata folder — it holds session keys, you will be logged out"
+  os: [windows]
+- id: whatsapp-cache
+  name: WhatsApp Desktop cache
+  path: "%LOCALAPPDATA%/Packages/5319275A.WhatsAppDesktop_cv1g1gvanyjgm/LocalCache"
+  kind: clean_contents
+  category: messengers
+  safe: careful
+  describe: "Store app; quit WhatsApp first, relogin may be needed"
+  os: [windows]
+- id: viber-downloads
+  name: Viber downloads
+  path: "%USERPROFILE%/Documents/ViberDownloads"
+  kind: clean_contents
+  category: messengers
+  safe: careful
+  describe: "Files received in Viber; delete only what you already saved elsewhere"
+  os: [windows]
+- id: zoom-recordings
+  name: Zoom local recordings
+  path: "%USERPROFILE%/Documents/Zoom"
+  kind: run_command
+  command: "Zoom app > Recordings > trash icon (or move elsewhere first)"
+  category: messengers
+  safe: careful
+  describe: "SIZE ONLY + in-app delete. Your own meeting videos (GBs) — not cache, confirm each"
+  os: [windows]
+- id: thunderbird-cache
+  name: Shader cache (Roaming)
+  program: Thunderbird
+  path: "%APPDATA%/Thunderbird/Profiles"
+  kind: clean_selected
+  subpaths: ["*.default*/shader-cache", "*.default*/startupCache"]
+  category: messengers
+  safe: safe
+  describe: "Globbed per profile like Firefox; mails kept. Internet cache (cache2) is in Local"
+  processes: [thunderbird.exe]
+  os: [windows]
+- id: thunderbird-cache-local
+  name: Internet cache (Local)
+  program: Thunderbird
+  path: "%LOCALAPPDATA%/Thunderbird/Profiles"
+  kind: clean_selected
+  subpaths: ["*.default*/cache2", "*.default*/startupCache", "*.default*/thumbnails"]
+  category: messengers
+  safe: safe
+  describe: "cache2 lives in Local, not Roaming (same as Firefox); mails kept"
+  processes: [thunderbird.exe]
+  os: [windows]
+
+- id: signal-cache
+  name: Signal cache
+  path: "%APPDATA%/Signal"
+  kind: clean_selected
+  subpaths: [Cache, Code Cache, GPUCache, blob_storage, Crashpad, Logs]
+  category: messengers
+  program: Signal
+  safe: safe
+  describe: "Quit Signal first; chats/keys kept"
+  os: [windows]
+- id: notion-cache
+  name: Notion cache/logs
+  path: "%APPDATA%/Notion"
+  kind: clean_selected
+  subpaths: ["*Cache", "logs", "partitions/*Cache"]
+  category: messengers
+  program: Notion
+  safe: safe
+  describe: "Quit Notion first; pages live in cloud"
+  os: [windows]
+- id: obsidian-cache
+  name: Obsidian cache/logs
+  path: "%APPDATA%/Obsidian"
+  kind: clean_selected
+  subpaths: ["*cache", "*.log"]
+  category: messengers
+  program: Obsidian
+  safe: safe
+  describe: "Quit Obsidian first; vaults untouched"
+  os: [windows]
+- id: bitwarden-cache
+  name: Bitwarden cache/logs
+  path: "%APPDATA%/Bitwarden"
+  kind: clean_selected
+  subpaths: ["*Cache", "blob_storage", "Logs"]
+  category: messengers
+  program: Bitwarden
+  safe: safe
+  describe: "Only caches/logs listed here — vault (data.json) never touched"
+  os: [windows]
+- id: mailbird-cache
+  name: Mailbird cache
+  path: "%LOCALAPPDATA%/Mailbird"
+  kind: clean_selected
+  subpaths: ["Misc/*cache*", "Misc/Default/*cache*"]
+  category: messengers
+  program: Mailbird
+  safe: safe
+  describe: "Quit Mailbird first; mails kept"
+  os: [windows]

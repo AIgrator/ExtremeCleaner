@@ -1,0 +1,342 @@
+# Browsers tab: NEVER delete profile fully — only cache subpaths per checkbox.
+# Chromium: caches live under User Data/<profile>/ (Default AND Profile 1..N — globbed).
+# Firefox family: cache2/startupCache in %LOCALAPPDATA%, shader-cache in %APPDATA%.
+# Opera: disk Cache in Local, Code Cache/GPU caches in Roaming — split into two rules.
+# *_trace rules (tier: userdata): history/cookies/downloads — size + instructions, never deleted.
+# processes = exe names warned about in confirm dialog while they hold locks.
+- id: chrome-cache-selected
+  tier: safe
+  name: Cache (all profiles)
+  program: Chrome
+  path: "%LOCALAPPDATA%/Google/Chrome/User Data"
+  kind: clean_selected
+  careful_subpaths: [Service Worker, IndexedDB, File System]
+  subpaths: ["*/Cache", "*/Code Cache", "*/GPUCache", "*/DawnGraphiteCache", "*/DawnWebGPUCache", "*/image_cache", "*/AutofillAiModelCache", "*/optimization_guide_hint_cache_store", "*/Service Worker", "*/IndexedDB", "*/File System"]
+  category: browsers
+  safe: safe
+  describe: "Close Chrome first; logins/bookmarks kept"
+  processes: [chrome.exe, googlechrome.exe]
+  os: [windows]
+- id: chrome-browsing-trace
+  tier: userdata
+  name: History & cookies
+  program: Chrome
+  path: "%LOCALAPPDATA%/Google/Chrome/User Data"
+  kind: clean_selected
+  subpaths: ["*/History", "*/Network/Cookies", "*/Cookies", "*/Web Data", "*/Sessions", "*/Login Data"]
+  category: browsers
+  safe: careful
+  processes: [chrome.exe, googlechrome.exe]
+  describe: "Size shown for reference. Clean yourself (Ctrl+Shift+Del): only History + Downloads (+ cached images if wanted). IMPORTANT: cookies, saved passwords, autofill and open tabs are KEEP - never delete them; program never touches these"
+  os: [windows]
+- id: edge-cache-selected
+  tier: safe
+  name: Cache (all profiles)
+  program: Edge
+  path: "%LOCALAPPDATA%/Microsoft/Edge/User Data"
+  kind: clean_selected
+  careful_subpaths: [Service Worker, IndexedDB, File System]
+  subpaths: ["*/Cache", "*/Code Cache", "*/GPUCache", "*/DawnGraphiteCache", "*/DawnWebGPUCache", "*/image_cache", "*/AutofillAiModelCache", "*/optimization_guide_hint_cache_store", "*/Service Worker", "*/IndexedDB", "*/File System"]
+  category: browsers
+  safe: safe
+  describe: "Same engine as Chrome; close Edge first"
+  processes: [msedge.exe]
+  os: [windows]
+- id: edge-browsing-trace
+  tier: userdata
+  name: History & cookies
+  program: Edge
+  path: "%LOCALAPPDATA%/Microsoft/Edge/User Data"
+  kind: clean_selected
+  subpaths: ["*/History", "*/Network/Cookies", "*/Cookies", "*/Web Data", "*/Sessions", "*/Login Data"]
+  category: browsers
+  safe: careful
+  processes: [msedge.exe]
+  describe: "Size shown for reference. Clean yourself (Ctrl+Shift+Del): only History + Downloads (+ cached images if wanted). IMPORTANT: cookies, saved passwords, autofill and open tabs are KEEP - never delete them; program never touches these"
+  os: [windows]
+- id: brave-cache-selected
+  tier: safe
+  name: Cache (all profiles)
+  program: Brave
+  path: "%LOCALAPPDATA%/BraveSoftware/Brave-Browser/User Data"
+  kind: clean_selected
+  careful_subpaths: [Service Worker, IndexedDB, File System]
+  subpaths: ["*/Cache", "*/Code Cache", "*/GPUCache", "*/DawnGraphiteCache", "*/DawnWebGPUCache", "*/image_cache", "*/Service Worker", "*/IndexedDB", "*/File System"]
+  category: browsers
+  safe: safe
+  describe: "Same engine as Chrome; close Brave first"
+  processes: [brave.exe]
+  os: [windows]
+- id: brave-browsing-trace
+  tier: userdata
+  name: History & cookies
+  program: Brave
+  path: "%LOCALAPPDATA%/BraveSoftware/Brave-Browser/User Data"
+  kind: clean_selected
+  subpaths: ["*/History", "*/Network/Cookies", "*/Cookies", "*/Web Data", "*/Sessions"]
+  category: browsers
+  safe: careful
+  processes: [brave.exe]
+  describe: "Size shown for reference. Clean yourself (Ctrl+Shift+Del): only History + Downloads (+ cached images if wanted). IMPORTANT: cookies, saved passwords, autofill and open tabs are KEEP - never delete them; program never touches these"
+  os: [windows]
+- id: opera-cache-selected
+  tier: safe
+  name: Disk cache (Local)
+  program: Opera
+  path: "%LOCALAPPDATA%/Opera Software/Opera Stable"
+  kind: clean_selected
+  subpaths: ["*/Cache", "*/System Cache"]
+  category: browsers
+  safe: safe
+  describe: "Disk cache lives in Local; profile is Roaming — profile untouched. Close Opera first"
+  processes: [opera.exe]
+  os: [windows]
+- id: opera-code-cache
+  tier: safe
+  name: Code & GPU caches (Roaming)
+  program: Opera
+  path: "%APPDATA%/Opera Software/Opera Stable"
+  kind: clean_selected
+  careful_subpaths: [Service Worker, IndexedDB]
+  subpaths: ["*/Code Cache", "*/GPUCache", "*/DawnGraphiteCache", "*/DawnWebGPUCache", "GPUPersistentCache", "GrShaderCache", "GraphiteDawnCache", "ShaderCache", "*/Service Worker", "*/IndexedDB"]
+  category: browsers
+  safe: safe
+  describe: "Roaming side of Opera: JS code cache, GPU shaders, service workers. Close Opera first"
+  processes: [opera.exe]
+  os: [windows]
+- id: opera-browsing-trace
+  tier: userdata
+  name: History & cookies
+  program: Opera
+  path: "%APPDATA%/Opera Software/Opera Stable"
+  kind: clean_selected
+  subpaths: ["*/History", "*/Network/Cookies", "*/Cookies", "*/Web Data", "*/Sessions", "*/Login Data"]
+  category: browsers
+  safe: careful
+  processes: [opera.exe]
+  describe: "Size shown for reference. Clean yourself (Ctrl+Shift+Del): only History + Downloads (+ cached images if wanted). IMPORTANT: cookies, saved passwords, autofill and open tabs are KEEP - never delete them; program never touches these"
+  os: [windows]
+- id: opera-gx-cache-selected
+  tier: safe
+  name: Disk cache (Local)
+  program: Opera GX
+  path: "%LOCALAPPDATA%/Opera Software/Opera GX Stable"
+  kind: clean_selected
+  subpaths: ["*/Cache", "*/System Cache"]
+  category: browsers
+  safe: safe
+  describe: "Same as Opera; close Opera GX first"
+  processes: [opera_gx.exe]
+  os: [windows]
+- id: opera-gx-code-cache
+  tier: safe
+  name: Code & GPU caches (Roaming)
+  program: Opera GX
+  path: "%APPDATA%/Opera Software/Opera GX Stable"
+  kind: clean_selected
+  careful_subpaths: [Service Worker, IndexedDB]
+  subpaths: ["*/Code Cache", "*/GPUCache", "*/DawnGraphiteCache", "*/DawnWebGPUCache", "GPUPersistentCache", "GrShaderCache", "GraphiteDawnCache", "ShaderCache", "*/Service Worker", "*/IndexedDB"]
+  category: browsers
+  safe: safe
+  describe: "Roaming side of Opera GX: JS code cache, GPU shaders, service workers. Close Opera GX first"
+  processes: [opera_gx.exe]
+  os: [windows]
+- id: opera-gx-browsing-trace
+  tier: userdata
+  name: History & cookies
+  program: Opera GX
+  path: "%APPDATA%/Opera Software/Opera GX Stable"
+  kind: clean_selected
+  subpaths: ["*/History", "*/Network/Cookies", "*/Cookies", "*/Web Data", "*/Sessions", "*/Login Data"]
+  category: browsers
+  safe: careful
+  processes: [opera_gx.exe]
+  describe: "Size shown for reference. Clean yourself (Ctrl+Shift+Del): only History + Downloads (+ cached images if wanted). IMPORTANT: cookies, saved passwords, autofill and open tabs are KEEP - never delete them; program never touches these"
+  os: [windows]
+- id: vivaldi-cache-selected
+  tier: safe
+  name: Cache (all profiles)
+  program: Vivaldi
+  path: "%LOCALAPPDATA%/Vivaldi/User Data"
+  kind: clean_selected
+  careful_subpaths: [Service Worker, IndexedDB, File System]
+  subpaths: ["*/Cache", "*/Code Cache", "*/GPUCache", "*/DawnGraphiteCache", "*/DawnWebGPUCache", "*/image_cache", "*/Service Worker", "*/IndexedDB", "*/File System"]
+  category: browsers
+  safe: safe
+  describe: "Chromium engine; close Vivaldi first; logins/bookmarks kept"
+  processes: [vivaldi.exe]
+  os: [windows]
+- id: vivaldi-browsing-trace
+  tier: userdata
+  name: History & cookies
+  program: Vivaldi
+  path: "%LOCALAPPDATA%/Vivaldi/User Data"
+  kind: clean_selected
+  subpaths: ["*/History", "*/Network/Cookies", "*/Cookies", "*/Web Data", "*/Sessions"]
+  category: browsers
+  safe: careful
+  processes: [vivaldi.exe]
+  describe: "Size shown for reference. Clean yourself (Ctrl+Shift+Del): only History + Downloads (+ cached images if wanted). IMPORTANT: cookies, saved passwords, autofill and open tabs are KEEP - never delete them; program never touches these"
+  os: [windows]
+- id: yandex-cache-selected
+  tier: safe
+  name: Cache (all profiles)
+  program: Yandex Browser
+  path: "%LOCALAPPDATA%/Yandex/YandexBrowser/User Data"
+  kind: clean_selected
+  careful_subpaths: [Service Worker, IndexedDB, File System]
+  subpaths: ["*/Cache", "*/Code Cache", "*/GPUCache", "*/DawnGraphiteCache", "*/DawnWebGPUCache", "*/Tablo Cache", "*/TurboAppCache", "*/image_cache", "*/Service Worker", "*/IndexedDB", "*/File System"]
+  category: browsers
+  safe: safe
+  describe: "Chromium engine; close Yandex Browser first; logins/bookmarks kept"
+  processes: [browser.exe, yandex.exe]
+  os: [windows]
+- id: yandex-browsing-trace
+  tier: userdata
+  name: History & cookies
+  program: Yandex Browser
+  path: "%LOCALAPPDATA%/Yandex/YandexBrowser/User Data"
+  kind: clean_selected
+  subpaths: ["*/History", "*/Network/Cookies", "*/Cookies", "*/Web Data", "*/Sessions", "*/Login Data"]
+  category: browsers
+  safe: careful
+  processes: [browser.exe, yandex.exe]
+  describe: "Size shown for reference. Clean yourself (Ctrl+Shift+Del): only History + Downloads (+ cached images if wanted). IMPORTANT: cookies, saved passwords, autofill and open tabs are KEEP - never delete them; program never touches these"
+  os: [windows]
+- id: firefox-cache-selected
+  tier: safe
+  name: Shader cache (Roaming)
+  program: Firefox
+  path: "%APPDATA%/Mozilla/Firefox/Profiles"
+  kind: clean_selected
+  careful_subpaths: []
+  subpaths: ["*.default*/shader-cache", "*.default*/startupCache"]
+  category: browsers
+  safe: safe
+  describe: "Globbed per profile; close Firefox first. Real internet cache (cache2) is in Local — see Firefox internet cache rule"
+  processes: [firefox.exe]
+  os: [windows]
+- id: firefox-cache-local
+  tier: safe
+  name: Internet cache (Local)
+  program: Firefox
+  path: "%LOCALAPPDATA%/Mozilla/Firefox/Profiles"
+  kind: clean_selected
+  careful_subpaths: []
+  subpaths: ["*.default*/cache2", "*.default*/startupCache", "*.default*/thumbnails"]
+  category: browsers
+  safe: safe
+  describe: "cache2 + startupCache live here (Local), NOT in Roaming. Close Firefox first; storage/ (site data) intentionally excluded"
+  processes: [firefox.exe]
+  os: [windows]
+- id: firefox-browsing-trace
+  tier: userdata
+  name: History & cookies
+  program: Firefox
+  path: "%APPDATA%/Mozilla/Firefox/Profiles"
+  kind: clean_selected
+  subpaths: ["*.default*/places.sqlite", "*.default*/cookies.sqlite", "*.default*/formhistory.sqlite", "*.default*/sessionstore.jsonlz4"]
+  category: browsers
+  safe: careful
+  processes: [firefox.exe]
+  describe: "Size shown for reference. Clean yourself (Ctrl+Shift+Del): only History + Downloads. IMPORTANT: cookies, saved passwords, form autofill and open tabs are KEEP - never delete them; program never touches these"
+  os: [windows]
+- id: librewolf-cache-selected
+  tier: safe
+  name: Shader cache (Roaming)
+  program: LibreWolf
+  path: "%APPDATA%/librewolf/Profiles"
+  kind: clean_selected
+  careful_subpaths: []
+  subpaths: ["*.default*/shader-cache", "*.default*/startupCache"]
+  category: browsers
+  safe: safe
+  describe: "Same engine as Firefox; close LibreWolf first"
+  processes: [librewolf.exe]
+  os: [windows]
+- id: librewolf-cache-local
+  tier: safe
+  name: Internet cache (Local)
+  program: LibreWolf
+  path: "%LOCALAPPDATA%/librewolf/Profiles"
+  kind: clean_selected
+  careful_subpaths: []
+  subpaths: ["*.default*/cache2", "*.default*/startupCache", "*.default*/thumbnails"]
+  category: browsers
+  safe: safe
+  describe: "Same layout as Firefox: cache2 lives in Local. Close LibreWolf first"
+  processes: [librewolf.exe]
+  os: [windows]
+- id: librewolf-browsing-trace
+  tier: userdata
+  name: History & cookies
+  program: LibreWolf
+  path: "%APPDATA%/librewolf/Profiles"
+  kind: clean_selected
+  subpaths: ["*.default*/places.sqlite", "*.default*/cookies.sqlite", "*.default*/formhistory.sqlite", "*.default*/sessionstore.jsonlz4"]
+  category: browsers
+  safe: careful
+  processes: [librewolf.exe]
+  describe: "Size shown for reference. Clean yourself (Ctrl+Shift+Del): only History + Downloads. IMPORTANT: cookies, saved passwords, form autofill and open tabs are KEEP - never delete them; program never touches these"
+  os: [windows]
+- id: waterfox-cache-selected
+  tier: safe
+  name: Shader cache (Roaming)
+  program: Waterfox
+  path: "%APPDATA%/Waterfox/Profiles"
+  kind: clean_selected
+  careful_subpaths: []
+  subpaths: ["*.default*/shader-cache", "*.default*/startupCache"]
+  category: browsers
+  safe: safe
+  describe: "Same engine as Firefox; close Waterfox first"
+  processes: [waterfox.exe]
+  os: [windows]
+- id: waterfox-cache-local
+  tier: safe
+  name: Internet cache (Local)
+  program: Waterfox
+  path: "%LOCALAPPDATA%/Waterfox/Profiles"
+  kind: clean_selected
+  careful_subpaths: []
+  subpaths: ["*.default*/cache2", "*.default*/startupCache", "*.default*/thumbnails"]
+  category: browsers
+  safe: safe
+  describe: "Same layout as Firefox: cache2 lives in Local. Close Waterfox first"
+  processes: [waterfox.exe]
+  os: [windows]
+- id: waterfox-browsing-trace
+  tier: userdata
+  name: History & cookies
+  program: Waterfox
+  path: "%APPDATA%/Waterfox/Profiles"
+  kind: clean_selected
+  subpaths: ["*.default*/places.sqlite", "*.default*/cookies.sqlite", "*.default*/formhistory.sqlite", "*.default*/sessionstore.jsonlz4"]
+  category: browsers
+  safe: careful
+  processes: [waterfox.exe]
+  describe: "Size shown for reference. Clean yourself (Ctrl+Shift+Del): only History + Downloads. IMPORTANT: cookies, saved passwords, form autofill and open tabs are KEEP - never delete them; program never touches these"
+  os: [windows]
+- id: chrome-optguide-model
+  tier: safe
+  name: Chrome on-device AI model (4GB)
+  path: "%LOCALAPPDATA%/Google/Chrome/User Data/OptGuideOnDeviceModel"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "Delete weights manually + turn off Settings > System > On-device AI to stop redownload"
+  processes: [chrome.exe]
+  os: [windows]
+- id: epic-browser-cache-selected
+  tier: safe
+  name: Cache (all profiles)
+  program: Epic
+  path: "%LOCALAPPDATA%/Epic Privacy Browser/User Data"
+  kind: clean_selected
+  careful_subpaths: [Service Worker, IndexedDB]
+  subpaths: ["*/Cache", "*/Code Cache", "*/GPUCache", "*/DawnGraphiteCache", "*/DawnWebGPUCache", "*/Service Worker", "*/IndexedDB"]
+  category: browsers
+  safe: safe
+  describe: "Chromium layout; close browser first"
+  processes: [epicprivacybrowser.exe]
+  os: [windows]

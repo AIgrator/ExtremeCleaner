@@ -1,0 +1,61 @@
+# Java / Android stack, group Java/Android. Category: cache (default).
+- id: gradle-caches
+  name: Gradle caches (.gradle)
+  path: "%USERPROFILE%/.gradle"
+  kind: clean_contents
+  command: "gradle --stop"
+  safe: safe
+  group: Java/Android
+  describe: "Close IDE first; first build after clean is slower"
+  processes: [studio64.exe, studio.exe, emulator.exe]
+  os: [windows]
+- id: android-cache
+  name: Android SDK temp cache (.android/cache)
+  path: "%USERPROFILE%/.android/cache"
+  kind: clean_contents
+  safe: safe
+  group: Java/Android
+  describe: "Temp cache only; keep adbkey/debug.keystore, clean avd only via Wipe Data"
+  os: [windows]
+- id: android-studio-caches
+  name: Android Studio system caches
+  path: "%LOCALAPPDATA%/Google/AndroidStudio2026.1.1"
+  kind: run_command
+  command: "File > Invalidate Caches... (or delete after closing IDE)"
+  safe: safe
+  group: Java/Android
+  describe: "Reindexed on next start"
+  os: [windows]
+- id: android-build-tools
+  program: Android SDK
+  name: Android SDK old build-tools
+  path: ""
+  kind: old_versions
+  parent: "%LOCALAPPDATA%/Android/Sdk/build-tools"
+  match: "*"
+  keep: ["36.1.0"]
+  category: devtools
+  safe: careful
+  describe: "You have 5 versions; keep the one pinned in build.gradle (or latest AGP default)"
+  os: [windows]
+- id: android-system-images
+  program: Android SDK
+  name: Android SDK system images
+  path: ""
+  kind: old_versions
+  parent: "%LOCALAPPDATA%/Android/Sdk/system-images"
+  match: "*"
+  auto_keep: android-avd
+  category: devtools
+  safe: careful
+  describe: "API level in use is auto-detected from AVD configs (yours: android-35) and auto-kept"
+  os: [windows]
+- id: dev-dot-cache
+  name: Dev ML/tool caches (~/.cache)
+  path: "%USERPROFILE%/.cache"
+  kind: clean_contents
+  safe: safe
+  tier: userdata
+  group: ML
+  describe: "Pip trash mixed with YOUR huggingface/paddle/torch models — review yourself"
+  os: [windows]

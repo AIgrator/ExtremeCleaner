@@ -1,0 +1,56 @@
+# Old program versions: versioned siblings next to the ACTIVE one.
+# `keep` = manual active-version names; auto_keep: exe = active detected from
+# FileVersion of `exe` in the parent dir (falls back to the child holding the exe).
+- id: opera-old-versions
+  name: Opera old versions
+  path: ""
+  kind: old_versions
+  parent: "%LOCALAPPDATA%/Programs/Opera"
+  match: "[0-9]*"
+  keep: []
+  auto_keep: exe
+  exe: opera.exe
+  category: old_versions
+  safe: careful
+  describe: "Updates leave old version dirs (~400MB each); active detected from opera.exe FileVersion"
+  processes: [opera.exe]
+  os: [windows]
+- id: chrome-old-versions-machine
+  name: Chrome old versions (Program Files)
+  path: ""
+  kind: old_versions
+  parent: "C:/Program Files/Google/Chrome/Application"
+  match: "[0-9]*"
+  keep: []
+  auto_keep: exe
+  exe: chrome.exe
+  category: old_versions
+  safe: careful
+  describe: "Chrome usually self-cleans; leftovers pile up after failed updates; active from chrome.exe"
+  processes: [chrome.exe]
+  os: [windows]
+- id: chrome-old-versions-user
+  name: Chrome old versions (user install)
+  path: ""
+  kind: old_versions
+  parent: "%LOCALAPPDATA%/Google/Chrome/Application"
+  match: "[0-9]*"
+  keep: []
+  auto_keep: exe
+  exe: chrome.exe
+  category: old_versions
+  safe: careful
+  describe: "Only if Chrome installed per-user; active detected from chrome.exe FileVersion"
+  processes: [chrome.exe]
+  os: [windows]
+- id: android-studio-old-dirs
+  name: Android Studio old version dirs
+  path: ""
+  kind: old_versions
+  parent: "%LOCALAPPDATA%/Google"
+  match: "AndroidStudio*"
+  keep: ["AndroidStudio2026.1.1"]
+  category: old_versions
+  safe: careful
+  describe: "Previous IDE versions after update; new version stops using them"
+  os: [windows]

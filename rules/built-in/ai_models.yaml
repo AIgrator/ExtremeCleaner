@@ -1,0 +1,152 @@
+# AI models: heavy weights downloaded by browsers, OCR, local LLM/image tools.
+# Weights are your library (GBs each) — careful, remove only unused ones.
+# Portable tools (A1111/Fooocus/RVC) keep models inside their install folders —
+# add your install path via user rules; ComfyUI Desktop default is below.
+- id: easyocr-models
+  name: EasyOCR models (~/.EasyOCR)
+  path: "%USERPROFILE%/.EasyOCR"
+  kind: clean_contents
+  category: ai_models
+  safe: safe
+  describe: "Detection/recognition weights, redownloaded on first use"
+  os: [windows]
+- id: ollama-models
+  name: Ollama models (~/.ollama)
+  path: "%USERPROFILE%/.ollama"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "Local LLM weights incl. Hermes/Llama/Qwen gguf (GBs); delete only unused ones (ollama rm)"
+  os: [windows]
+- id: lmstudio-models
+  name: LM Studio models
+  path: "%USERPROFILE%/.cache/lm-studio/models"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "Uninstall does NOT remove models; in-app delete leaves empty folders behind. Remove unused gguf manually"
+  os: [windows]
+- id: comfyui-models
+  name: ComfyUI Desktop models
+  path: "%USERPROFILE%/Documents/ComfyUI/models"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "Checkpoints/LoRAs/VAE (GBs each); no uninstall button — delete unused files by hand. Portable installs live elsewhere"
+  os: [windows]
+- id: invokeai-root
+  name: InvokeAI data
+  path: "%USERPROFILE%/invokeai"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "Default root (models + outputs); your install path may differ — adjust it"
+  os: [windows]
+- id: ultralytics-data
+  name: Ultralytics YOLO data
+  path: "%USERPROFILE%/.ultralytics"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "Auto-downloaded datasets (GBs). NOTE: .pt weights land in your project cwd, runs/ outputs too — per-project scan is a future feature; settings live in %APPDATA%/Ultralytics"
+  os: [windows]
+- id: gpt4all-models
+  name: GPT4All models
+  path: "%LOCALAPPDATA%/nomic.ai/GPT4All"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "Desktop gguf incl. Hermes/Llama (GBs each). Python lib uses ~/.cache/gpt4all instead"
+  os: [windows]
+- id: anythingllm-storage
+  name: AnythingLLM storage
+  path: "%APPDATA%/anythingllm-desktop/storage"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  tier: userdata
+  describe: "Models + YOUR documents/vectors/chats DB. Manual review — documents are yours"
+  os: [windows]
+- id: nltk-data
+  name: NLTK data
+  path: ""
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "Corpora/models, redownloaded via nltk.download(). Custom path = NLTK_DATA env"
+  os: [windows]
+  options:
+    - id: home
+      name: ~/nltk_data
+      path: "%USERPROFILE%/nltk_data"
+      kind: clean_contents
+      safe: careful
+      describe: ""
+    - id: appdata
+      name: "%APPDATA%/nltk_data"
+      path: "%APPDATA%/nltk_data"
+      kind: clean_contents
+      safe: careful
+      describe: "Windows per-user default"
+    - id: central
+      name: C:/nltk_data
+      path: "C:/nltk_data"
+      kind: clean_contents
+      safe: careful
+      describe: "Central install (admin)"
+- id: stanza-resources
+  name: Stanza models
+  path: "%USERPROFILE%/stanza_resources"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "Per-language .pt (GBs with charlms). Override = STANZA_RESOURCES_DIR"
+  os: [windows]
+- id: gensim-data
+  name: Gensim datasets
+  path: "%USERPROFILE%/gensim-data"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "Downloader cache, refetched on demand"
+  os: [windows]
+- id: flair-cache
+  name: Flair models/datasets
+  path: "%USERPROFILE%/.flair"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "flair.cache_root: models + datasets, redownloaded"
+  os: [windows]
+- id: deepface-weights
+  name: DeepFace weights
+  path: "%USERPROFILE%/.deepface"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "Face recognition weights, redownloaded"
+  os: [windows]
+- id: insightface-models
+  name: InsightFace models
+  path: "%USERPROFILE%/.insightface"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "ONNX bundles (buffalo_l 300MB+), redownloaded"
+  os: [windows]
+- id: bentoml-store
+  name: BentoML store
+  path: "%USERPROFILE%/bentoml"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "Local bento/model store. Production artifacts — confirm"
+  os: [windows]
+- id: topaz-models
+  name: Topaz Labs data
+  path: "%ProgramData%/Topaz Labs LLC"
+  kind: manual
+  category: ai_models
+  safe: careful
+  describe: "AI models live somewhere inside (Photo/Video). Open and remove unused model packs by hand; needs admin"
+  os: [windows]

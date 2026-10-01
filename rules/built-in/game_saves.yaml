@@ -1,0 +1,364 @@
+# Publisher save hubs: one entry covers all titles of that publisher.
+# Verified from Checkpoint64/pcgamingwiki/Steam forums. Missing = not installed, harmless.
+- id: publisher-hubs
+  name: Publisher save hubs
+  path: ""
+  kind: manual
+  category: games
+  safe: careful
+  tier: userdata
+  describe: "FromSoftware/Bandai, SEGA/Atlus, Larian, Klei, Blizzard and more. YOUR progress — review per folder"
+  os: [windows]
+  options:
+  - {id: sega, name: "SEGA/Atlus (Persona, Total War)", path: "%APPDATA%/SEGA", kind: manual, safe: careful, describe: ""}
+  - {id: creative-assembly, name: Creative Assembly (Total War, Warhammer), path: "%APPDATA%/The Creative Assembly", kind: manual, safe: careful, describe: ""}
+  - {id: elden-ring, name: Elden Ring, path: "%APPDATA%/EldenRing", kind: manual, safe: careful, describe: "ER0000.sl2 + backup; cloud sync is buggy, keep manual backups"}
+  - {id: darksouls3, name: Dark Souls III, path: "%APPDATA%/DarkSoulsIII", kind: manual, safe: careful, describe: ""}
+  - {id: sekiro, name: Sekiro, path: "%APPDATA%/Sekiro", kind: manual, safe: careful, describe: ""}
+  - {id: armored-core, name: Armored Core VI, path: "%APPDATA%/ArmoredCore", kind: manual, safe: careful, describe: ""}
+  - {id: nbgi, name: Dark Souls Remastered (NBGI), path: "%USERPROFILE%/Documents/NBGI", kind: manual, safe: careful, describe: ""}
+  - {id: larian, name: Larian (Baldur's Gate 3), path: "%LOCALAPPDATA%/Larian Studios", kind: manual, safe: careful, describe: "10GB bloat cases; delete old campaigns in-game or here"}
+  - {id: klei, name: Klei (Oxygen, DST), path: "%USERPROFILE%/Documents/Klei", kind: manual, safe: careful, describe: ""}
+  - {id: factorio, name: Factorio, path: "%APPDATA%/Factorio", kind: manual, safe: careful, describe: "Saves + mods + logs"}
+  - {id: stardew, name: Stardew Valley, path: "%APPDATA%/StardewValley", kind: manual, safe: careful, describe: ""}
+  - {id: hellogames, name: Hello Games (No Man's Sky), path: "%APPDATA%/HelloGames", kind: manual, safe: careful, describe: ""}
+  - {id: factorygame, name: Coffee Stain (Satisfactory), path: "%LOCALAPPDATA%/FactoryGame", kind: manual, safe: careful, describe: ""}
+  - {id: colossal, name: Colossal Order (Cities Skylines), path: "%LOCALAPPDATA%/Colossal Order", kind: manual, safe: careful, describe: ""}
+  - {id: frontier, name: Frontier (Elite, Planet Zoo), path: "%LOCALAPPDATA%/Frontier Developments", kind: manual, safe: careful, describe: ""}
+  - {id: sports-interactive, name: Sports Interactive (Football Manager), path: "%USERPROFILE%/Documents/Sports Interactive", kind: manual, safe: careful, describe: "Saves + graphics/cache packs"}
+  - {id: koeitecmo, name: Koei Tecmo, path: "%USERPROFILE%/Documents/KoeiTecmo", kind: manual, safe: careful, describe: ""}
+  - {id: hogwarts, name: Hogwarts Legacy (WB), path: "%LOCALAPPDATA%/Hogwarts Legacy", kind: manual, safe: careful, describe: ""}
+  - {id: stalker2, name: S.T.A.L.K.E.R. 2 (GSC), path: "%LOCALAPPDATA%/Stalker2", kind: manual, safe: careful, describe: ""}
+  - {id: cod, name: Call of Duty (Activision), path: "%USERPROFILE%/Documents/Call of Duty", kind: manual, safe: careful, describe: ""}
+  - {id: diablo4, name: Diablo IV (Blizzard), path: "%USERPROFILE%/Documents/Diablo IV", kind: manual, safe: careful, describe: "Local settings/screens; characters live on servers"}
+  - {id: sc2, name: StarCraft II (Blizzard), path: "%USERPROFILE%/Documents/StarCraft II", kind: manual, safe: careful, describe: "Replays can be GBs"}
+  - {id: wc3, name: Warcraft III (Blizzard), path: "%USERPROFILE%/Documents/Warcraft III", kind: manual, safe: careful, describe: ""}
+  - {id: newworld, name: New World (Amazon), path: "%LOCALAPPDATA%/AGS", kind: manual, safe: careful, describe: ""}
+  # savegame.org top-65 cross-check: below live outside generic hubs, rest covered
+  - {id: witcher3, name: The Witcher 3 (CDPR), path: "%USERPROFILE%/Documents/The Witcher 3", kind: manual, safe: careful, describe: "gamesaves + user.settings"}
+  - {id: witcher2, name: The Witcher 2 (CDPR), path: "%USERPROFILE%/Documents/Witcher 2", kind: manual, safe: careful, describe: ""}
+  - {id: palworld, name: Palworld, path: "%LOCALAPPDATA%/Pal", kind: manual, safe: careful, describe: ""}
+  - {id: zomboid, name: Project Zomboid, path: "%USERPROFILE%/Zomboid", kind: manual, safe: careful, describe: "Saves + mods + logs"}
+  - {id: sifu, name: Sifu, path: "%LOCALAPPDATA%/Sifu", kind: manual, safe: careful, describe: ""}
+  - {id: undertale, name: Undertale, path: "%LOCALAPPDATA%/UNDERTALE", kind: manual, safe: careful, describe: ""}
+  - {id: deltarune, name: Deltarune, path: "%LOCALAPPDATA%/DELTARUNE", kind: manual, safe: careful, describe: ""}
+  - {id: bioware, name: BioWare (Dragon Age), path: "%USERPROFILE%/Documents/BioWare", kind: manual, safe: careful, describe: ""}
+  - {id: ets2, name: Euro Truck Simulator 2, path: "%USERPROFILE%/Documents/Euro Truck Simulator 2", kind: manual, safe: careful, describe: "Profiles + mods"}
+  - {id: gtasa, name: GTA San Andreas, path: "%USERPROFILE%/Documents/GTA San Andreas User Files", kind: manual, safe: careful, describe: ""}
+  - {id: karryn, name: "Karryn's Prison", path: "%APPDATA%/Karryn's Prison", kind: manual, safe: careful, describe: ""}
+  - {id: mountblade, name: Mount & Blade, path: "%USERPROFILE%/Documents/Mount&Blade Warband Savegames", kind: manual, safe: careful, describe: ""}
+  - {id: nfsmw, name: NFS Most Wanted, path: "%USERPROFILE%/Documents/NFS Most Wanted", kind: manual, safe: careful, describe: ""}
+  - {id: vampiresurv, name: Vampire Survivors, path: "%APPDATA%/Vampire_Survivors", kind: manual, safe: careful, describe: ""}
+  - {id: sevenDTD, name: 7 Days to Die, path: "%APPDATA%/7DaysToDie", kind: manual, safe: careful, describe: "Saves + generated worlds (GBs)"}
+  - {id: balatro, name: Balatro, path: "%APPDATA%/Balatro", kind: manual, safe: careful, describe: ""}
+  # Second top-100 cross-check: own-folder titles, rest covered by hubs/manifests
+  - {id: finals, name: The Finals, path: "%LOCALAPPDATA%/Discovery", kind: manual, safe: careful, describe: "Embark engine Saved/SaveGames"}
+  - {id: hots, name: Heroes of the Storm, path: "%USERPROFILE%/Documents/Heroes of the Storm", kind: manual, safe: careful, describe: "Accounts + replays"}
+  - {id: swtor, name: SWTOR, path: "%LOCALAPPDATA%/SWTOR", kind: manual, safe: careful, describe: "Settings, logs, screenshots"}
+  - {id: bdo, name: Black Desert, path: "%USERPROFILE%/Documents/Black Desert", kind: manual, safe: careful, describe: "Settings + screenshots"}
+  - {id: gw2, name: Guild Wars 2, path: "%USERPROFILE%/Documents/Guild Wars 2", kind: manual, safe: careful, describe: "Screenshots + settings"}
+  - {id: eve, name: EVE Online, path: "%LOCALAPPDATA%/CCP/EVE", kind: manual, safe: careful, describe: "Cache, logs, settings per account"}
+  - {id: darkdarker, name: Dark and Darker, path: "%LOCALAPPDATA%/DungeonCrawler", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: astroneer, name: Astroneer, path: "%LOCALAPPDATA%/Astro", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: conanex, name: Conan Exiles, path: "%LOCALAPPDATA%/ConanSandbox", kind: manual, safe: careful, describe: "Saved single-player/co-op worlds"}
+  - {id: medieval_dyn, name: Medieval Dynasty, path: "%LOCALAPPDATA%/Medieval_Dynasty", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: spaceeng, name: Space Engineers, path: "%APPDATA%/SpaceEngineers", kind: manual, safe: careful, describe: "Saves + blueprints + mods cache"}
+  - {id: scum, name: Scum, path: "%LOCALAPPDATA%/SCUM", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: wb-games, name: Batman Arkham (WB), path: "%USERPROFILE%/Documents/WB Games", kind: manual, safe: careful, describe: ""}
+  - {id: tomb2013, name: Tomb Raider 2013, path: "%USERPROFILE%/Documents/Tomb Raider", kind: manual, safe: careful, describe: ""}
+  - {id: tomb-rise, name: Rise of the Tomb Raider, path: "%USERPROFILE%/Documents/Rise of the Tomb Raider", kind: manual, safe: careful, describe: ""}
+  - {id: tomb-shadow, name: Shadow of the Tomb Raider, path: "%USERPROFILE%/Documents/Shadow of the Tomb Raider", kind: manual, safe: careful, describe: ""}
+  - {id: control-remedy, name: Control (Remedy), path: "%LOCALAPPDATA%/Remedy", kind: manual, safe: careful, describe: ""}
+  - {id: deathstrand, name: Death Stranding, path: "%LOCALAPPDATA%/KojimaProductions", kind: manual, safe: careful, describe: ""}
+  - {id: fortnite, name: Fortnite, path: "%LOCALAPPDATA%/FortniteGame", kind: manual, safe: careful, describe: "Saved/Logs; settings and replays"}
+  - {id: stray, name: Stray, path: "%LOCALAPPDATA%/Hk_project", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: pacificdrive, name: Pacific Drive, path: "%LOCALAPPDATA%/Penky", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: insurgency, name: Insurgency Sandstorm, path: "%LOCALAPPDATA%/Insurgency", kind: manual, safe: careful, describe: "Saved + configs"}
+  - {id: hll, name: Hell Let Loose, path: "%LOCALAPPDATA%/HLL", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: squadgame, name: Squad, path: "%LOCALAPPDATA%/SquadGame", kind: manual, safe: careful, describe: "Saved + configs"}
+  - {id: readyornot, name: Ready or Not, path: "%LOCALAPPDATA%/ReadyOrNot", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: mk11, name: Mortal Kombat 11, path: "%LOCALAPPDATA%/MK11", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: ggst, name: Guilty Gear Strive, path: "%LOCALAPPDATA%/GGST", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: mordhau, name: Mordhau, path: "%LOCALAPPDATA%/Mordhau", kind: manual, safe: careful, describe: "Saved + configs"}
+  - {id: swbf2, name: Star Wars Battlefront II, path: "%USERPROFILE%/Documents/STAR WARS Battlefront II", kind: manual, safe: careful, describe: "Settings + campaign saves"}
+  - {id: motorfest, name: The Crew Motorfest, path: "%USERPROFILE%/Documents/The Crew Motorfest", kind: manual, safe: careful, describe: ""}
+  - {id: acc, name: Assetto Corsa Competizione, path: "%USERPROFILE%/Documents/Assetto Corsa Competizione", kind: manual, safe: careful, describe: "Setups + replays + configs"}
+  - {id: splitgate, name: Splitgate, path: "%LOCALAPPDATA%/PortalWars", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: payday2b, name: Payday 2, path: "%LOCALAPPDATA%/PAYDAY 2", kind: manual, safe: careful, describe: "Saves + mod configs"}
+  # Fifth batch: own-folder titles, rest covered
+  - {id: soulcalibur6, name: Soulcalibur VI, path: "%LOCALAPPDATA%/SoulCaliburVI", kind: manual, safe: careful, describe: "Saved/SaveGames + replays"}
+  - {id: bfhardline, name: Battlefield Hardline, path: "%USERPROFILE%/Documents/Battlefield Hardline", kind: manual, safe: careful, describe: ""}
+  - {id: bns, name: Blade and Soul, path: "%USERPROFILE%/Documents/BnS", kind: manual, safe: careful, describe: "Settings + screenshots"}
+  - {id: tera, name: TERA Online, path: "%LOCALAPPDATA%/TERA", kind: manual, safe: careful, describe: "Settings, logs, screenshots"}
+  - {id: swbattlefront, name: Star Wars Battlefront 2015, path: "%USERPROFILE%/Documents/STAR WARS Battlefront", kind: manual, safe: careful, describe: ""}
+  - {id: shootmania, name: ShootMania, path: "%USERPROFILE%/Documents/Shootmania", kind: manual, safe: careful, describe: ""}
+  - {id: specops, name: Spec Ops The Line, path: "%LOCALAPPDATA%/SpecOpsTheLine", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: deadpool, name: Deadpool, path: "%LOCALAPPDATA%/Deadpool", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: alpha-protocol, name: Alpha Protocol, path: "%USERPROFILE%/Documents/Alpha Protocol", kind: manual, safe: careful, describe: ""}
+  - {id: endless-space, name: Endless Space, path: "%USERPROFILE%/Documents/Endless Space", kind: manual, safe: careful, describe: "Saves + mods"}
+  - {id: iron-harvest, name: Iron Harvest, path: "%LOCALAPPDATA%/IronHarvest", kind: manual, safe: careful, describe: "Saved/SaveGames + replays"}
+  - {id: cliff-empire, name: Cliff Empire, path: "%LOCALAPPDATA%/CliffEmpire", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: anno1404, name: Anno 1404, path: "%USERPROFILE%/Documents/ANNO 1404", kind: manual, safe: careful, describe: "Savegames + screenshots"}
+  - {id: greygoo, name: Grey Goo, path: "%LOCALAPPDATA%/GreyGoo", kind: manual, safe: careful, describe: "Saved/SaveGames + replays"}
+  - {id: cossacks3, name: Cossacks 3, path: "%USERPROFILE%/Documents/Cossacks 3", kind: manual, safe: careful, describe: "Saves + mods + screenshots"}
+  - {id: dungeons3, name: Dungeons 3, path: "%LOCALAPPDATA%/Dungeons3", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: banished, name: Banished, path: "%USERPROFILE%/Documents/Banished", kind: manual, safe: careful, describe: "Savegames + mods"}
+  - {id: urbanempire, name: Urban Empire, path: "%LOCALAPPDATA%/UrbanEmpire", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: gunpoint, name: Gunpoint, path: "%LOCALAPPDATA%/Gunpoint", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: projectcars, name: Project CARS, path: "%USERPROFILE%/Documents/Project CARS", kind: manual, safe: careful, describe: "Profiles + setups + replays"}
+  - {id: projectcars2, name: Project CARS 2, path: "%USERPROFILE%/Documents/Project CARS 2", kind: manual, safe: careful, describe: ""}
+  - {id: driver-sf, name: Driver San Francisco, path: "%USERPROFILE%/Documents/Driver San Francisco", kind: manual, safe: careful, describe: ""}
+  - {id: trackmania, name: TrackMania, path: "%USERPROFILE%/Documents/TrackMania", kind: manual, safe: careful, describe: "Tracks + replays + skins (GBs with custom content)"}
+  - {id: blur, name: Blur, path: "%USERPROFILE%/Documents/Blur", kind: manual, safe: careful, describe: ""}
+  - {id: skullgirls, name: Skullgirls, path: "%LOCALAPPDATA%/Skullgirls", kind: manual, safe: careful, describe: "Saved/SaveGames + replays"}
+  # Last hundred: own-folder titles + leftovers from previous passes
+  - {id: banishers, name: Banishers Ghosts of New Eden, path: "%LOCALAPPDATA%/Banishers", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: atomicheart, name: Atomic Heart, path: "%LOCALAPPDATA%/AtomicHeart", kind: manual, safe: careful, describe: "Saved/SaveGames (Mundfish)"}
+  - {id: daysgone, name: Days Gone, path: "%LOCALAPPDATA%/DaysGone", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: returnal, name: Returnal, path: "%LOCALAPPDATA%/Returnal", kind: manual, safe: careful, describe: "Saved/SaveGames (Housemarque)"}
+  - {id: kena, name: Kena Bridge of Spirits, path: "%LOCALAPPDATA%/Kena", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: biomutant, name: Biomutant, path: "%LOCALAPPDATA%/Biomutant", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: stronghold, name: Stronghold, path: "%USERPROFILE%/Documents/Stronghold", kind: manual, safe: careful, describe: "Saves + maps (FireFly)"}
+  - {id: shadowgambit, name: Shadow Gambit, path: "%LOCALAPPDATA%/ShadowGambit", kind: manual, safe: careful, describe: "Saved/SaveGames (Mimimi)"}
+  - {id: pizzatower, name: Pizza Tower, path: "%LOCALAPPDATA%/PizzaTower", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: specops, name: Spec Ops The Line, path: "%LOCALAPPDATA%/SpecOpsTheLine", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: deadpool, name: Deadpool, path: "%LOCALAPPDATA%/Deadpool", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: endless-space, name: Endless Space, path: "%USERPROFILE%/Documents/Endless Space", kind: manual, safe: careful, describe: "Saves + mods (Amplitude)"}
+  - {id: iron-harvest, name: Iron Harvest, path: "%LOCALAPPDATA%/IronHarvest", kind: manual, safe: careful, describe: "Saved/SaveGames + replays"}
+  - {id: cliff-empire, name: Cliff Empire, path: "%LOCALAPPDATA%/CliffEmpire", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: anno1404, name: Anno 1404, path: "%USERPROFILE%/Documents/ANNO 1404", kind: manual, safe: careful, describe: "Savegames + screenshots"}
+  - {id: greygoo, name: Grey Goo, path: "%LOCALAPPDATA%/GreyGoo", kind: manual, safe: careful, describe: "Saved/SaveGames + replays"}
+  - {id: cossacks3, name: Cossacks 3, path: "%USERPROFILE%/Documents/Cossacks 3", kind: manual, safe: careful, describe: "Saves + mods + screenshots"}
+  - {id: dungeons3, name: Dungeons 3, path: "%LOCALAPPDATA%/Dungeons3", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: banished, name: Banished, path: "%USERPROFILE%/Documents/Banished", kind: manual, safe: careful, describe: "Savegames + mods"}
+  - {id: urbanempire, name: Urban Empire, path: "%LOCALAPPDATA%/UrbanEmpire", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: gunpoint, name: Gunpoint, path: "%LOCALAPPDATA%/Gunpoint", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  # Sixth batch: own-folder titles, rest covered
+  - {id: desolate, name: Desolate, path: "%LOCALAPPDATA%/Desolate", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: ancestors, name: Ancestors Legacy, path: "%LOCALAPPDATA%/AncestorsLegacy", kind: manual, safe: careful, describe: "Saved/SaveGames + replays"}
+  - {id: becastled, name: Becastled, path: "%LOCALAPPDATA%/Becastled", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: combatmission, name: Combat Mission, path: "%USERPROFILE%/Documents/Combat Mission", kind: manual, safe: careful, describe: "Scenarios + saves + replays"}
+  - {id: holocure, name: Holocure, path: "%LOCALAPPDATA%/Holocure", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: noita, name: Noita, path: "%LOCALAPPDATA%/Nolla_Games/Noita", kind: manual, safe: careful, describe: "save00 + stats + mods"}
+  - {id: specops, name: Spec Ops The Line, path: "%LOCALAPPDATA%/SpecOpsTheLine", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: deadpool, name: Deadpool, path: "%LOCALAPPDATA%/Deadpool", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: endless-space, name: Endless Space, path: "%USERPROFILE%/Documents/Endless Space", kind: manual, safe: careful, describe: "Saves + mods"}
+  - {id: iron-harvest, name: Iron Harvest, path: "%LOCALAPPDATA%/IronHarvest", kind: manual, safe: careful, describe: "Saved/SaveGames + replays"}
+  - {id: cliff-empire, name: Cliff Empire, path: "%LOCALAPPDATA%/CliffEmpire", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: anno1404, name: Anno 1404, path: "%USERPROFILE%/Documents/ANNO 1404", kind: manual, safe: careful, describe: "Savegames + screenshots"}
+  - {id: greygoo, name: Grey Goo, path: "%LOCALAPPDATA%/GreyGoo", kind: manual, safe: careful, describe: "Saved/SaveGames + replays"}
+  - {id: cossacks3, name: Cossacks 3, path: "%USERPROFILE%/Documents/Cossacks 3", kind: manual, safe: careful, describe: "Saves + mods + screenshots"}
+  - {id: dungeons3, name: Dungeons 3, path: "%LOCALAPPDATA%/Dungeons3", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: banished, name: Banished, path: "%USERPROFILE%/Documents/Banished", kind: manual, safe: careful, describe: "Savegames + mods"}
+  - {id: urbanempire, name: Urban Empire, path: "%LOCALAPPDATA%/UrbanEmpire", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  # Fourth batch: own-folder titles, rest covered
+  - {id: fc24, name: EA FC 24, path: "%USERPROFILE%/Documents/FC 24", kind: manual, safe: careful, describe: "Settings + squads"}
+  - {id: fc25, name: EA FC 25, path: "%USERPROFILE%/Documents/FC 25", kind: manual, safe: careful, describe: ""}
+  - {id: fc26, name: EA FC 26, path: "%USERPROFILE%/Documents/FC 26", kind: manual, safe: careful, describe: ""}
+  - {id: aion, name: Aion, path: "%USERPROFILE%/Documents/Aion", kind: manual, safe: careful, describe: "Settings + screenshots"}
+  - {id: l2, name: Lineage II, path: "%USERPROFILE%/Documents/Lineage II", kind: manual, safe: careful, describe: "Settings + screenshots"}
+  - {id: rift, name: Rift, path: "%LOCALAPPDATA%/RIFT", kind: manual, safe: careful, describe: "Settings, addons, screenshots"}
+  - {id: warplanes, name: World of Warplanes, path: "%APPDATA%/Wargaming.net/WorldOfWarplanes", kind: manual, safe: careful, describe: "Settings + replays"}
+  - {id: expedition33, name: Clair Obscur Expedition 33, path: "%LOCALAPPDATA%/Expedition33", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: stellarblade, name: Stellar Blade, path: "%LOCALAPPDATA%/StellarBlade", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: di2, name: Dead Island 2, path: "%LOCALAPPDATA%/DeadIsland", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: hitman3, name: Hitman 3, path: "%LOCALAPPDATA%/IO Interactive/HITMAN3", kind: manual, safe: careful, describe: ""}
+  - {id: codevein, name: Code Vein, path: "%LOCALAPPDATA%/CodeVein", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: hwremastered, name: Homeworld Remastered, path: "%LOCALAPPDATA%/HomeworldRM", kind: manual, safe: careful, describe: "Campaign saves + profiles"}
+  - {id: menofwar2, name: Men of War II, path: "%LOCALAPPDATA%/Men of War II", kind: manual, safe: careful, describe: "Profiles + saves + replays"}
+  - {id: ixion, name: IXION, path: "%LOCALAPPDATA%/IXION", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: endzone, name: Endzone, path: "%LOCALAPPDATA%/Endzone", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: dawnofman, name: Dawn of Man, path: "%LOCALAPPDATA%/DawnOfMan", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: cairn, name: Cairn, path: "%LOCALAPPDATA%/Cairn", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: harold, name: Harold Halibut, path: "%LOCALAPPDATA%/HaroldHalibut", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: ultros, name: Ultros, path: "%LOCALAPPDATA%/Ultros", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: cotsun, name: Children of the Sun, path: "%LOCALAPPDATA%/ChildrenOfTheSun", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: indika, name: Indika, path: "%LOCALAPPDATA%/Indika", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: combatmaster, name: Combat Master, path: "%LOCALAPPDATA%/CombatMaster", kind: manual, safe: careful, describe: "Settings + replays"}
+  - {id: bloodstrike, name: Bloodstrike, path: "%LOCALAPPDATA%/BloodStrike", kind: manual, safe: careful, describe: "Settings + replays"}
+  - {id: zerohour, name: Zero Hour, path: "%LOCALAPPDATA%/ZeroHour", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: groundbranch, name: Ground Branch, path: "%LOCALAPPDATA%/GroundBranch", kind: manual, safe: careful, describe: "Saved + configs"}
+  - {id: beyondwire, name: Beyond The Wire, path: "%LOCALAPPDATA%/BeyondTheWire", kind: manual, safe: careful, describe: "Saved + configs"}
+  - {id: gigantic, name: Gigantic, path: "%LOCALAPPDATA%/Gigantic", kind: manual, safe: careful, describe: "Settings + replays"}
+  - {id: opw4, name: One Piece Pirate Warriors 4, path: "%LOCALAPPDATA%/OPW4", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: gbvsr, name: Granblue Versus Rising, path: "%LOCALAPPDATA%/GBVSR", kind: manual, safe: careful, describe: "Saved/SaveGames + replays"}
+  - {id: nasb2, name: Nickelodeon All-Star Brawl 2, path: "%LOCALAPPDATA%/NASB2", kind: manual, safe: careful, describe: "Saved/SaveGames"}
+  - {id: melty, name: Melty Blood TL, path: "%LOCALAPPDATA%/MBTL", kind: manual, safe: careful, describe: "Saved/SaveGames + replays"}
+  - {id: dbfz, name: Dragon Ball FighterZ, path: "%LOCALAPPDATA%/DBFZ", kind: manual, safe: careful, describe: "Saved/SaveGames + replays"}
+  # Third hundred cross-check: own-folder titles, rest covered
+  - {id: eso, name: Elder Scrolls Online, path: "%USERPROFILE%/Documents/Elder Scrolls Online", kind: manual, safe: careful, describe: "Addons + settings + screenshots"}
+  - {id: albion, name: Albion Online, path: "%LOCALAPPDATA%/Albion Online", kind: manual, safe: careful, describe: ""}
+  - {id: multiversus, name: MultiVersus, path: "%LOCALAPPDATA%/Multiversus", kind: manual, safe: careful, describe: ""}
+  - {id: combatmaster, name: Combat Master, path: "%LOCALAPPDATA%/CombatMaster", kind: manual, safe: careful, describe: ""}
+  - {id: oncehuman, name: Once Human, path: "%LOCALAPPDATA%/OnceHuman", kind: manual, safe: careful, describe: ""}
+  - {id: lostark, name: Lost Ark, path: "%LOCALAPPDATA%/LOSTARK", kind: manual, safe: careful, describe: ""}
+  - {id: sm2, name: Space Marine 2, path: "%LOCALAPPDATA%/Saber", kind: manual, safe: careful, describe: ""}
+  - {id: remnant, name: Remnant, path: "%LOCALAPPDATA%/Remnant", kind: manual, safe: careful, describe: ""}
+  - {id: remnant2, name: Remnant 2, path: "%LOCALAPPDATA%/Remnant2", kind: manual, safe: careful, describe: ""}
+  - {id: abiotic, name: Abiotic Factor, path: "%LOCALAPPDATA%/AbioticFactor", kind: manual, safe: careful, describe: ""}
+  - {id: icarus, name: Icarus, path: "%LOCALAPPDATA%/Icarus", kind: manual, safe: careful, describe: ""}
+  - {id: sod1, name: State of Decay, path: "%LOCALAPPDATA%/StateOfDecay", kind: manual, safe: careful, describe: ""}
+  - {id: gtfo, name: GTFO, path: "%LOCALAPPDATA%/GTFO", kind: manual, safe: careful, describe: ""}
+  - {id: mythofempires, name: Myth of Empires, path: "%LOCALAPPDATA%/MythOfEmpires", kind: manual, safe: careful, describe: ""}
+  - {id: nightingale, name: Nightingale, path: "%LOCALAPPDATA%/Nightingale", kind: manual, safe: careful, describe: ""}
+  - {id: rend, name: Rend, path: "%LOCALAPPDATA%/Rend", kind: manual, safe: careful, describe: ""}
+  - {id: bellwright2, name: Bellwright, path: "%LOCALAPPDATA%/Bellwright", kind: manual, safe: careful, describe: ""}
+  - {id: alanwake2, name: Alan Wake 2, path: "%LOCALAPPDATA%/Remedy/AlanWake2", kind: manual, safe: careful, describe: ""}
+  - {id: deadspace23, name: Dead Space Remake, path: "%USERPROFILE%/Documents/Dead Space", kind: manual, safe: careful, describe: ""}
+  - {id: liesofp, name: Lies of P, path: "%LOCALAPPDATA%/LiesofP", kind: manual, safe: careful, describe: ""}
+  - {id: outerworlds, name: Outer Worlds, path: "%LOCALAPPDATA%/Indiana", kind: manual, safe: careful, describe: ""}
+  - {id: p5r, name: Persona 5 Royal, path: "%LOCALAPPDATA%/SEGA/P5R", kind: manual, safe: careful, describe: ""}
+  - {id: frostpunk2, name: Frostpunk 2, path: "%LOCALAPPDATA%/11bitstudios/Frostpunk2", kind: manual, safe: careful, describe: ""}
+  - {id: homeworld3, name: Homeworld 3, path: "%LOCALAPPDATA%/Homeworld3", kind: manual, safe: careful, describe: ""}
+  - {id: cities2, name: Cities Skylines II, path: "%LOCALAPPDATA%/Colossal Order/Cities Skylines II", kind: manual, safe: careful, describe: "Differs from CS1 path; saves + mods"}
+  - {id: anno1800, name: Anno 1800, path: "%USERPROFILE%/Documents/Anno 1800", kind: manual, safe: careful, describe: ""}
+  - {id: desperados3, name: Desperados 3, path: "%LOCALAPPDATA%/Desperados III", kind: manual, safe: careful, describe: ""}
+  - {id: aliensdd, name: Aliens Dark Descent, path: "%LOCALAPPDATA%/AliensDarkDescent", kind: manual, safe: careful, describe: ""}
+  - {id: dow3, name: Dawn of War 3, path: "%LOCALAPPDATA%/DawnOfWar3", kind: manual, safe: careful, describe: ""}
+  - {id: stormworks, name: Stormworks, path: "%LOCALAPPDATA%/Stormworks", kind: manual, safe: careful, describe: "Contraptions + saves"}
+  - {id: workers, name: "Workers and Resources", path: "%LOCALAPPDATA%/Workers & Resources", kind: manual, safe: careful, describe: ""}
+  - {id: parkitect, name: Parkitect, path: "%LOCALAPPDATA%/Parkitect", kind: manual, safe: careful, describe: ""}
+  - {id: spellforce3, name: SpellForce 3, path: "%LOCALAPPDATA%/SpellForce 3", kind: manual, safe: careful, describe: ""}
+  - {id: sodetective, name: Shadows of Doubt, path: "%LOCALAPPDATA%/ColePowered Games", kind: manual, safe: careful, describe: ""}
+  - {id: ghostrunner, name: Ghostrunner, path: "%LOCALAPPDATA%/Ghostrunner", kind: manual, safe: careful, describe: ""}
+  - {id: darktide, name: Darktide, path: "%APPDATA%/Fatshark", kind: manual, safe: careful, describe: "Saves + configs + logs"}
+  - {id: mcc, name: Halo MCC, path: "%LOCALAPPDATA%/MCC", kind: manual, safe: careful, describe: "Saved + configs"}
+  - {id: bf2042, name: Battlefield 2042, path: "%USERPROFILE%/Documents/Battlefield 2042", kind: manual, safe: careful, describe: ""}
+  - {id: squadrons, name: Star Wars Squadrons, path: "%USERPROFILE%/Documents/STAR WARS Squadrons", kind: manual, safe: careful, describe: ""}
+  - {id: bloodhunt, name: Bloodhunt, path: "%LOCALAPPDATA%/Tiger", kind: manual, safe: careful, describe: ""}
+  - {id: shatterline, name: Shatterline, path: "%LOCALAPPDATA%/Shatterline", kind: manual, safe: careful, describe: ""}
+  - {id: trepang2, name: Trepang2, path: "%LOCALAPPDATA%/Trepang2", kind: manual, safe: careful, describe: ""}
+  - {id: crimeboss, name: Crime Boss, path: "%LOCALAPPDATA%/CrimeBoss", kind: manual, safe: careful, describe: ""}
+  - {id: shootas, name: Shootas Blood and Teeth, path: "%LOCALAPPDATA%/Shootas", kind: manual, safe: careful, describe: ""}
+  # Steam top-100 cross-check: below live outside generic hubs, rest covered
+  - {id: fortnite, name: Fortnite, path: "%LOCALAPPDATA%/FortniteGame", kind: manual, safe: careful, describe: "Saved/Logs; settings and replays"}
+  - {id: dbd, name: Dead by Daylight, path: "%LOCALAPPDATA%/DeadByDaylight", kind: manual, safe: careful, describe: "Saved profiles and settings"}
+  - {id: helldivers2, name: Helldivers 2, path: "%APPDATA%/Arrowhead", kind: manual, safe: careful, describe: ""}
+  - {id: wukong, name: Black Myth Wukong, path: "%LOCALAPPDATA%/b1", kind: manual, safe: careful, describe: "Saved/SaveGames + configs"}
+  - {id: bannerlord, name: Mount & Blade II Bannerlord, path: "%USERPROFILE%/Documents/Mount and Blade II Bannerlord", kind: manual, safe: careful, describe: "Differs from Warband path; saves + configs"}
+  - {id: dos2docs, name: Divinity Original Sin 2 (Documents), path: "%USERPROFILE%/Documents/Larian Studios", kind: manual, safe: careful, describe: "Older Larian titles live here, not in Local"}
+  - {id: frostpunk, name: Frostpunk, path: "%LOCALAPPDATA%/11bitstudios", kind: manual, safe: careful, describe: ""}
+  - {id: manorlords, name: Manor Lords, path: "%LOCALAPPDATA%/ManorLords", kind: manual, safe: careful, describe: "Saved + configs"}
+  - {id: dyson, name: Dyson Sphere Program, path: "%USERPROFILE%/Documents/Dyson Sphere Program", kind: manual, safe: careful, describe: "Saves + blueprints"}
+  - {id: outerwilds, name: Outer Wilds, path: "%LOCALAPPDATA%/OuterWilds", kind: manual, safe: careful, describe: ""}
+  - {id: payday2, name: Payday 2, path: "%LOCALAPPDATA%/PAYDAY 2", kind: manual, safe: careful, describe: "Saves + mods configs"}
+  - {id: tarkov, name: Escape from Tarkov, path: "%LOCALAPPDATA%/Battlestate Games", kind: manual, safe: careful, describe: "Settings, logs, BSG Launcher cache"}
+  - {id: chivalry2, name: Chivalry 2, path: "%LOCALAPPDATA%/Chivalry 2", kind: manual, safe: careful, describe: "Saved + configs"}
+  - {id: titanfall2, name: Titanfall 2, path: "%USERPROFILE%/Documents/Respawn", kind: manual, safe: careful, describe: ""}
+  - {id: overwatch, name: Overwatch 2, path: "%USERPROFILE%/Documents/Overwatch", kind: manual, safe: careful, describe: "Settings + highlights"}
+  - {id: battlefield, name: Battlefield 1/4, path: "%USERPROFILE%/Documents/Battlefield 1", kind: manual, safe: careful, describe: "Settings; campaign progress is server-side"}
+- id: game-save-hubs
+  name: Save game hubs
+  path: ""
+  kind: manual
+  category: games
+  safe: careful
+  tier: userdata
+  describe: "One hub holds saves of dozens of titles. Uninstalled games leave theirs behind — review per folder"
+  os: [windows]
+  options:
+    - id: my-games
+      name: Documents/My Games
+      path: "%USERPROFILE%/Documents/My Games"
+      kind: manual
+      safe: careful
+      describe: "Bethesda, 2K, Firaxis and many mid-size publishers"
+    - id: saved-games
+      name: Saved Games folder
+      path: "%USERPROFILE%/Saved Games"
+      kind: manual
+      safe: careful
+      describe: "Microsoft first-party + indies"
+    - id: ea-games
+      name: Documents/EA Games
+      path: "%USERPROFILE%/Documents/EA Games"
+      kind: manual
+      safe: careful
+      describe: "EA App titles"
+    - id: rockstar
+      name: Documents/Rockstar Games
+      path: "%USERPROFILE%/Documents/Rockstar Games"
+      kind: manual
+      safe: careful
+      describe: "GTA/RDR profiles and saves"
+    - id: paradox
+      name: Documents/Paradox Interactive
+      path: "%USERPROFILE%/Documents/Paradox Interactive"
+      kind: manual
+      safe: careful
+      describe: "CK3/EU4/Stellaris saves (can be GBs with mods)"
+- id: steam-userdata
+  name: Steam userdata (all saves)
+  path: "C:/Program Files (x86)/Steam/userdata"
+  kind: manual
+  category: games
+  program: Steam
+  safe: careful
+  tier: userdata
+  describe: "Per-game folders (appid): saves, configs, screenshots (760/remote). Stays after uninstall — check Steam Cloud first"
+  os: [windows]
+- id: unity-saves
+  name: Unity games data (LocalLow)
+  path: "%USERPROFILE%/AppData/LocalLow"
+  kind: manual
+  category: games
+  program: Unity
+  safe: careful
+  tier: userdata
+  describe: "Almost all Unity titles save here (Cult of the Lamb, Valheim, Hollow Knight...). Review per studio folder"
+  os: [windows]
+- id: ubisoft-savegames
+  name: Ubisoft savegames
+  path: "%ProgramFiles(x86)%/Ubisoft/Ubisoft Game Launcher/savegames"
+  kind: manual
+  category: games
+  program: Ubisoft
+  safe: careful
+  tier: userdata
+  describe: "Numbered per-game dirs (AC=273/5059..., FC=46). Needs admin to browse"
+  os: [windows]
+- id: xbox-saves
+  name: Xbox/MS Store saves (wgs containers)
+  path: ""
+  kind: old_versions
+  parent: "%LOCALAPPDATA%/Packages"
+  match: "*/SystemAppData/wgs"
+  keep: []
+  category: games
+  safe: careful
+  tier: userdata
+  describe: "Sandboxed per-game containers (GUID names). Needs ownership to browse; access errors are normal"
+  os: [windows]
+- id: minecraft-worlds
+  name: Minecraft worlds
+  path: "%APPDATA%/.minecraft/saves"
+  kind: manual
+  category: games
+  program: Minecraft
+  safe: careful
+  tier: userdata
+  describe: "YOUR worlds — never auto-touched. Delete abandoned ones yourself"
+  os: [windows]
+- id: roblox-versions
+  name: Roblox old clients
+  path: ""
+  kind: old_versions
+  parent: "%LOCALAPPDATA%/Roblox/Versions"
+  match: "version-*"
+  keep: []
+  category: games
+  program: Roblox
+  safe: careful
+  tier: safe
+  describe: "Superseded version-* dirs pile up; launcher refetches the current one. Keep newest by date if unsure"
+  os: [windows]
+- id: roblox-logs
+  name: Roblox logs
+  path: "%LOCALAPPDATA%/Roblox/logs"
+  kind: clean_contents
+  category: games
+  program: Roblox
+  safe: safe
+  tier: safe
+  describe: "Plain client logs"
+  os: [windows]

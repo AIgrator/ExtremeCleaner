@@ -1,0 +1,258 @@
+# Package managers and toolchains, grouped by language. Category: cache (default).
+# IDEs/editors/agents live in the "devtools" category instead.
+- id: yarn-cache
+  name: Yarn cache
+  path: "%LOCALAPPDATA%/Yarn/Cache"
+  kind: run_command
+  command: "yarn cache clean --all || yarn cache clean"
+  exec: true
+  safe: safe
+  group: Node.js
+  describe: "Classic Yarn; berry uses .yarn/berry/cache inside projects"
+  os: [windows]
+- id: pnpm-store
+  name: pnpm store
+  path: "%LOCALAPPDATA%/pnpm/store"
+  kind: run_command
+  command: "pnpm store prune"
+  exec: true
+  safe: safe
+  group: Node.js
+  describe: "Content-addressable store, prune removes unreferenced packages"
+  os: [windows]
+- id: uv-cache
+  name: uv cache
+  path: "%LOCALAPPDATA%/uv/cache"
+  kind: run_command
+  command: "uv cache clean"
+  exec: true
+  safe: safe
+  group: Python
+  describe: "Astral's fast Python installer cache"
+  os: [windows]
+- id: poetry-cache
+  name: Poetry cache
+  path: "%LOCALAPPDATA%/pypoetry/Cache"
+  kind: clean_contents
+  safe: safe
+  group: Python
+  describe: "Wheels/artifacts cache, redownloaded on next install"
+  os: [windows]
+- id: conda-pkgs
+  name: Conda package cache
+  path: "%USERPROFILE%/.conda/pkgs"
+  kind: run_command
+  command: "conda clean --all -y"
+  exec: true
+  safe: safe
+  group: Python
+  describe: "Downloaded tarballs; envs themselves untouched"
+  os: [windows]
+- id: composer-cache
+  name: Composer cache (PHP)
+  path: "%APPDATA%/Composer"
+  kind: run_command
+  command: "composer clear-cache"
+  exec: true
+  safe: safe
+  group: PHP
+  describe: "Packagist zips/metadata"
+  os: [windows]
+- id: cargo-registry
+  name: Cargo registry
+  path: "%USERPROFILE%/.cargo/registry"
+  kind: clean_contents
+  safe: safe
+  group: Rust
+  describe: "Crates sources; NEVER wipe whole .cargo — bin/ holds installed tools"
+  os: [windows]
+- id: cargo-git
+  name: Cargo git checkouts
+  path: "%USERPROFILE%/.cargo/git"
+  kind: clean_contents
+  safe: safe
+  group: Rust
+  describe: "Git dependencies, refetched on next build"
+  os: [windows]
+- id: go-build-cache
+  name: Go build cache
+  path: "%LOCALAPPDATA%/go-build"
+  kind: run_command
+  command: "go clean -cache"
+  exec: true
+  safe: safe
+  group: Go
+  describe: "Compiled artifacts; first build after clean is slower"
+  os: [windows]
+- id: go-mod-cache
+  tier: safe
+  name: Go module cache
+  path: "%USERPROFILE%/go/pkg/mod"
+  kind: run_command
+  command: "go clean -modcache"
+  safe: careful
+  group: Go
+  describe: "Downloaded modules; offline builds break until go mod download"
+  os: [windows]
+- id: maven-repo
+  tier: safe
+  name: Maven local repository
+  path: "%USERPROFILE%/.m2/repository"
+  kind: clean_contents
+  safe: careful
+  group: Java
+  describe: "All dependency jars; huge after years, offline builds break until refetch"
+  os: [windows]
+- id: nuget-packages
+  name: NuGet packages
+  path: "%USERPROFILE%/.nuget/packages"
+  kind: clean_contents
+  safe: safe
+  group: .NET
+  describe: "Restored automatically on next build"
+  os: [windows]
+- id: flutter-pub-cache
+  tier: safe
+  name: Flutter/Dart pub cache
+  path: "%LOCALAPPDATA%/Pub/Cache"
+  kind: run_command
+  command: "flutter pub cache clean"
+  exec: true
+  safe: careful
+  group: Flutter
+  describe: "Hosted packages; confirm, all projects refetch on next get"
+  os: [windows]
+- id: vscode-cache
+  name: VS Code caches
+  path: "%APPDATA%/Code"
+  kind: clean_selected
+  subpaths: [Cache, Code Cache, GPUCache, Crashpad, logs, CachedExtensionVSIXs, Service Worker]
+  category: devtools
+  safe: safe
+  describe: "Close VS Code first. NEVER touch User/ (settings, snippets, workspaceStorage)"
+  processes: [code.exe]
+  os: [windows]
+- id: jetbrains-systems
+  program: JetBrains
+  name: JetBrains IDE system dirs (per product)
+  path: ""
+  kind: old_versions
+  parent: "%LOCALAPPDATA%/JetBrains"
+  match: "*"
+  keep: [Toolbox, Toolbox.settings.json, consentOptions, Transient]
+  category: devtools
+  safe: careful
+  describe: "Per-product caches+logs (IdeaIC2024.x...). Close IDEs; Roaming settings/plugins untouched. IDE auto-cleans after 180d — same as Help > Delete Leftover IDE Directories"
+  processes: [idea64.exe, pycharm64.exe, webstorm64.exe, clion64.exe, phpstorm64.exe, rubymine64.exe, goland64.exe, rider64.exe, datagrip64.exe]
+  os: [windows]
+- id: jetbrains-toolbox
+  tier: safe
+  program: JetBrains
+  name: JetBrains Toolbox leftovers
+  path: "%LOCALAPPDATA%/JetBrains/Toolbox"
+  kind: run_command
+  command: "Toolbox Settings: remove previous tool versions, clear download cache, leftover dirs"
+  category: devtools
+  safe: careful
+  describe: "SIZE ONLY + in-app cleanup. Keeps previous IDE versions for instant rollback by design"
+  os: [windows]
+- id: vcpkg-archives
+  name: vcpkg binary cache (C++)
+  path: "%LOCALAPPDATA%/vcpkg/archives"
+  kind: clean_contents
+  safe: safe
+  group: C++
+  describe: "Microsoft-confirmed safe; rebuilt on next install. Disable via VCPKG_FEATURE_FLAGS=-binarycaching"
+  os: [windows]
+- id: conan-cache
+  tier: safe
+  name: Conan package cache (C++)
+  path: "%USERPROFILE%/.conan2"
+  kind: run_command
+  command: "conan remove * + conan cache clean"
+  safe: careful
+  group: C++
+  describe: "Official clean still leaves leftovers (incl. 13GB backup sources cases) — folder wipe is the real fix"
+  os: [windows]
+- id: bun-cache
+  name: Bun install cache
+  path: "%USERPROFILE%/.bun/install/cache"
+  kind: run_command
+  command: "bun pm cache rm"
+  exec: true
+  safe: safe
+  group: Node.js
+  describe: "Global store behind hardlinked node_modules"
+  os: [windows]
+- id: deno-cache
+  name: Deno cache
+  path: "%LOCALAPPDATA%/deno"
+  kind: run_command
+  command: "deno clean"
+  exec: true
+  safe: safe
+  group: Node.js
+  describe: "Remote modules + compiled output, refetched on run"
+  os: [windows]
+- id: unreal-ddc
+  tier: safe
+  name: Unreal Engine Derived Data Cache
+  path: "%LOCALAPPDATA%/UnrealEngine/Common/DerivedDataCache"
+  kind: clean_contents
+  program: Unreal Engine
+  safe: careful
+  describe: "Shaders, 8-47 GB cases. Rebuilds on next editor launch (slow first start)"
+  os: [windows]
+- id: vs-packages
+  tier: safe
+  name: Visual Studio installer packages
+  path: "C:/ProgramData/Microsoft/VisualStudio/Packages"
+  kind: clean_contents
+  program: Visual Studio
+  safe: careful
+  docs: "https://learn.microsoft.com/en-us/visualstudio/install/disable-or-move-the-package-cache"
+  describe: "3 GB offline repair payloads. Deleting = repair will need internet (MS approved). To stop regrowing: run vs_installer.exe --nocache once, or Installer > Modify"
+  os: [windows]
+- id: platformio-core
+  tier: safe
+  name: PlatformIO core data
+  path: "%USERPROFILE%/.platformio"
+  kind: clean_selected
+  subpaths: [.cache, packages]
+  program: PlatformIO
+  safe: careful
+  describe: "Downloaded platforms/toolchains, refetched per project. Keep penv/ (never listed here)"
+  os: [windows]
+- id: arduino-data
+  tier: safe
+  name: Arduino data
+  path: ""
+  kind: clean_contents
+  program: Arduino
+  safe: careful
+  describe: "Quit Arduino IDE first"
+  os: [windows]
+  options:
+    - id: staging
+      name: Staging (downloaded archives)
+      path: "%LOCALAPPDATA%/Arduino15/staging"
+      kind: clean_contents
+      safe: safe
+      describe: "Installer zips, redownloaded on board install"
+    - id: ide-cache
+      name: Arduino IDE 2 cache
+      path: "%APPDATA%/arduino-ide"
+      kind: clean_selected
+      subpaths: [Cache, Code Cache, GPUCache]
+      safe: safe
+      describe: "Electron caches"
+
+- id: tortoisesvn-cache
+  name: TortoiseSVN icon cache
+  path: "%LOCALAPPDATA%/TSVNCache"
+  kind: clean_contents
+  category: devtools
+  program: TortoiseSVN
+  safe: safe
+  describe: "Icon overlay DB, rebuilt on browse. Roaming configs untouched"
+  os: [windows]

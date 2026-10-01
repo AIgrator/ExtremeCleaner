@@ -1,0 +1,43 @@
+# Torrent clients: logs/dumps/updaters are trash; .torrent lists and settings are YOURS.
+- id: qbittorrent-logs
+  name: qBittorrent logs
+  path: "%LOCALAPPDATA%/qBittorrent/logs"
+  kind: clean_contents
+  category: other
+  program: qBittorrent
+  safe: safe
+  tier: safe
+  describe: "Plain logs. %APPDATA%/qBittorrent (preferences) never listed here"
+  os: [windows]
+- id: qbittorrent-backup
+  name: qBittorrent torrent list (BT_backup)
+  path: "%LOCALAPPDATA%/qBittorrent/BT_backup"
+  kind: manual
+  category: other
+  program: qBittorrent
+  safe: careful
+  tier: userdata
+  describe: "YOUR .torrent files = what you seed. Deleting stops seeding — review yourself"
+  os: [windows]
+- id: utorrent-junk
+  name: uTorrent logs/dumps/updaters
+  path: "%APPDATA%/uTorrent"
+  kind: clean_selected
+  subpaths: ["*.log", "*.dmp", "*.bad", "updates"]
+  category: other
+  program: uTorrent
+  safe: safe
+  tier: safe
+  describe: "Only trash masks listed — resume.dat/settings.dat never touched"
+  os: [windows]
+- id: bittorrent-junk
+  name: BitTorrent logs/dumps/updaters
+  path: "%APPDATA%/BitTorrent"
+  kind: clean_selected
+  subpaths: ["*.log", "*.dmp", "*.bad", "updates"]
+  category: other
+  program: BitTorrent
+  safe: safe
+  tier: safe
+  describe: "Only trash masks listed — resume.dat/settings.dat never touched"
+  os: [windows]

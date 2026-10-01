@@ -1,0 +1,162 @@
+# User data: shown with size + open-in-Explorer. The program NEVER deletes these.
+# Screenshots and downloads are YOUR files — review them yourself.
+- id: screenshots
+  name: Screenshots (Pictures)
+  path: ""
+  kind: manual
+  category: media
+  safe: careful
+  tier: userdata
+  describe: "Win+Shift+S and app shots land here (plain Pictures or OneDrive mirror). YOUR images — review yourself"
+  os: [windows]
+  options:
+    - id: standard
+      name: Pictures/Screenshots
+      path: "%USERPROFILE%/Pictures/Screenshots"
+      kind: manual
+      safe: careful
+      describe: ""
+    - id: onedrive-en
+      name: OneDrive/Pictures
+      path: "%USERPROFILE%/OneDrive/Pictures"
+      kind: manual
+      safe: careful
+      describe: "OneDrive mirror of Pictures"
+    - id: onedrive-ru
+      name: OneDrive/Изображения
+      path: "%USERPROFILE%/OneDrive/Изображения"
+      kind: manual
+      safe: careful
+      describe: "Localized OneDrive mirror"
+- id: gamebar-captures
+  name: Xbox Game Bar captures
+  path: ""
+  kind: manual
+  category: media
+  program: Xbox Game Bar
+  safe: careful
+  tier: userdata
+  describe: "Win+G clips (MP4) and shots (PNG). YOUR captures — review yourself"
+  os: [windows]
+  options:
+    - id: clips
+      name: Videos/Captures
+      path: "%USERPROFILE%/Videos/Captures"
+      kind: manual
+      safe: careful
+      describe: ""
+    - id: shots
+      name: Pictures/Xbox Screenshots
+      path: "%USERPROFILE%/Pictures/Xbox Screenshots"
+      kind: manual
+      safe: careful
+      describe: ""
+- id: sharex-shots
+  name: ShareX screenshots
+  path: "%USERPROFILE%/Documents/ShareX"
+  kind: manual
+  category: media
+  program: ShareX
+  safe: careful
+  tier: userdata
+  describe: "Default output (Screenshots/ by month). Custom folder is set in App Settings > Paths"
+  os: [windows]
+- id: bandicam-output
+  name: Bandicam output
+  path: "%USERPROFILE%/Documents/Bandicam"
+  kind: manual
+  category: media
+  program: Bandicam
+  safe: careful
+  tier: userdata
+  describe: "Default output folder; check Output settings if customized"
+  os: [windows]
+- id: downloads-folder
+  name: Downloads folder
+  path: "%USERPROFILE%/Downloads"
+  kind: manual
+  category: other
+  safe: careful
+  tier: userdata
+  describe: "Installers/zips you forgot. YOUR files — review yourself"
+  os: [windows]
+- id: desktop-pile
+  name: Desktop pile
+  path: "%USERPROFILE%/Desktop"
+  kind: manual
+  category: other
+  safe: careful
+  tier: userdata
+  describe: "The classic junkyard. YOUR files — review yourself"
+  os: [windows]
+- id: documents-root
+  name: Documents root
+  path: "%USERPROFILE%/Documents"
+  kind: manual
+  category: other
+  safe: careful
+  tier: userdata
+  describe: "Years of forgotten files. Note: game hubs (My Games/EA/Rockstar) inside are counted separately too"
+  os: [windows]
+- id: videos-folder
+  name: Videos folder
+  path: "%USERPROFILE%/Videos"
+  kind: manual
+  category: media
+  safe: careful
+  tier: userdata
+  describe: "Recordings, downloads, exports. YOUR files — review yourself"
+  os: [windows]
+- id: music-folder
+  name: Music folder
+  path: "%USERPROFILE%/Music"
+  kind: manual
+  category: media
+  safe: careful
+  tier: userdata
+  describe: "Old downloads/rips. YOUR files — review yourself"
+  os: [windows]
+- id: onedrive-mirror
+  name: OneDrive local mirror
+  path: "%USERPROFILE%/OneDrive"
+  kind: manual
+  category: other
+  safe: careful
+  tier: userdata
+  describe: "Deleting local files DELETES them in the cloud too. Review in Explorer, use Free up space per file"
+  os: [windows]
+- id: outlook-ost
+  name: Outlook offline mail (OST)
+  path: "%LOCALAPPDATA%/Microsoft/Outlook"
+  kind: manual
+  category: other
+  program: Microsoft
+  safe: careful
+  tier: userdata
+  describe: "Offline copies of mailboxes (GBs). Originals stay on server; compact via Account Settings > Data Files"
+  os: [windows]
+- id: thunderbird-mail
+  name: Thunderbird mail storage
+  path: ""
+  kind: manual
+  category: messengers
+  program: Thunderbird
+  safe: careful
+  tier: userdata
+  describe: "YOUR mails (Mail/Local Folders per profile). Compact folders in-app to shrink"
+  os: [windows]
+  options:
+    - id: mail
+      name: Mail per profile
+      parent: "%APPDATA%/Thunderbird/Profiles"
+      match: "*.default*/Mail"
+      kind: old_versions
+      safe: careful
+      describe: ""
+    - id: imap
+      name: IMAP cache per profile
+      parent: "%APPDATA%/Thunderbird/Profiles"
+      match: "*.default*/ImapMail"
+      kind: old_versions
+      safe: careful
+      describe: ""

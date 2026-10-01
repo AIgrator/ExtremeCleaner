@@ -1,0 +1,92 @@
+- id: claude-debug-logs
+  program: Claude Code
+  name: Claude Code debug logs
+  path: ''
+  kind: old_versions
+  parent: '%USERPROFILE%/.claude'
+  match: debug
+  keep: []
+  category: devtools
+  safe: safe
+  describe: TXT debug logs, safe to drop
+  os:
+  - windows
+- id: claude-telemetry
+  program: Claude Code
+  name: Claude Code telemetry
+  path: ''
+  kind: old_versions
+  parent: '%USERPROFILE%/.claude'
+  match: telemetry
+  keep: []
+  category: devtools
+  safe: safe
+  describe: Failed telemetry uploads, safe to drop
+  os:
+  - windows
+- id: claude-file-history
+  program: Claude Code
+  name: Claude Code file history
+  path: ''
+  kind: old_versions
+  parent: '%USERPROFILE%/.claude'
+  match: file-history
+  keep: []
+  category: devtools
+  safe: safe
+  describe: File version snapshots, safe to drop
+  os:
+  - windows
+- id: claude-sessions
+  program: Claude Code
+  name: Claude Code sessions (~/.claude/projects)
+  path: '%USERPROFILE%/.claude/projects'
+  kind: run_command
+  command: Delete .jsonl sessions older than 30 days, keep memory/ and active session
+    (or use claude-clean)
+  category: devtools
+  safe: careful
+  describe: SIZE ONLY + manual cleanup. 100MB-3GB of past conversations; resume needs
+    them
+  os:
+  - windows
+- id: cursor-caches
+  program: Cursor
+  name: Cursor editor caches
+  path: '%APPDATA%/Cursor'
+  kind: clean_selected
+  subpaths:
+  - Cache
+  - Code Cache
+  - GPUCache
+  category: devtools
+  safe: safe
+  describe: Close Cursor first; chats live in ~/.cursor, untouched here
+  processes: [cursor.exe]
+  os:
+  - windows
+- id: cursor-data
+  program: Cursor
+  name: Cursor chats/state (~/.cursor)
+  path: '%USERPROFILE%/.cursor'
+  kind: run_command
+  command: Delete old chats in-app; vacuum User/globalStorage/state.vscdb (1GB+)
+  category: devtools
+  safe: careful
+  describe: SIZE ONLY + in-app cleanup. store.db + transcripts, up to 8 GB scattered
+  os:
+  - windows
+- id: windsurf-caches
+  name: Windsurf editor caches
+  path: '%APPDATA%/Windsurf'
+  kind: clean_selected
+  subpaths:
+  - Cache
+  - Code Cache
+  - GPUCache
+  category: devtools
+  safe: safe
+  describe: Close Windsurf first
+  processes: [windsurf.exe]
+  os:
+  - windows

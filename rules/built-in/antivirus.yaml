@@ -1,0 +1,65 @@
+# Antiviruses: quarantine/history/old bases can be tens of GB (26/90/160 GB cases).
+# Self-defense blocks hands and admin rights are needed — show size, clean via the AV itself.
+- id: defender-history
+  name: Defender scan history
+  path: "C:/ProgramData/Microsoft/Windows Defender/Scans/History"
+  kind: manual
+  category: antivirus
+  safe: careful
+  tier: userdata
+  describe: "26 GB cases (2.3M encrypted files). Clean via Windows Security > Protection history or Disk Cleanup. Hands need admin; service locks files"
+  os: [windows]
+- id: defender-quarantine
+  name: Defender quarantine
+  path: "C:/ProgramData/Microsoft/Windows Defender/Quarantine"
+  kind: manual
+  category: antivirus
+  safe: careful
+  tier: userdata
+  describe: "90 GB cases. Delete ONLY via Windows Security > Quarantine (files are live malware, isolated)"
+  os: [windows]
+- id: defender-definitions
+  name: Defender old definition updates
+  path: "C:/ProgramData/Microsoft/Windows Defender/Definition Updates"
+  kind: manual
+  category: antivirus
+  safe: careful
+  tier: userdata
+  describe: "7-160 GB of old bases+Backup. Disk Cleanup > Windows Update Cleanup; Safe Mode as last resort"
+  os: [windows]
+- id: avast-chest
+  name: Avast Virus Chest
+  path: "%ProgramData%/AVAST Software/Avast/chest"
+  kind: manual
+  category: antivirus
+  safe: careful
+  tier: userdata
+  describe: "Encrypted, protected area (5 GB default quota). Delete ONLY via Avast UI > Quarantine"
+  os: [windows]
+- id: malwarebytes-logs
+  name: Malwarebytes logs
+  path: "%ProgramData%/Malwarebytes/MBAMService/logs"
+  kind: manual
+  category: antivirus
+  safe: careful
+  tier: userdata
+  describe: "Service logs. Quarantine itself: delete via Malwarebytes UI > Detection History"
+  os: [windows]
+- id: mcafee-logs
+  name: McAfee MCP logs
+  path: "C:/ProgramData/McAfee/MCP/Logs"
+  kind: manual
+  category: antivirus
+  safe: careful
+  tier: userdata
+  describe: "3.2 GB cases (1800+ ETL traces). Corporate machines: ask your admin first. Quarantine: McAfee UI only"
+  os: [windows]
+- id: kaspersky-kvrt
+  name: Kaspersky removal tool leftovers
+  path: "C:/KVRT_Data"
+  kind: manual
+  category: antivirus
+  safe: careful
+  tier: userdata
+  describe: "One-time Virus Removal Tool traces/quarantine/reports. Main product quarantine: Kaspersky UI only"
+  os: [windows]

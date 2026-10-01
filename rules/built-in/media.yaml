@@ -1,0 +1,251 @@
+# Media: video editors and music. CCleaner doesn't touch these.
+# Render/preview caches regenerate; offline downloads redownload.
+- id: capcut-cache
+  name: CapCut cache
+  path: "%LOCALAPPDATA%/CapCut/User Data/Cache"
+  kind: clean_contents
+  category: media
+  safe: safe
+  describe: "Close CapCut first; effects/fonts redownload on demand. Settings shows less than folder (resources vs preview cache)"
+  processes: [capcut.exe]
+  os: [windows]
+- id: premiere-media-cache
+  program: Adobe
+  name: Premiere Pro media cache
+  path: "%APPDATA%/Adobe/Common"
+  kind: clean_selected
+  subpaths: [Media Cache Files, Media Cache]
+  category: media
+  safe: safe
+  describe: "Shared DB with After Effects/Media Encoder/Audition — one cleanup covers all. Close Adobe apps first; hundreds of GB over years"
+  processes: [afterfx.exe, "premiere pro.exe", "adobe media encoder.exe", audition.exe, lightroom.exe, photoshop.exe]
+  os: [windows]
+- id: after-effects-disk-cache
+  tier: safe
+  program: Adobe
+  name: After Effects disk cache
+  path: "%APPDATA%/Adobe"
+  kind: run_command
+  command: "AE > Edit > Purge > All Memory & Disk Cache (location: Preferences > Media & Disk Cache > Empty Disk Cache)"
+  docs: "https://www.youtube.com/watch?v=uCeu-ok1JSU"
+  category: media
+  safe: careful
+  describe: "SIZE ONLY + in-app cleanup. Disk Cache path is user-set; RAM previews regenerate"
+  os: [windows]
+- id: camera-raw-cache
+  program: Adobe
+  name: Camera Raw cache
+  path: "%LOCALAPPDATA%/Adobe/CameraRaw/Cache"
+  kind: clean_contents
+  category: media
+  safe: safe
+  describe: "Shared by Photoshop/Bridge/Lightroom; raw previews rebuild on demand"
+  os: [windows]
+- id: lightroom-previews
+  tier: safe
+  name: Lightroom previews
+  path: "%USERPROFILE%/Pictures/Lightroom"
+  kind: run_command
+  command: "Lightroom > Library > Previews > Discard 1:1 / Smart Previews"
+  category: media
+  safe: careful
+  describe: "SIZE ONLY + in-app cleanup. *.lrdata next to catalog rebuild slowly — keep if you browse offline"
+  os: [windows]
+- id: davinci-cache
+  tier: safe
+  name: DaVinci Resolve render cache
+  path: "%APPDATA%/Blackmagic Design"
+  kind: run_command
+  command: "Resolve > Playback > Delete Render Cache > All (cache path: Preferences > Media Storage)"
+  docs: "https://www.youtube.com/watch?v=1_FmnuQcLwo"
+  category: media
+  safe: careful
+  describe: "SIZE ONLY + in-app cleanup. Cases of 400-900 GB. Never delete databases by hand — projects live nearby"
+  os: [windows]
+- id: spotify-data
+  name: Spotify songs cache
+  path: "%LOCALAPPDATA%/Spotify/Data"
+  kind: clean_contents
+  category: media
+  safe: careful
+  describe: "Close Spotify first. Includes OFFLINE downloads — for cache-only use Settings > Storage > Clear cache, or set storage.size limit in prefs file"
+  processes: [spotify.exe]
+  os: [windows]
+
+- id: vlc-art
+  name: VLC art cache
+  path: "%APPDATA%/vlc"
+  kind: clean_selected
+  subpaths: [art]
+  category: media
+  program: VLC
+  safe: safe
+  describe: "Album art, rebuilt on play"
+  os: [windows]
+- id: foobar-cache
+  name: foobar2000 wavecache/crashes
+  path: "%APPDATA%/foobar2000"
+  kind: clean_selected
+  subpaths: [wavecache.db, crash reports]
+  category: media
+  program: foobar2000
+  safe: safe
+  describe: "Waveform cache + crash dumps; library kept"
+  os: [windows]
+- id: musicbee-cache
+  name: MusicBee internal cache
+  path: "%APPDATA%/MusicBee"
+  kind: clean_selected
+  subpaths: [InternalCache]
+  category: media
+  program: MusicBee
+  safe: safe
+  describe: "Rebuilt on rescan"
+  os: [windows]
+- id: potplayer-log
+  name: PotPlayer logs
+  path: "%APPDATA%/Daum/PotPlayer"
+  kind: clean_selected
+  subpaths: [Log]
+  category: media
+  program: PotPlayer
+  safe: safe
+  describe: "Plain playback logs"
+  os: [windows]
+- id: calibre-cache
+  name: Calibre cache
+  path: "%LOCALAPPDATA%/calibre-cache"
+  kind: clean_contents
+  category: media
+  program: Calibre
+  safe: safe
+  describe: "Viewer/webengine cache; library kept"
+  os: [windows]
+- id: sumatra-cache
+  name: SumatraPDF cache
+  path: ""
+  kind: clean_contents
+  category: media
+  program: SumatraPDF
+  safe: safe
+  describe: "Rendered page thumbnails"
+  os: [windows]
+  options:
+    - id: local
+      name: Cache (Local)
+      path: "%LOCALAPPDATA%/SumatraPDF/sumatrapdfcache"
+      kind: clean_contents
+      safe: safe
+      describe: "Rendered page thumbnails (Local)"
+    - id: roaming
+      name: Cache (Roaming)
+      path: "%APPDATA%/SumatraPDF/sumatrapdfcache"
+      kind: clean_contents
+      safe: safe
+      describe: "Rendered page thumbnails (Roaming)"
+- id: foxit-cache
+  name: Foxit PDF Editor cache
+  path: "%APPDATA%/Foxit Software/Foxit PDF Editor"
+  kind: clean_selected
+  subpaths: [Cache]
+  category: media
+  program: Foxit
+  safe: safe
+  describe: "Quit Foxit first"
+  os: [windows]
+- id: kodi-cache
+  name: Kodi cache/thumbnails
+  path: "%APPDATA%/kodi"
+  kind: clean_selected
+  subpaths: [Cache, Thumbnails, Addons/Packages]
+  category: media
+  program: Kodi
+  safe: safe
+  describe: "Fanart + addon zips; thumbnails rebuild slowly on first browse"
+  os: [windows]
+- id: plex-cache
+  name: Plex cache/logs
+  path: ""
+  kind: clean_contents
+  category: media
+  program: Plex
+  safe: safe
+  describe: "Quit Plex first; libraries untouched"
+  os: [windows]
+  options:
+    - id: client
+      name: Plex client
+      path: "%LOCALAPPDATA%/Plex"
+      kind: clean_selected
+      subpaths: [cache, logs]
+      safe: safe
+      describe: "Player cache and logs"
+    - id: server
+      name: Plex Media Server
+      path: "%LOCALAPPDATA%/Plex/Plex Media Server"
+      kind: clean_selected
+      subpaths: [Cache, Logs]
+      safe: safe
+      describe: "Transcoder cache and logs"
+- id: jellyfin-cache
+  name: Jellyfin player cache
+  path: "%LOCALAPPDATA%/Jellyfin Media Player"
+  kind: clean_selected
+  subpaths: [cache, QtWebEngine/Default/GPUCache]
+  category: media
+  program: Jellyfin
+  safe: safe
+  describe: "Quit player first"
+  os: [windows]
+- id: obs-logs
+  name: OBS Studio logs/crashes
+  path: "%APPDATA%/obs-studio"
+  kind: clean_selected
+  subpaths: [logs, crashes]
+  category: media
+  program: OBS Studio
+  safe: safe
+  describe: "Session logs; scenes/profiles kept. Recordings are yours — untouched"
+  os: [windows]
+- id: handbrake-logs
+  name: HandBrake logs
+  path: "%APPDATA%/HandBrake"
+  kind: clean_selected
+  subpaths: [logs]
+  category: media
+  program: HandBrake
+  safe: safe
+  describe: "Encode logs"
+  os: [windows]
+- id: audacity-crashes
+  name: Audacity crash reports
+  path: "%LOCALAPPDATA%/Audacity"
+  kind: clean_selected
+  subpaths: [CrashReports]
+  category: media
+  program: Audacity
+  safe: safe
+  describe: "Crash dumps only"
+  os: [windows]
+- id: gimp-temp
+  name: GIMP temp/crashes
+  path: "%LOCALAPPDATA%/GIMP"
+  kind: clean_selected
+  subpaths: ["*/tmp", "*/CrashLog"]
+  category: media
+  program: GIMP
+  safe: safe
+  describe: "Versioned temp dirs; close GIMP first"
+  processes: [gimp.exe]
+  os: [windows]
+- id: krita-cache
+  name: Krita cache/logs
+  path: "%LOCALAPPDATA%"
+  kind: clean_selected
+  subpaths: ["krita/cache", "krita*.log"]
+  category: media
+  program: Krita
+  safe: safe
+  describe: "Close Krita first"
+  processes: [krita.exe]
+  os: [windows]

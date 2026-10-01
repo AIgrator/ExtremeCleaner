@@ -1,0 +1,136 @@
+- id: sys-softwaredist
+  name: Windows Update downloads
+  path: "C:/Windows/SoftwareDistribution/Download"
+  kind: run_command
+  command: "net stop wuauserv + net stop bits > delete contents > net start wuauserv + net start bits"
+  category: system
+  safe: never_full
+  describe: "10-20 GB of applied updates. ONLY when no update is installing/waiting for reboot — deleting mid-install corrupts the OS"
+  search: "SoftwareDistribution Download folder safe to delete Windows Update cache"
+  docs: "https://learn.microsoft.com/en-us/answers/questions/785704/c-windowssoftwaredistributiondownload-taking-up-to"
+  os: [windows]
+- id: sys-cbs-logs
+  name: Servicing logs (CBS)
+  path: "C:/Windows/Logs/CBS"
+  kind: run_command
+  command: "Stop TrustedInstaller service > delete CbsPersist_*.log (keep latest CBS.log) > start service"
+  category: system
+  safe: never_full
+  describe: "SFC/DISM logs; broken compression can grow them to GBs. Troubleshooting-only files"
+  search: "CbsPersist logs safe to delete Servicing CBS log folder"
+  docs: "https://learn.microsoft.com/en-us/answers/questions/2716487/c-windowslogscbs"
+  os: [windows]
+- id: sys-delivery-opt
+  name: Delivery Optimization files
+  path: ""
+  kind: run_command
+  command: "cleanmgr /d C: (tick Delivery Optimization Files) or Settings > Storage > Temporary files. To stop sharing: Windows Update > Advanced options > Delivery Optimization > off"
+  category: system
+  safe: never_full
+  describe: "2.5-35 GB of P2P update sharing payload (folder needs admin to measure). Safe via Disk Cleanup"
+  search: "Delivery Optimization files how to clear Windows 11"
+  docs: "https://learn.microsoft.com/en-us/windows/deployment/do/waas-delivery-optimization"
+  os: [windows]
+- id: sys-pagefile
+  name: Virtual memory (pagefile/swapfile)
+  path: ""
+  kind: run_command
+  command: "System Properties > Advanced > Performance Settings > Advanced > Virtual memory > Change (move to another drive or set custom size)"
+  category: system
+  safe: never_full
+  describe: "SIZE ONLY + system dialog. Never just delete — move or resize; needs reboot"
+  search: "move pagefile sys to another drive Windows 10 11"
+  os: [windows]
+  options:
+    - id: pagefile
+      name: pagefile.sys
+      path: "C:/pagefile.sys"
+      kind: run_command
+      command: "Move via Virtual memory dialog"
+      safe: never_full
+      describe: "~RAM size; overflow RAM onto disk"
+    - id: swapfile
+      name: swapfile.sys
+      path: "C:/swapfile.sys"
+      kind: run_command
+      command: "Managed with pagefile via the same dialog"
+      safe: never_full
+      describe: "UWP app swapping; small"
+- id: sys-hiberfil
+  name: Hibernation file (hiberfil.sys)
+  path: "C:/hiberfil.sys"
+  kind: run_command
+  command: "powercfg /hibernate off  OR  powercfg /h /type reduced (keeps fast startup)"
+  category: system
+  safe: never_full
+  describe: "NEVER delete by hand (protected, recreates itself). ~40% of RAM full / ~20% reduced"
+  search: "hiberfil.sys what is it disable hibernation powercfg"
+  docs: "https://learn.microsoft.com/en-us/troubleshoot/windows-client/setup-upgrade-and-drivers/disable-and-re-enable-hibernation"
+  os: [windows]
+- id: sys-vss
+  name: Shadow copies + Point-in-Time Restore (VSS)
+  path: ""
+  kind: run_command
+  command: "vssadmin list shadowstorage  THEN  vssadmin resize shadowstorage /for=C: /on=C: /maxsize=15GB"
+  category: system
+  safe: never_full
+  describe: "SIZE via vssadmin list (ADMIN rights required). Grows from big-file churn, not installs. Do NOT disable protection entirely"
+  docs: "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/vssadmin-resize-shadowstorage"
+  search: "vssadmin resize shadowstorage reduce shadow copies Windows 11"
+  os: [windows]
+- id: sys-restore-points
+  name: System Restore points
+  path: ""
+  kind: run_command
+  command: "Press Win, type 'create a restore point', open it > Configure: 'Currently used' is your forgotten gigabytes > Delete wipes them (also orphans with protection OFF). Keep-latest via admin terminal: vssadmin delete shadows /for=C: /oldest (repeat)"
+  category: system
+  safe: never_full
+  describe: "Windows' own rollback snapshots (drivers/updates). Protection is usually ON from install and silently eats gigabytes. We only count here — you delete by hand (see Action); keep at least the latest"
+  docs: "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/vssadmin-delete-shadows"
+  search: "delete old system restore points keep latest vssadmin delete shadows"
+  os: [windows]
+  discover: restore-points
+- id: sys-d3dscache
+  name: DirectX shader cache (D3DSCache)
+  path: "%LOCALAPPDATA%/D3DSCache"
+  kind: run_command
+  command: "cleanmgr /d C: (tick DirectX Shader Cache)"
+  category: system
+  safe: never_full
+  describe: "System-level cache (50-500 MB); driver-level NVIDIA DXCache is a separate rule"
+  search: "clear DirectX shader cache D3DSCache Windows 11"
+  docs: "https://support.microsoft.com/en-us/windows/free-up-drive-space-in-windows-85529ccb-c365-490d-b548-831022bc9b32"
+  os: [windows]
+- id: sys-windows-old
+  name: Previous Windows installations (Windows.old)
+  path: "C:/Windows.old"
+  kind: run_command
+  command: "cleanmgr (Previous Windows installations). Self-deletes after 10 days"
+  category: system
+  safe: never_full
+  describe: "20-30 GB after version upgrades; keeps rollback. NEVER delete by hand (ACL errors)"
+  search: "Windows.old folder safe to delete after upgrade"
+  docs: "https://support.microsoft.com/en-us/windows/manage-drive-space-with-storage-sense-654f6ada-7bfc-45e5-966b-e24aded96ad5"
+  os: [windows]
+- id: sys-winsxs
+  name: Component store (WinSxS)
+  path: "C:/Windows/WinSxS"
+  kind: run_command
+  command: "DISM /Online /Cleanup-Image /AnalyzeComponentStore  THEN  StartComponentCleanup (avoid /ResetBase)"
+  category: system
+  safe: never_full
+  docs: "https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/clean-up-the-winsxs-folder?view=windows-11"
+  describe: "NEVER touch by hand (system won't boot/update). Explorer LIES here (hardlinks) — shown size overestimated; real ballast is Backups+Cache, usually 0.5-2 GB"
+  search: "WinSxS folder safe to delete component store cleanup DISM"
+  os: [windows]
+- id: sys-reserved
+  name: Reserved Storage (~7 GB)
+  path: ""
+  kind: run_command
+  command: "DISM /Online /Set-ReservedStorageState /State:Disabled (not recommended)"
+  category: system
+  safe: never_full
+  describe: "Virtual ~7 GB reservation held by Windows for updates/temp — not a real folder. So upgrades don't stall on a full disk"
+  docs: "https://support.microsoft.com/en-us/windows/storage-settings-in-windows-5bc98443-0711-8038-4621-6a18ddc904f2"
+  search: "Windows Reserved Storage 7GB what is it disable"
+  os: [windows]

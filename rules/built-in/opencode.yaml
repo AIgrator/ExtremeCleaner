@@ -1,0 +1,49 @@
+# OpenCode: trash (tier safe, checkbox) split from YOUR context (tier userdata, open-only).
+- id: opencode-cache
+  name: OpenCode cache/logs
+  path: ''
+  kind: clean_contents
+  category: devtools
+  safe: safe
+  tier: safe
+  describe: 'Downloaded helpers + plain logs. Close opencode first.'
+  processes: [opencode.exe]
+  os: [windows]
+  options:
+  - id: cache
+    name: Cache (binaries, model list)
+    path: '%USERPROFILE%/.cache/opencode'
+    kind: clean_contents
+    safe: safe
+    describe: Downloaded helpers, redownloaded on next run
+  - id: logs
+    name: Logs and tool output
+    path: '%USERPROFILE%/.local/share/opencode'
+    kind: clean_selected
+    subpaths: [log, tool-output]
+    safe: safe
+    describe: Plain logs
+- id: opencode-history
+  name: OpenCode session history (context!)
+  path: ''
+  kind: clean_contents
+  category: devtools
+  safe: careful
+  tier: userdata
+  describe: 'YOUR conversations and resume context. Program never deletes this — open the folder and decide yourself.'
+  os: [windows]
+  options:
+  - id: history
+    name: Sessions and snapshots
+    path: '%USERPROFILE%/.local/share/opencode'
+    kind: clean_selected
+    subpaths: [storage, snapshot]
+    safe: careful
+    describe: Your conversations and resume context
+  - id: history-index
+    name: Session index (opencode.db*)
+    parent: '%USERPROFILE%/.local/share/opencode'
+    match: opencode.db*
+    kind: old_versions
+    safe: careful
+    describe: Index over sessions; goes together with history

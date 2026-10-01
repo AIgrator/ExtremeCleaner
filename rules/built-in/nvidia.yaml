@@ -1,0 +1,75 @@
+# NVIDIA shader caches: safe, regrow on next game launch
+- id: nvidia-dxcache
+  name: NVIDIA DXCache
+  path: "%LOCALAPPDATA%/NVIDIA/DXCache"
+  kind: clean_contents
+  group: GPU
+  safe: safe
+  describe: "Old games/drivers pile up; set Shader Cache Size limit in NVIDIA panel"
+  os: [windows]
+- id: nvidia-glcache
+  name: NVIDIA GLCache
+  path: "%LOCALAPPDATA%/NVIDIA/GLCache"
+  kind: clean_contents
+  group: GPU
+  safe: safe
+  describe: "Same as DXCache, for OpenGL"
+  os: [windows]
+
+- id: nvidia-installers
+  tier: safe
+  name: NVIDIA installer downloads
+  path: "%ProgramData%/NVIDIA Corporation"
+  kind: clean_selected
+  subpaths: [Downloader, Updatus/DownloadManager]
+  category: cache
+  group: GPU
+  program: NVIDIA
+  safe: careful
+  describe: "Driver payloads; keep if you reinstall offline. Needs admin"
+  os: [windows]
+- id: amd-cache
+  name: AMD software cache
+  path: "%LOCALAPPDATA%/AMD"
+  kind: clean_selected
+  subpaths: ["*Cache"]
+  category: cache
+  group: GPU
+  program: AMD
+  safe: safe
+  describe: "QML/component caches; drivers untouched"
+  os: [windows]
+- id: driver-extracts
+  tier: safe
+  name: Driver installer extracts (C:/)
+  path: ""
+  kind: clean_contents
+  category: other
+  safe: careful
+  describe: "Self-extracting driver packs leave folders on C:/ — safe after successful install + reboot"
+  os: [windows]
+  options:
+    - id: nvidia
+      name: C:/NVIDIA
+      path: "C:/NVIDIA"
+      kind: clean_contents
+      safe: careful
+      describe: "NVIDIA installer extracts on C:/"
+    - id: amd
+      name: C:/AMD
+      path: "C:/AMD"
+      kind: clean_contents
+      safe: careful
+      describe: "AMD installer extracts on C:/"
+    - id: intel
+      name: C:/Intel
+      path: "C:/Intel"
+      kind: clean_contents
+      safe: careful
+      describe: "Intel installer extracts on C:/"
+    - id: dell
+      name: C:/dell
+      path: "C:/dell"
+      kind: clean_contents
+      safe: careful
+      describe: "Dell installer extracts on C:/"
