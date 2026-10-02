@@ -136,6 +136,10 @@ growing and the program doesn't list it — add it yourself, right from the inte
 [Releases](../../releases) and run it — no Python needed, nothing is installed.
 Run as administrator if you want automatic restore points before cleanups.
 
+**System requirements:** Windows 10/11 64-bit. No Python needed (everything is
+inside the exe). Admin rights only for automatic restore points — without them
+the program warns and asks for confirmation instead.
+
 From source (Windows, Python 3.10+):
 
 ```powershell
