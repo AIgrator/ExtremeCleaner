@@ -37,6 +37,33 @@
   describe: File version snapshots, safe to drop
   os:
   - windows
+- id: claude-shell-snapshots
+  program: Claude Code
+  name: Claude Code shell snapshots
+  path: '%USERPROFILE%/.claude/shell-snapshots'
+  kind: clean_contents
+  category: devtools
+  safe: safe
+  describe: 'Per-session bash env dumps; recreated on demand (many sessions = hundreds of MBs)'
+  os:
+  - windows
+- id: claude-projects-cache
+  program: Claude Code
+  name: Claude Code project memory cache
+  kind: clean_selected
+  category: devtools
+  safe: safe
+  describe: 'memoryCache chunks next to sessions, rebuilt. Sessions/memory/ untouched'
+  os:
+  - windows
+  options:
+  - id: memory-cache
+    name: memoryCache (per project)
+    parent: '%USERPROFILE%/.claude/projects'
+    match: '*/memoryCache'
+    kind: clean_contents
+    safe: safe
+    describe: 'Conversation memory cache, rebuilt on demand'
 - id: claude-sessions
   program: Claude Code
   name: Claude Code sessions (~/.claude/projects)
@@ -86,7 +113,252 @@
   - GPUCache
   category: devtools
   safe: safe
-  describe: Close Windsurf first
+  describe: 'Close Windsurf first'
   processes: [windsurf.exe]
   os:
   - windows
+- id: windsurf-agent-data
+  program: Windsurf
+  name: Windsurf Cascade agent data (~/.codeium/windsurf)
+  path: '%USERPROFILE%/.codeium/windsurf'
+  kind: manual
+  category: devtools
+  safe: careful
+  tier: userdata
+  describe: 'Cascade chats (.pb), per-workspace memories (official docs: ~/.codeium/windsurf/memories/), rules/workflows, embeddings DB. Quit Windsurf before cleaning anything here'
+  os: [windows]
+  options:
+  - id: database
+    name: database (embeddings)
+    path: '%USERPROFILE%/.codeium/windsurf/database'
+    kind: clean_contents
+    safe: safe
+    describe: 'Vector index of your codebase, rebuilt on next reindex'
+  - id: cascade-tmp
+    name: cascade temp (.tmp)
+    path: '%USERPROFILE%/.codeium/windsurf/cascade'
+    kind: manual
+    safe: careful
+    describe: 'cascade/ holds .pb conversations + huge .tmp dumps; delete only *.tmp yourself - .pb = history'
+- id: devin-desktop-caches
+  program: Devin Desktop (ex-Windsurf)
+  name: Devin Desktop editor caches
+  path: '%APPDATA%/Devin'
+  kind: clean_selected
+  subpaths:
+  - Cache
+  - Code Cache
+  - GPUCache
+  category: devtools
+  safe: safe
+  describe: 'Official FAQ (docs.devin.ai): since 2026-06 rebrand new data is written to %APPDATA%\Devin; legacy %APPDATA%\Windsurf stays read-only for old installs'
+  processes: [Devin.exe]
+  os: [windows]
+- id: devin-local-data
+  program: Devin Desktop (ex-Windsurf)
+  name: Devin Local agent data (~/.devin)
+  path: '%USERPROFILE%/.devin'
+  kind: manual
+  category: devtools
+  safe: careful
+  tier: userdata
+  describe: 'Devin CLI/local agent harness state. FAQ lists cleanup dirs: %APPDATA%\Devin, %LOCALAPPDATA%\devin, ~/.codeium, ~/.windsurf; global skills now in %APPDATA%\devin\skills'
+  os: [windows]
+- id: tabnine-vdb
+  program: Tabnine
+  name: Tabnine VDB index/logs
+  path: '%APPDATA%/TabNine/servers/vdb'
+  kind: clean_contents
+  category: devtools
+  safe: safe
+  tier: safe
+  describe: 'Official docs: personalization vector DB + logs. Can balloon hugely (official issue #731: 109 GB); Tabnine staff: close IDE, delete - rebuilt on reindex'
+  os: [windows]
+- id: pearai-caches
+  program: PearAI
+  name: PearAI editor caches
+  path: '%APPDATA%/PearAI'
+  kind: clean_selected
+  subpaths:
+  - Cache
+  - Code Cache
+  - GPUCache
+  category: devtools
+  safe: safe
+  describe: 'VS Code fork dir (like Trae/Windsurf). PearAI chat state is a Continue fork - lives in ~/.pearai'
+  os: [windows]
+- id: pearai-data
+  program: PearAI
+  name: PearAI data (~/.pearai)
+  path: '%USERPROFILE%/.pearai'
+  kind: manual
+  category: devtools
+  safe: careful
+  tier: userdata
+  describe: 'Official docs reference ~/.pearai/config.ts (custom slash-commands); Continue-fork config/chat state lives here'
+  os: [windows]
+- id: amazonq-config
+  program: Amazon Q Developer
+  name: Amazon Q local config (~/.aws/amazonq)
+  path: '%USERPROFILE%/.aws/amazonq'
+  kind: manual
+  category: devtools
+  safe: careful
+  tier: userdata
+  describe: 'Official AWS docs: global MCP/agent configs live here; chat content itself is stored server-side (US regions). IDE plugins go EOL 30.04.2027 (successor: Kiro)'
+  os: [windows]
+- id: trae-caches
+  program: Trae
+  name: Trae IDE caches
+  path: '%APPDATA%/Trae'
+  kind: clean_selected
+  subpaths:
+  - Cache
+  - Code Cache
+  - GPUCache
+  category: devtools
+  safe: safe
+  describe: 'Close Trae first; agent chats live in ~/.trae, untouched here'
+  processes: [Trae.exe]
+  os:
+  - windows
+- id: continue-caches
+  program: Continue
+  name: Continue index/logs
+  kind: clean_contents
+  category: devtools
+  safe: safe
+  tier: safe
+  describe: 'Embeddings + logs. config.yaml and chat history outside these dirs are untouched'
+  os:
+  - windows
+  options:
+  - id: index
+    name: Codebase embeddings index
+    path: '%USERPROFILE%/.continue/index'
+    kind: clean_contents
+    safe: safe
+    describe: 'Vector index of your repos, rebuilt (re-embedded) on next run'
+  - id: logs
+    name: Logs
+    path: '%USERPROFILE%/.continue/logs'
+    kind: clean_contents
+    safe: safe
+    describe: Plain logs
+- id: cherry-studio-caches
+  program: Cherry Studio
+  name: Cherry Studio caches
+  path: '%APPDATA%/CherryStudio'
+  kind: clean_selected
+  category: devtools
+  safe: safe
+  describe: 'Electron caches. Chats and knowledge base (Data/) untouched - official docs: all local in this dir'
+  os: [windows]
+  subpaths:
+  - Cache
+  - Code Cache
+  - GPUCache
+  - DawnGraphiteCache
+  - DawnWebGPUCache
+  - blob_storage
+- id: cherry-studio-data
+  program: Cherry Studio
+  name: Cherry Studio chats/knowledge
+  path: '%APPDATA%/CherryStudio'
+  kind: manual
+  category: devtools
+  safe: careful
+  tier: userdata
+  describe: 'All chats + knowledge base (libSQL DB) live here - yours. Official docs: %APPDATA%\CherryStudio'
+  os: [windows]
+- id: chatbox-caches
+  program: Chatbox
+  name: Chatbox caches
+  path: '%APPDATA%/chatbox'
+  kind: clean_selected
+  category: devtools
+  safe: safe
+  describe: 'Electron caches. Chat history in this dir untouched (official docs: %APPDATA%\chatbox)'
+  os: [windows]
+  subpaths:
+  - Cache
+  - Code Cache
+  - GPUCache
+  - blob_storage
+- id: chatbox-data
+  program: Chatbox
+  name: Chatbox chat history
+  path: '%APPDATA%/chatbox'
+  kind: manual
+  category: devtools
+  safe: careful
+  tier: userdata
+  describe: 'Entire conversation history + prompts + API keys (local only, unrecoverable after delete). Community builds also use %APPDATA%\xyz.chatboxapp.app'
+  os: [windows]
+- id: hammerai-data
+  program: HammerAI
+  name: HammerAI desktop data
+  path: '%APPDATA%/HammerAI'
+  kind: manual
+  category: devtools
+  safe: careful
+  tier: userdata
+  describe: 'Local LLM models (GBs, re-downloadable) + local chats/characters. Official install dir is %LOCALAPPDATA%\HammerAI (program)= leave alone'
+  os: [windows]
+- id: dyad-data
+  program: Dyad
+  name: Dyad settings/backups
+  path: '%APPDATA%/dyad'
+  kind: manual
+  category: devtools
+  safe: careful
+  tier: userdata
+  describe: 'sqlite.db + user-settings.json + auto-backups. Your generated apps live separately in ~/dyad-apps (not scanned)'
+  os: [windows]
+  options:
+  - id: backups
+    name: Auto-backup folders
+    path: '%APPDATA%/dyad/backups'
+    kind: clean_contents
+    safe: careful
+    describe: 'Pre-upgrade snapshots (rollback copies); deleting loses rollback ability'
+- id: descript-data
+  program: Descript
+  name: Descript app data
+  path: '%APPDATA%/Descript'
+  kind: manual
+  category: devtools
+  safe: careful
+  tier: userdata
+  describe: 'Files and preferences (official uninstall page: Roaming\Descript). App itself sits elsewhere'
+  os: [windows]
+  options:
+  - id: caches
+    name: Electron caches
+    path: '%APPDATA%/Descript'
+    kind: clean_selected
+    safe: safe
+    describe: Cache, Code Cache, GPUCache
+- id: perplexity-desktop-data
+  program: Perplexity (desktop)
+  name: Perplexity store-package data
+  path: '%LOCALAPPDATA%/Packages/PerplexityAI.PerplexityApp_3jh4kjrg4dzr2'
+  kind: manual
+  category: devtools
+  safe: careful
+  tier: userdata
+  describe: 'Microsoft Store package (PFN verified via Store catalog). LocalState = settings (keep), LocalCache/TempState/AC = cacheable'
+  os: [windows]
+  options:
+  - id: temp-state
+    name: TempState
+    path: '%LOCALAPPDATA%/Packages/PerplexityAI.PerplexityApp_3jh4kjrg4dzr2/TempState'
+    kind: clean_contents
+    safe: safe
+    describe: Temporary files of the packaged app
+  - id: ac
+    name: AC (app-container cache)
+    path: '%LOCALAPPDATA%/Packages/PerplexityAI.PerplexityApp_3jh4kjrg4dzr2/AC'
+    kind: clean_contents
+    safe: safe
+    describe: 'Standard AppContainer cache (INetCache etc.)'

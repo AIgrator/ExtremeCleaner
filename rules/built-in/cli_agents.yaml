@@ -70,6 +70,100 @@
   tier: userdata
   describe: "config.toml + session_index + logs. Review before touching config"
   os: [windows]
+- id: zcode-data
+  name: ZCode data (~/.zcode)
+  path: "%USERPROFILE%/.zcode"
+  kind: manual
+  category: devtools
+  program: ZCode (Z.ai)
+  safe: careful
+  tier: userdata
+  describe: "Z.ai's GLM harness: config.json, AGENTS.md, agents/skills/commands are yours. cli/exec never auto-cleans"
+  os: [windows]
+  options:
+  - id: cli-exec
+    name: cli/exec (terminal output cache)
+    path: "%USERPROFILE%/.zcode/cli/exec"
+    kind: clean_contents
+    safe: safe
+    describe: "Past-session terminal command output; official FAQ: safe to delete whole dir with ZCode fully quit"
+- id: minimax-code-data
+  name: MiniMax Code data (~/.minimax)
+  path: "%USERPROFILE%/.minimax"
+  kind: manual
+  category: devtools
+  program: MiniMax Code (mcode)
+  safe: careful
+  tier: userdata
+  describe: "config.yaml, sessions, logs, plugins, skills (MINIMAX_DATA_DIR override). Official uninstall note: back up sessions first"
+  os: [windows]
+  options:
+  - id: logs
+    name: Logs only
+    path: "%USERPROFILE%/.minimax/logs"
+    kind: clean_contents
+    safe: safe
+    describe: Runtime logs, recreated
+- id: minimax-code-install
+  name: MiniMax Code installer dir (~/.minimax-code)
+  path: "%USERPROFILE%/.minimax-code"
+  kind: manual
+  category: devtools
+  program: MiniMax Code (mcode)
+  safe: careful
+  tier: userdata
+  describe: "CL binaries from install.ps1. After uninstall these can remain - delete yourself"
+  os: [windows]
+- id: omp-data
+  name: omp agent data (~/.omp)
+  path: "%USERPROFILE%/.omp"
+  kind: manual
+  category: devtools
+  program: omp (Oh My Pi)
+  safe: careful
+  tier: userdata
+  describe: "agent/config.yml, AGENTS.md, personal rules - your setup. Project .omp/ dirs live inside repos (not scanned)"
+  os: [windows]
+- id: nanobot-data
+  name: nanobot data (~/.nanobot)
+  path: "%USERPROFILE%/.nanobot"
+  kind: manual
+  category: devtools
+  program: nanobot (HKUDS)
+  safe: careful
+  tier: userdata
+  describe: "config.json + workspace with memory/skills/cron - the agent's brain. Alternative instances use ./.nanobot-A/"
+  os: [windows]
+  options:
+  - id: sessions
+    name: sessions/
+    path: "%USERPROFILE%/.nanobot/sessions"
+    kind: clean_contents
+    safe: careful
+    describe: "Per-workspace chat history (outside agent workspace); resumes gone after delete"
+  - id: media
+    name: media/
+    path: "%USERPROFILE%/.nanobot/media"
+    kind: clean_contents
+    safe: safe
+    describe: "Runtime media attachments from chats"
+- id: claude-mem-data
+  name: claude-mem data (~/.claude-mem)
+  path: "%USERPROFILE%/.claude-mem"
+  kind: manual
+  category: devtools
+  program: claude-mem
+  safe: careful
+  tier: userdata
+  describe: "SQLite memory of your Claude Code sessions (claude-mem.db) + settings.json + logs; worker daemon may be running"
+  os: [windows]
+  options:
+  - id: logs
+    name: Logs only
+    path: "%USERPROFILE%/.claude-mem/logs"
+    kind: clean_contents
+    safe: safe
+    describe: Plain logs
 - id: cline-tasks
   name: Cline tasks
   path: "%APPDATA%/Code/User/globalStorage/saoudrizwan.claude-dev/tasks"
@@ -119,4 +213,147 @@
   safe: careful
   tier: userdata
   describe: "PB + brain artifacts of Google's agent IDE"
+  os: [windows]
+- id: codex-archived
+  name: Codex CLI archived sessions
+  path: "%USERPROFILE%/.codex/archived_sessions"
+  kind: manual
+  category: devtools
+  program: Codex CLI
+  safe: careful
+  tier: userdata
+  describe: "Sessions shelved by 'codex archive' (JSONL+zst). Restore with 'codex unarchive <id>'"
+  os: [windows]
+- id: codex-tui-log
+  name: Codex CLI TUI logs
+  path: "%USERPROFILE%/.codex/log"
+  kind: clean_contents
+  category: devtools
+  program: Codex CLI
+  safe: safe
+  tier: safe
+  describe: "codex-tui.log can reach GBs in long sessions (known issue); recreated on next run"
+  os: [windows]
+- id: trae-sessions
+  name: Trae agent data (~/.trae)
+  path: "%USERPROFILE%/.trae"
+  kind: manual
+  category: devtools
+  program: Trae
+  safe: careful
+  tier: userdata
+  describe: "Session index + skills of ByteDance's agent IDE / TraeCli harness. Skills are your setup — review"
+  os: [windows]
+- id: iflow-data
+  name: iFlow CLI data
+  path: "%USERPROFILE%/.iflow"
+  kind: manual
+  category: devtools
+  program: iFlow CLI
+  safe: careful
+  tier: userdata
+  describe: "settings.json (API key!) + session files. Service shut down 2026 — likely leftovers only"
+  os: [windows]
+- id: goose-sessions
+  name: goose sessions
+  path: "%APPDATA%/Block/goose/data"
+  kind: manual
+  category: devtools
+  program: goose
+  safe: careful
+  tier: userdata
+  describe: "sessions.db conversations + history.txt — YOUR context. Back up first: goose session export"
+  os: [windows]
+- id: goose-logs
+  name: goose CLI logs
+  path: "%APPDATA%/Block/goose/data/logs"
+  kind: clean_contents
+  category: devtools
+  program: goose
+  safe: safe
+  tier: safe
+  describe: "Daily subdirs; goose prunes older than 2 weeks itself, manual clean is instant"
+  os: [windows]
+- id: aider-histories
+  name: Aider chat histories
+  path: ""
+  kind: old_versions
+  parent: "%USERPROFILE%"
+  match: ".aider*"
+  keep: []
+  category: devtools
+  program: Aider
+  safe: careful
+  tier: userdata
+  describe: ".aider.chat.history.md / .aider.input.history (markdown logs per project) + tags cache. YOUR chats — review manually"
+  os: [windows]
+- id: crush-data
+  name: Crush agent data
+  path: "%LOCALAPPDATA%/crush"
+  kind: manual
+  category: devtools
+  program: Crush
+  safe: careful
+  tier: userdata
+  describe: "Machine state of Charm's agent (OAuth tokens!). Per-project session DBs live in <project>/.crush/*.db"
+  os: [windows]
+- id: factory-droid-sessions
+  name: Factory Droid CLI sessions
+  path: "%USERPROFILE%/.factory/sessions"
+  kind: manual
+  category: devtools
+  program: Factory Droid
+  safe: careful
+  tier: userdata
+  describe: "JSONL + .settings.json per session, no auto-cleanup. settings.json (keys) stays one level up — untouched"
+  os: [windows]
+- id: planner-sessions
+  name: Planner CLI sessions
+  path: "%USERPROFILE%/.planner"
+  kind: manual
+  category: devtools
+  program: Planner CLI
+  safe: careful
+  tier: userdata
+  describe: "Sessions/diagnostics of the plan-first CLI agent; review, config untouched"
+  os: [windows]
+- id: cagent-data
+  name: Docker cagent data
+  path: "%USERPROFILE%/.cagent"
+  kind: manual
+  category: devtools
+  program: Docker cagent
+  safe: careful
+  tier: userdata
+  describe: "Session logs/config of Docker's agent CLI (arrives with Docker Desktop). Review yourself"
+  os: [windows]
+- id: hermes-data
+  name: Hermes Agent data (~/.hermes)
+  path: "%USERPROFILE%/.hermes"
+  kind: manual
+  category: devtools
+  program: Hermes Agent
+  safe: careful
+  tier: userdata
+  describe: "Whole agent home: memories (MEMORY.md/USER.md), skills the agent created, config.yaml. It IS the agent — copy before deleting"
+  os: [windows]
+- id: openclaw-data
+  name: OpenClaw data (~/.openclaw)
+  path: "%USERPROFILE%/.openclaw"
+  kind: manual
+  category: devtools
+  program: OpenClaw
+  safe: careful
+  tier: userdata
+  describe: "Sessions + per-agent SQLite, workspace with MEMORY.md/day notes, credentials/. Yours and sensitive — review in Explorer"
+  os: [windows]
+- id: pi-sessions
+  name: pi agent sessions (~/.pi)
+  path: "%USERPROFILE%/.pi/agent/sessions"
+  kind: manual
+  category: devtools
+  program: pi
+  safe: careful
+  tier: userdata
+  describe: "JSONL session trees per working directory (pi -r resumes from them). settings.json lives one level up — untouched"
   os: [windows]

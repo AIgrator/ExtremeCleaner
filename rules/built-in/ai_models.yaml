@@ -150,3 +150,83 @@
   safe: careful
   describe: "AI models live somewhere inside (Photo/Video). Open and remove unused model packs by hand; needs admin"
   os: [windows]
+# Voice transcription (local Whisper/ASR apps) — their model downloads can be GBs each.
+- id: huggingface-hub
+  name: Hugging Face Hub cache
+  path: "%USERPROFILE%/.cache/huggingface"
+  kind: clean_selected
+  subpaths: [hub, xet]
+  category: ai_models
+  safe: careful
+  describe: "OFFICIAL hub cache (docs: ~/.cache/huggingface/hub) - one dir for MANY tools: faster-whisper, pyannote, WhisperX, transformers. Delete only unused models--* folders, others re-download"
+  os: [windows]
+- id: whisper-cli-models
+  name: OpenAI Whisper models (~/.cache/whisper)
+  path: "%USERPROFILE%/.cache/whisper"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "(.pt weights, tiny..large). Official OpenAI whisper repo + Buzz FAQ: same dir used by Whisper CLI and Buzz"
+  os: [windows]
+- id: buzz-models
+  name: Buzz whisper.cpp models
+  path: "%LOCALAPPDATA%/Buzz/Buzz/Cache"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "Official FAQ: ggml .bin models + tasks cache here; settings/transcripts NOT here (app dir elsewhere)"
+  processes: [Buzz.exe]
+  os: [windows]
+- id: vibe-models
+  name: Vibe models (%LOCALAPPDATA%)
+  path: "%LOCALAPPDATA%/github.com.thewh1teagle.vibe"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "Official issue #922: auto-downloaded ggml .bin + silero VAD model live here (default); path is customizable in settings. Config: %APPDATA%\\github.com.thewh1teagle.vibe"
+  processes: [Vibe.exe]
+  os: [windows]
+- id: subtitleedit-whisper
+  name: Subtitle Edit Whisper engines/models
+  path: "%APPDATA%/Subtitle Edit/Whisper"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "WHISPER engines + models (Whisper.cpp/Purfview/Const-me etc., per maintainer in issue #6807); subtitles/projects stay in parent dir"
+  processes: [SubtitleEdit.exe]
+  os: [windows]
+- id: openwhispr-models
+  name: OpenWhispr model cache
+  path: "%USERPROFILE%/.cache/openwhispr"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "Official issue #1279: hardcoded dir with whisper-models/ + parakeet-models/ (sherpa-onnx) GGML/onnx weights; app config/db live in %APPDATA%"
+  os: [windows]
+- id: wts-models
+  name: Whisper Transcriber Suite cache
+  path: "%LOCALAPPDATA%/WhisperTranscriberSuite"
+  kind: clean_selected
+  subpaths: [Cache]
+  category: ai_models
+  safe: careful
+  describe: "Official docs: models always cached per-user here (never in Program Files); config.json at root is NOT touched"
+  processes: [WhisperTranscriberSuite.exe]
+  os: [windows]
+# TTS + torch.hub umbrella (image/video generators pull weights from here too)
+- id: coqui-tts-models
+  name: Coqui TTS models
+  path: "%LOCALAPPDATA%/tts"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "Official FAQ (coqui-tts docs): Windows default model dir incl. XTTS-v2 (~1.8GB per model); overridable via TTS_HOME"
+  os: [windows]
+- id: torch-hub-models
+  name: torch.hub weights/checkpoints
+  path: "%USERPROFILE%/.cache/torch/hub"
+  kind: clean_contents
+  category: ai_models
+  safe: careful
+  describe: "Official pytorch docs: ~/.cache/torch/hub = repo caches + checkpoints/ for MANY python image/video tools (torch.hub.load_state_dict_from_url); re-downloaded"
+  os: [windows]

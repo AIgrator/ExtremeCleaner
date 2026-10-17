@@ -329,7 +329,11 @@ class MainWindow(QMainWindow):
         if self.show_all_box.isChecked():
             return True
         if res.rule.tier == "system":
-            # info tab: command-only rows (no folder) always listed; absent folders are not
+            # info tab: command-only rows (no folder) always listed; absent folders are not.
+            # A parent holding only measured subfolders must not show as a forever-0 row.
+            if not res.rule.path and res.rule.options:
+                visible = [c for c in res.children if c.exists and (c.size_bytes > 0 or c.files > 0 or c.errors)]
+                return bool(visible)
             return not (res.rule.path and not res.exists)
         if res.errors:
             return True  # denied/locked places stay visible (status explains why)
@@ -1094,7 +1098,7 @@ class MainWindow(QMainWindow):
         top.addWidget(icon_lbl)
         info = QLabel(
             "<b>ExtremeCleaner</b><br>"
-            "Version: 1.0.0<br>"
+            "Version: 1.1.0<br>"
             "Author: Yaroslav Litovchenko<br>"
             'Email: <a href="mailto:aigrator@gmail.com">aigrator@gmail.com</a><br>'
             'GitHub page: <a href="https://github.com/AIgrator/ExtremeCleaner">github.com/AIgrator/ExtremeCleaner</a><br>'

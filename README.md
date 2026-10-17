@@ -5,6 +5,28 @@ and understand what each of them is before you delete anything.
 
 ![Status](https://img.shields.io/badge/status-beta-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
+![Version](https://img.shields.io/badge/version-1.1.0-brightgreen)
+
+## What's new in 1.1.0
+
+Rule count grew 254 → **294**, everything verified against official documentation only:
+
+- **Devin Desktop (ex-Windsurf)** editor caches + `~/.devin` agent data (official
+  migration FAQ: `%APPDATA%\Windsurf` → `%APPDATA%\Devin`, June 2026 rebrand).
+- **JetBrains AI Assistant** official in-app cleanup of chats/requests log.
+- **Full Visual Studio** (the "big" one): MEF ComponentModelCache + Roslyn cache
+  (Microsoft Learn) — previously only the installer package cache was covered.
+- **Popular-IDE sweep vs the Stack Overflow Survey top list**: Notepad++ unsaved
+  snapshots, Sublime Text cache (official: deliberately separate from settings),
+  Neovim state (shada/swap/undo — plugins untouched).
+- **Voice transcription (local Whisper apps)**: Hugging Face Hub cache (one dir
+  shared by faster-whisper, pyannote, WhisperX, transformers…), OpenAI Whisper CLI,
+  Buzz, Vibe, Subtitle Edit engines, OpenWhispr, Whisper Transcriber Suite.
+- **TTS + generic torch.hub** weights: Coqui TTS (`%LOCALAPPDATA%\tts`), PyTorch
+  Hub checkpoints — the umbrella for local image/video-generation tools.
+- Agent-vs-agent coverage kept in step with 2026 ecosystem: Cherry Studio,
+  Chatbox, HammerAI, Dyad, Descript, Perplexity, PearAI, Amazon Q (MCP config),
+  ZCode, MiniMax Code, omp, nanobot, claude-mem, hermes, openclaw, Zoo Code.
 
 Keywords: disk cleaner, PC cleaner, junk file remover, cache cleaner,
 free up disk space, disk space analyzer, developer cache cleaner.
@@ -22,7 +44,7 @@ Deletion is gentle by design: console tools are cleaned through their own
 official commands, everything else goes to the Recycle Bin — never wiped
 permanently by the program.
 
-## Places we check (239 rules and counting)
+## Places we check (294 rules and counting)
 
 - **Cache (31 places)**: Python (pip, uv, poetry, conda), Node.js (npm, yarn, pnpm, bun, deno),
   Java/Android (gradle, maven), Rust (cargo), Go, C++ (vcpkg, conan), .NET (nuget),
@@ -34,8 +56,12 @@ permanently by the program.
   Android SDK build-tools — the active version is always protected.
 - **AI models**: EasyOCR, Ollama (incl. Hermes/Llama/Qwen), LM Studio, ComfyUI,
   InvokeAI, YOLO datasets, GPT4All, NLTK, Stanza, Gensim, Flair, DeepFace,
-  InsightFace, BentoML, Topaz — plus agent histories (Claude, Codex, Gemini,
-  Qwen, Kimi, Copilot, Cursor, Cline, Roo, Kilo, Kiro) shown separately as user data.
+   InsightFace, BentoML, Topaz — plus the shared Hugging Face Hub and torch.hub
+   caches, the local voice-transcription stack (Whisper CLI, Buzz, Vibe, OpenWhispr,
+   Subtitle Edit, Whisper Transcriber Suite) and Coqui TTS. Agent histories
+   (Claude, Codex, Gemini, Qwen, Kimi, Copilot, Cursor, Cline, Roo, Kilo, Kiro,
+   Trae, goose, Aider, Crush, Factory Droid, iFlow, Planner, cagent, Continue)
+   shown separately as user data.
 - **Messengers**: Discord, Slack, Skype, Teams, Telegram, WhatsApp, Viber,
   Zoom recordings, Signal, Notion, Obsidian, Bitwarden, Mailbird, Thunderbird.
 - **Media**: Adobe (Premiere, After Effects, Camera Raw), Spotify, CapCut, DaVinci,
@@ -154,3 +180,10 @@ Roadmap: [PLAN.md](PLAN.md), cross-platform notes: [CROSS_PLATFORM_PLAN.md](CROS
 ## License
 
 MIT — free for everyone.
+
+
+
+
+
+
+

@@ -54,6 +54,16 @@
   safe: safe
   describe: "node/ = npm tarballs (4GB cases), logs = language-server diagnostics. Settings/extensions kept"
   os: [windows]
+- id: zoo-code-tasks
+  name: Zoo Code tasks
+  path: "%APPDATA%/Code/User/globalStorage/ZooCodeOrganization.zoo-code"
+  kind: manual
+  category: devtools
+  program: Zoo Code (VS Code)
+  safe: careful
+  tier: userdata
+  describe: "Roo Code fork - same task history pattern in VS Code globalStorage (per-task histories)"
+  os: [windows]
 - id: office-filecache
   name: Office file cache (M365)
   path: "%LOCALAPPDATA%/Microsoft/Office/16.0/OfficeFileCache"
@@ -70,7 +80,18 @@
   command: "iTunes/Apple Devices > Preferences > Devices > Delete old backups"
   category: other
   safe: careful
-  describe: "SIZE ONLY + in-app delete. Full device images, tens of GB — keep at least the latest"
+  describe: "SIZE ONLY + in-app delete. Full device images, tens of GB - keep at least the latest"
+  os: [windows]
+- id: jetbrains-ai-data
+  name: JetBrains AI Assistant chats/log
+  path: ""
+  kind: run_command
+  command: "AI Chat > Chat History > RMB on the chat > Delete. Data Sharing page: run Clean Up AI Assistant Requests Log (per project)"
+  category: devtools
+  program: JetBrains AI Assistant
+  safe: careful
+  tier: userdata
+  describe: "SIZE UNKNOWN - official docs: chats stored locally per project, disk path undocumented; requests log exists only during an IDE session. System caches/covers of IDE are in jetbrains-systems"
   os: [windows]
 
 - id: libreoffice-cache

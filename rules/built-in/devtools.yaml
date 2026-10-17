@@ -132,6 +132,45 @@
   describe: "Close VS Code first. NEVER touch User/ (settings, snippets, workspaceStorage)"
   processes: [code.exe]
   os: [windows]
+- id: vs-caches
+  name: Visual Studio MEF/Roslyn caches
+  path: "%LOCALAPPDATA%/Microsoft/VisualStudio"
+  kind: clean_selected
+  subpaths: ["*/ComponentModelCache", "Roslyn/Cache"]
+  category: devtools
+  safe: safe
+  describe: "Official (MS Learn): MEF ComponentModelCache (17.0_xxx) + Roslyn analyzer cache - safe to delete, IDE just reindexes slower; close devenv.exe first"
+  processes: [devenv.exe]
+  os: [windows]
+- id: notepadpp-backup
+  name: Notepad++ backup (unsaved snapshots)
+  path: "%APPDATA%/Notepad++/backup"
+  kind: clean_contents
+  category: devtools
+  safe: careful
+  tier: userdata
+  describe: "Official manual (npp-user-manual.org/docs/preferences): periodic session-snapshot backup lives here - unsaved files too. Close N++ and check no unsaved tabs; settings/config stay untouched"
+  os: [windows]
+- id: sublime-caches
+  name: Sublime Text cache
+  path: "%LOCALAPPDATA%/Sublime Text"
+  kind: clean_contents
+  category: devtools
+  safe: safe
+  tier: safe
+  describe: "Official docs (sublimetext.com/docs/revert): cache is deliberately separate from data dir %APPDATA%\\Sublime Text (settings/packages/session) - untouched"
+  processes: [sublime_text.exe]
+  os: [windows]
+- id: nvim-state
+  name: Neovim state (~+/nvim-data)
+  path: "%LOCALAPPDATA%/nvim-data"
+  kind: clean_selected
+  subpaths: [shada, swap, undo, log]
+  category: devtools
+  safe: careful
+  tier: userdata
+  describe: "Official neovim docs: stdpath('state'/'data') on Windows = %LOCALAPPDATA%\\nvim-data; shada (session history), swap, undo. Plugins (stdpath data)/site NOT touched"
+  os: [windows]
 - id: jetbrains-systems
   program: JetBrains
   name: JetBrains IDE system dirs (per product)

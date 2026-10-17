@@ -108,10 +108,40 @@
   command: "cleanmgr (Previous Windows installations). Self-deletes after 10 days"
   category: system
   safe: never_full
-  describe: "20-30 GB after version upgrades; keeps rollback. NEVER delete by hand (ACL errors)"
+  describe: "20-30 GB after version upgrades; keeps rollback. NEVER delete by hand (ACL errors). Read listing usually needs admin — without it the size shows as denied"
   search: "Windows.old folder safe to delete after upgrade"
   docs: "https://support.microsoft.com/en-us/windows/manage-drive-space-with-storage-sense-654f6ada-7bfc-45e5-966b-e24aded96ad5"
   os: [windows]
+- id: sys-upgrade-temp
+  name: Upgrade leftovers ($WINDOWS.~BT, $GetCurrent)
+  path: ""
+  kind: run_command
+  command: "cleanmgr (tick 'Previous Windows installations' + 'Temporary Windows installation files') or Settings > Storage > Temporary files"
+  category: system
+  safe: never_full
+  describe: "Hidden setup folders from feature updates. $WINDOWS.~BT holds the STAGED upgrade until it commits — deleting mid-update breaks the rollback. $GetCurrent is just downloaded installers (re-downloadable). Old setup media can also sit as $Windows.~WS"
+  search: "$WINDOWS.~BT safe to delete Windows 11"
+  docs: "https://support.microsoft.com/en-us/windows/manage-drive-space-with-storage-sense-654f6ada-7bfc-45e5-966b-e24aded96ad5"
+  os: [windows]
+  options:
+    - id: bt
+      name: "$WINDOWS.~BT (staged upgrade)"
+      path: "C:/$WINDOWS.~BT"
+      kind: run_command
+      safe: never_full
+      describe: "Staged Windows upgrade + its rollback data; few-to-20+ GB. Admin-only listing"
+    - id: ws
+      name: "$Windows.~WS (setup workshop)"
+      path: "C:/$Windows.~WS"
+      kind: run_command
+      safe: never_full
+      describe: "Remains of older upgrade runs"
+    - id: getcurrent
+      name: "$GetCurrent (update installers)"
+      path: "C:/$GetCurrent"
+      kind: run_command
+      safe: never_full
+      describe: "Installers of the last feature update; safe to remove via Disk Cleanup, they re-download"
 - id: sys-winsxs
   name: Component store (WinSxS)
   path: "C:/Windows/WinSxS"
