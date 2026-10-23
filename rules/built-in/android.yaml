@@ -20,11 +20,13 @@
 - id: android-studio-caches
   name: Android Studio system caches
   path: "%LOCALAPPDATA%/Google/AndroidStudio2026.1.1"
-  kind: run_command
-  command: "File > Invalidate Caches... (or delete after closing IDE)"
-  safe: safe
+  kind: clean_selected
+  subpaths: [caches, log, tmp, crash-dumps]
+  safe: careful
+  tier: safe
   group: Java/Android
-  describe: "Reindexed on next start"
+  describe: "Indexes/log/temp only — reindexed on next start; settings live in Roaming. Same as File > Invalidate Caches; close Studio first"
+  processes: [studio64.exe, studio.exe, emulator.exe]
   os: [windows]
 - id: android-build-tools
   program: Android SDK
@@ -54,8 +56,9 @@
   name: Dev ML/tool caches (~/.cache)
   path: "%USERPROFILE%/.cache"
   kind: clean_contents
+  exclude: [huggingface, whisper, openwhispr, torch, lm-studio, opencode]
   safe: safe
   tier: userdata
   group: ML
-  describe: "Pip trash mixed with YOUR huggingface/paddle/torch models — review yourself"
+  describe: "Pip/misc tool trash; huggingface/whisper/openwhispr/torch/lm-studio/opencode dirs are separate AI-model rules — review yourself"
   os: [windows]

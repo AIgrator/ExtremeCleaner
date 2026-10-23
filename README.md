@@ -5,7 +5,18 @@ and understand what each of them is before you delete anything.
 
 ![Status](https://img.shields.io/badge/status-beta-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-1.1.0-brightgreen)
+![Version](https://img.shields.io/badge/version-1.1.1-brightgreen)
+
+## What's new in 1.1.1 (bug fixes)
+
+- **Android Studio caches are now deletable**: the "File > Invalidate Caches"
+  instruction row became a real cleanup — `caches`, `log`, `tmp` and crash dumps
+  go to the bin, Studio reindexes on next start (same official mechanism).
+- **No more double-counted AI models**: a new per-rule `exclude` field stops
+  umbrella rules from re-scanning subfolders owned by dedicated rules. The
+  `~/.cache` "Dev ML/tool caches" rule no longer duplicates the Hugging Face Hub
+  rule's 3 GB (found on a real machine: 6 GB shown → 3 GB real), both in the
+  size overview and in what gets deleted.
 
 ## What's new in 1.1.0
 

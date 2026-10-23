@@ -77,6 +77,7 @@ def _dict_to_rule(d: dict, file_group: str = "", user_made: bool = False) -> Rul
         discover=str(d.get("discover", "")),
         auto_keep=str(d.get("auto_keep", "")),
         exe=str(d.get("exe", "")),
+        exclude=list(d.get("exclude", [])),
         search=str(d.get("search", "")),
         tier=str(d.get("tier") or _default_tier(d)),
         docs=str(d.get("docs", "")),

@@ -45,6 +45,7 @@ class Rule:
     discover: str = ""
     auto_keep: str = ""
     exe: str = ""  # auto_keep=exe: exe whose FileVersion marks the active dir
+    exclude: list[str] = field(default_factory=list)  # top-level dirs owned by other rules
     search: str = ""  # curated web-search query for the context menu (else built from name/path)
     docs: str = ""
     user_made: bool = False

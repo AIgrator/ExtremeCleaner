@@ -179,10 +179,14 @@ def _size_subtree(root: Path) -> tuple[int, int, int]:
     return total, count, errors
 
 
-def dir_size(root: Path, workers: int = 8) -> tuple[int, int, int]:
-    """Honest size. Top-level files counted inline, subdirs fanned out to threads (SSD win)."""
+def dir_size(root: Path, workers: int = 8, exclude: list[str] | None = None) -> tuple[int, int, int]:
+    """Honest size. Top-level files counted inline, subdirs fanned out to threads (SSD win).
+
+    `exclude`: top-level dir names owned by other rules (no double counting).
+    """
     from concurrent.futures import ThreadPoolExecutor
 
+    excl = {n.lower() for n in (exclude or [])}
     total, count, errors = 0, 0, 0
     subdirs: list[str] = []
     try:
@@ -194,6 +198,8 @@ def dir_size(root: Path, workers: int = 8) -> tuple[int, int, int]:
                     if entry.name.lower() == "desktop.ini":
                         continue  # shell metadata, never user content
                     if entry.is_dir(follow_symlinks=False):
+                        if entry.name.lower() in excl:
+                            continue
                         subdirs.append(entry.path)
                     elif entry.is_file(follow_symlinks=False):
                         total += entry.stat(follow_symlinks=False).st_size
@@ -572,7 +578,7 @@ def scan_rule(rule: Rule) -> ScanResult:
             return ScanResult(rule, True, st.st_size, 1, 0, str(base))
     except OSError:
         return ScanResult(rule, False, 0, 0, 1, str(base))
-    s, c, e = dir_size(base)
+    s, c, e = dir_size(base, exclude=rule.exclude)
     return ScanResult(rule, True, s, c, e, str(base))
 
 

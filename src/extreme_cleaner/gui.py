@@ -729,8 +729,11 @@ class MainWindow(QMainWindow):
 
     def _add_rule(self, parent, res: ScanResult, checkable: bool = True) -> None:
         add = parent.addTopLevelItem if isinstance(parent, QTreeWidget) else parent.addChild
+        # Info-style rows (official command, no auto-exec) are never deletable:
+        # checkboxes would only end in the "manual steps" dialog after Delete.
+        chk = checkable and not (res.rule.kind == "run_command" and not res.rule.exec)
         if res.children:
-            mid = self._mid_node(res.rule.name, checkable)
+            mid = self._mid_node(res.rule.name, chk)
             mid.setText(1, fmt_size(res.size_bytes))
             mid.setText(2, str(res.files))
             mid.setText(4, res.rule.describe or "")
@@ -742,14 +745,14 @@ class MainWindow(QMainWindow):
             mid.setToolTip(0, self._tooltip(res.rule.name, first_path, res.rule.kind, res.rule.command, res.rule.safe, self._details(res), res.parts, res.rule.docs))
             add(mid)
             if res.rule.user_made:
-                self._attach_user_actions(parent, mid, res.rule.id, checkable)
+                self._attach_user_actions(parent, mid, res.rule.id, chk)
             for sub in [c for c in res.children if self._is_visible(c)]:
-                mid.addChild(self._make_leaf(sub.rule.name, sub.size_bytes, sub.files, self._status(sub), self._details(sub), sub.rule.safe, sub.exists, sub.resolved, sub.rule.kind, sub.rule.command, sub.parts, checkable, sub.rule.docs, sub.rule.id, search=sub.rule.search))
+                mid.addChild(self._make_leaf(sub.rule.name, sub.size_bytes, sub.files, self._status(sub), self._details(sub), sub.rule.safe, sub.exists, sub.resolved, sub.rule.kind, sub.rule.command, sub.parts, chk, sub.rule.docs, sub.rule.id, search=sub.rule.search))
         else:
-            leaf = self._make_leaf(res.rule.name, res.size_bytes, res.files, self._status(res), self._details(res), res.rule.safe, res.exists, res.resolved, res.rule.kind, res.rule.command, res.parts, checkable, res.rule.docs, res.rule.id, search=res.rule.search)
+            leaf = self._make_leaf(res.rule.name, res.size_bytes, res.files, self._status(res), self._details(res), res.rule.safe, res.exists, res.resolved, res.rule.kind, res.rule.command, res.parts, chk, res.rule.docs, res.rule.id, search=res.rule.search)
             add(leaf)
             if res.rule.user_made:
-                self._attach_user_actions(parent, leaf, res.rule.id, checkable)
+                self._attach_user_actions(parent, leaf, res.rule.id, chk)
 
     @staticmethod
     def _collapse_singles(tree) -> None:
@@ -1098,7 +1101,7 @@ class MainWindow(QMainWindow):
         top.addWidget(icon_lbl)
         info = QLabel(
             "<b>ExtremeCleaner</b><br>"
-            "Version: 1.1.0<br>"
+            "Version: 1.1.1<br>"
             "Author: Yaroslav Litovchenko<br>"
             'Email: <a href="mailto:aigrator@gmail.com">aigrator@gmail.com</a><br>'
             'GitHub page: <a href="https://github.com/AIgrator/ExtremeCleaner">github.com/AIgrator/ExtremeCleaner</a><br>'

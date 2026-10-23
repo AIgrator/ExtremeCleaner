@@ -88,16 +88,17 @@ def _concrete_paths(res: ScanResult) -> list[str]:
     if rule.path:
         base = expand_rule_path(rule.path)
         if _safe_exists(base):
-            return _targets_of_single(str(base), rule.kind)
+            return _targets_of_single(str(base), rule.kind, rule.exclude)
     return []
 
 
-def _targets_of_single(path: str, kind: str) -> list[str]:
+def _targets_of_single(path: str, kind: str, exclude: list[str] | None = None) -> list[str]:
     p = Path(path)
     if kind == "clean_contents":
         try:
             if p.is_dir() and not p.is_symlink():
-                return [str(x) for x in p.iterdir()]
+                excl = {n.lower() for n in (exclude or [])}
+                return [str(x) for x in p.iterdir() if x.name.lower() not in excl]
         except OSError:
             return []
     return [path]
@@ -142,7 +143,7 @@ def plan_deletion(results: list[ScanResult]) -> tuple[list[CleanAction], list[st
                             base = str(expand_rule_path(rule.path))
                             actions.append(CleanAction(
                                 f"{rule.name}: tool missing, deleting cache files directly: {base}",
-                                "delete", _targets_of_single(base, "clean_contents"),
+                                "delete", _targets_of_single(base, "clean_contents", rule.exclude),
                                 size_bytes=leaf.size_bytes))
                         else:
                             blocked.append(f"{rule.id}: tool not found in PATH, skipping")
