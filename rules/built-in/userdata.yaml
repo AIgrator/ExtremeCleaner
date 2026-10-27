@@ -96,6 +96,7 @@
   category: other
   safe: careful
   tier: userdata
+  exclude: [Bandicam, ShareX, ViberDownloads, Zoom, "Virtual Machines", ComfyUI]
   describe: "Years of forgotten files. Note: game hubs (My Games/EA/Rockstar) inside are counted separately too"
   os: [windows]
 - id: videos-folder

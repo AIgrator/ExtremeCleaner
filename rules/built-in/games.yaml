@@ -216,10 +216,11 @@
   path: "%ProgramFiles%/Ubisoft/Ubisoft Game Launcher"
   kind: clean_selected
   subpaths: [Logs, Cache]
+  exclude: [Installers]
   category: games
   program: Ubisoft
   safe: safe
-  describe: "Program Files location — needs admin; game installs untouched"
+  describe: "Program Files location — needs admin; cached installers and game installs untouched"
   os: [windows]
 - id: ubisoft-installers
   tier: safe

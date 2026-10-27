@@ -129,6 +129,68 @@ def validate_rule_files(project_root: Path) -> list[str]:
     return bad
 
 
+def _claim_paths(rule: Rule) -> list[str]:
+    """Concrete dirs this rule claims (measures/cleans). Glob subpaths skipped:
+    per-profile folders are resolved at scan time and cannot be compared here."""
+    if rule.kind == "empty_bin" or rule.discover or not rule.path:
+        return []
+    try:
+        base = str(expand_rule_path(rule.path))
+    except Exception:
+        return []
+    if not base or base in (".", ""):
+        return []
+    outs: list[str] = []
+    if rule.kind == "clean_selected" and rule.subpaths:
+        for sub in rule.subpaths:
+            if any(c in sub for c in "*?["):
+                continue
+            outs.append(str(Path(base) / sub))
+        return outs  # the base dir itself stays constrained by its subpaths
+    outs.append(base)
+    for opt in rule.options:
+        if opt.path:
+            try:
+                outs.append(str(expand_rule_path(opt.path)))
+            except Exception:
+                pass
+    return outs
+
+
+def _path_key(path: str) -> tuple[str, ...]:
+    """Comparable identity of a path: parts, casefolded, tolerant of ~/%VAR% text left over."""
+    p = os.path.normpath(path)
+    if os.name == "nt":
+        p = p.lower()
+    return tuple(part for part in Path(p).parts if part not in ("", ".", "/"))
+
+
+def check_rule_overlaps(rules: list[Rule]) -> list[str]:
+    """[warning]: one rule's claimed dir nested inside another's (the same files
+    would be scanned/cleaned by two rules). OK when the outer rule excludes the
+    inner one (its own top-level dir name listed in outer.exclude)."""
+    claims: list[tuple[Rule, tuple[str, ...], str]] = []
+    for r in rules:
+        for raw in _claim_paths(r):
+            key = _path_key(raw)
+            if key:
+                claims.append((r, key, raw))
+    bad: set[str] = set()
+    for a, ka, pa in claims:
+        for b, kb, pb in claims:
+            if a.id == b.id:
+                continue
+            if ka == kb:
+                lo = a.id if a.id < b.id else b.id
+                bad.add(f"{lo} and {b.id if lo == a.id else a.id} claim the same dir {pa} — duplicated row")
+            elif len(kb) < len(ka) and ka[: len(kb)] == kb:
+                skipped = {s.lower() for s in (b.exclude or [])}  # dirs the outer rule omits anywhere
+                if any(part in skipped for part in ka[len(kb):]):
+                    continue  # outer rule deliberately leaves this subtree to `a`
+                bad.add(f"{b.id} ({pb}) covers {a.id} ({pa}) — same files may be counted/cleaned twice")
+    return sorted(bad)
+
+
 def project_root_from_here() -> Path:
     # src/extreme_cleaner/loader.py -> project root (3 levels up).
     # Frozen (PyInstaller onefile): the exe folder — writable user data lives there.

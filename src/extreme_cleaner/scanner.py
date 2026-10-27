@@ -1,8 +1,9 @@
-"""Honest size scanner (no NTFS hardlink double-count handling yet — MVP)."""
+"""Honest size scanner (NTFS hardlinks are deduplicated across the whole scan run)."""
 
 from __future__ import annotations
 
 import os
+import threading
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -10,6 +11,49 @@ from dataclasses import replace
 
 from .loader import expand_rule_path
 from .models import Rule, RuleOption
+
+# One process-wide tracking of physical file ids: the same hardlinked file is
+# counted once per scan run — the "real" bytes on disk, not per-rule inflated
+# sums. scandir's cheap stat() has no file id on Windows, so a (size, mtime)
+# hint set decides which files need the exact id (extra os.stat only on
+# hint collisions — hardlinks are rare).
+_DEDUP_LOCK = threading.Lock()
+_DEDUP_SEEN: set[tuple[int, int]] = set()
+_HINT_LOCK = threading.Lock()
+_HINT_SEEN: set[tuple[int, int]] = set()
+
+
+def reset_hardlink_dedup() -> None:
+    with _DEDUP_LOCK:
+        _DEDUP_SEEN.clear()
+    with _HINT_LOCK:
+        _HINT_SEEN.clear()
+
+
+def _countable(st: os.stat_result, path: str) -> bool:
+    """True = this file is physically new to the scan run (count size+files)."""
+    if os.name != "nt":
+        return True  # ext4/btrfs hardlink doubles are rare in cache dirs
+    if st.st_size == 0:
+        return True  # nothing to double-count; keep files count unfiltered
+    hint = (st.st_size, st.st_mtime_ns)
+    with _HINT_LOCK:
+        first_with_hint = hint not in _HINT_SEEN
+        _HINT_SEEN.add(hint)
+    if first_with_hint:
+        return True
+    try:  # hint collision: possible hardlink — the exact id settles it
+        real = os.stat(path, follow_symlinks=False)
+    except OSError:
+        return True
+    key = (real.st_dev, real.st_ino)
+    if key[1] == 0:
+        return True  # no id available — not guessing
+    with _DEDUP_LOCK:
+        if key in _DEDUP_SEEN:
+            return False
+        _DEDUP_SEEN.add(key)
+    return True
 
 
 SUBPATH_MEANING = {
@@ -152,7 +196,19 @@ class ScanResult:
             self.children = []
 
 
-def _size_subtree(root: Path) -> tuple[int, int, int]:
+def _first_time(key: tuple[int, int]) -> bool:
+    """True = count this file now. st_ino==0 (no id) always counts."""
+    if key[1] == 0:
+        return True
+    with _DEDUP_LOCK:
+        if key in _DEDUP_SEEN:
+            return False
+        _DEDUP_SEEN.add(key)
+        return True
+
+
+def _size_subtree(root: Path, excl: frozenset[str] = frozenset()) -> tuple[int, int, int]:
+    """excl: dir names (lowercased) owned by other rules — skipped at ANY depth."""
     total, count, errors = 0, 0, 0
     stack = [root]
     while stack:
@@ -170,10 +226,14 @@ def _size_subtree(root: Path) -> tuple[int, int, int]:
                 if entry.name.lower() == "desktop.ini":
                     continue  # shell metadata, never user content
                 if entry.is_dir(follow_symlinks=False):
+                    if entry.name.lower() in excl:
+                        continue
                     stack.append(Path(entry.path))
                 elif entry.is_file(follow_symlinks=False):
-                    total += entry.stat(follow_symlinks=False).st_size
-                    count += 1
+                    st = entry.stat(follow_symlinks=False)
+                    if _countable(st, entry.path):
+                        total += st.st_size
+                        count += 1
             except OSError:
                 errors += 1
     return total, count, errors
@@ -202,21 +262,23 @@ def dir_size(root: Path, workers: int = 8, exclude: list[str] | None = None) -> 
                             continue
                         subdirs.append(entry.path)
                     elif entry.is_file(follow_symlinks=False):
-                        total += entry.stat(follow_symlinks=False).st_size
-                        count += 1
+                        st = entry.stat(follow_symlinks=False)
+                        if _countable(st, entry.path):
+                            total += st.st_size
+                            count += 1
                 except OSError:
                     errors += 1
     except OSError:
         return 0, 0, 1
     if len(subdirs) < 2 or workers <= 1:
         for sd in subdirs:
-            s, c, e = _size_subtree(Path(sd))
+            s, c, e = _size_subtree(Path(sd), frozenset(n.lower() for n in excl))
             total += s
             count += c
             errors += e
         return total, count, errors
     with ThreadPoolExecutor(max_workers=min(workers, len(subdirs))) as ex:
-        for s, c, e in ex.map(_size_subtree, [Path(sd) for sd in subdirs]):
+        for s, c, e in ex.map(lambda sd: _size_subtree(sd, excl), [Path(sd) for sd in subdirs]):
             total += s
             count += c
             errors += e
@@ -561,7 +623,7 @@ def scan_rule(rule: Rule) -> ScanResult:
             parts.append(str(p))
             if _safe_exists(p) is True:
                 found = True
-                s, c, e = dir_size(p)
+                s, c, e = dir_size(p, exclude=rule.exclude)
                 total += s
                 count += c
                 errors += e
@@ -858,6 +920,7 @@ def _scan_old_versions(rule: Rule) -> ScanResult:
 
 
 def scan_all(rules: list[Rule], workers: int = 4) -> list[ScanResult]:
+    reset_hardlink_dedup()  # every scan counts each physical file once
     if len(rules) < 2 or workers <= 1:
         return [scan_rule(r) for r in rules]
     from concurrent.futures import ThreadPoolExecutor

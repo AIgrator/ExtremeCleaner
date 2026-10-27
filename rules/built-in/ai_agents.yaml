@@ -269,6 +269,7 @@
   category: devtools
   safe: careful
   tier: userdata
+  exclude: [Cache, Code Cache, GPUCache, DawnGraphiteCache, DawnWebGPUCache, blob_storage]
   describe: 'All chats + knowledge base (libSQL DB) live here - yours. Official docs: %APPDATA%\CherryStudio'
   os: [windows]
 - id: chatbox-caches
@@ -293,6 +294,7 @@
   category: devtools
   safe: careful
   tier: userdata
+  exclude: [Cache, Code Cache, GPUCache, blob_storage]
   describe: 'Entire conversation history + prompts + API keys (local only, unrecoverable after delete). Community builds also use %APPDATA%\xyz.chatboxapp.app'
   os: [windows]
 - id: hammerai-data

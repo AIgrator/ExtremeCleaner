@@ -27,6 +27,7 @@
   path: "%APPDATA%/Adobe"
   kind: run_command
   command: "AE > Edit > Purge > All Memory & Disk Cache (location: Preferences > Media & Disk Cache > Empty Disk Cache)"
+  exclude: [Common]
   docs: "https://www.youtube.com/watch?v=uCeu-ok1JSU"
   category: media
   safe: careful

@@ -5,7 +5,19 @@ and understand what each of them is before you delete anything.
 
 ![Status](https://img.shields.io/badge/status-beta-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-1.1.1-brightgreen)
+![Version](https://img.shields.io/badge/version-1.1.2-brightgreen)
+
+## What's new in 1.1.2 (honest sizes)
+
+- **NTFS hardlinks are no longer counted twice**: one physical file (Component
+  Store, shared PyInstaller packages, git object pools) is now counted once per
+  scan — the totals show the "real" bytes on disk, not inflated sums.
+- **Overlap watchdog**: the built-in test suite (`tests/test_rules.py`, runs on
+  GitHub CI) detects when two rules measure the same folder — the bug class that
+  filtered the 3-GB Hugging Face cache through two rows in 1.1.1. Twenty more
+  overlaps (Cherry Studio/Chatbox caches vs their data rows, Documents root,
+  Adobe, Ubisoft, goose) were found and fixed with a per-rule `exclude` field:
+  umbrella rows now show only the files they own.
 
 ## What's new in 1.1.1 (bug fixes)
 

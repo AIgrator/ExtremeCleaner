@@ -262,6 +262,7 @@
   program: goose
   safe: careful
   tier: userdata
+  exclude: [logs]
   describe: "sessions.db conversations + history.txt — YOUR context. Back up first: goose session export"
   os: [windows]
 - id: goose-logs
