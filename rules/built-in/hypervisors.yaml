@@ -78,9 +78,10 @@
   path: "%LOCALAPPDATA%/Docker"
   kind: run_command
   command: "docker system prune"
+  exclude: [wsl]
   category: hypervisors
   safe: careful
-  describe: "SIZE IS APPROX (real data in vhdx). Removes stopped containers, unused networks, dangling images"
+  describe: "SIZE IS APPROX (real data in vhdx, counted separately below). Removes stopped containers, unused networks, dangling images"
   os: [windows]
 - id: docker-data-vhdx
   program: Docker
