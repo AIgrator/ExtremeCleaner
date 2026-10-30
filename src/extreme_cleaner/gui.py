@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import sys
+import re
 import urllib.parse
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+_APPID_RE = re.compile(r"\d+")
 
 from PySide6.QtCore import QPoint, Qt, QThread, QEvent, Signal
 from PySide6.QtGui import QAction, QDesktopServices
@@ -1010,6 +1013,35 @@ class MainWindow(QMainWindow):
             copy_act = QAction("Copy path", menu)
             copy_act.triggered.connect(lambda: QApplication.clipboard().setText(path))
             menu.addAction(copy_act)
+        # Game-name resolution for emulator save folders: zero background
+        # network traffic anywhere in the program — the ONLY outbound request
+        # happens when the user clicks this action (explicit consent), and the
+        # result is stored locally so repeat scans stay offline.
+        shown_for_id = item.data(0, Qt.UserRole + 3) or item.text(0)
+        appid_tail = Path(path).name if path else ""
+        if "Steam AppID" in shown_for_id and path and _APPID_RE.fullmatch(appid_tail):
+            try:
+                from extreme_cleaner.scanner import resolve_emu_app_name as _resolve
+            except ImportError:  # pragma: no cover
+                _resolve = None
+            if _resolve:
+                def _lookup(appid: str = appid_tail, _it=item, _res=_resolve) -> None:
+                    name = _res(appid)
+                    if not name.startswith("Steam AppID"):
+                        new_text = _it.text(0).replace(f"Steam AppID {appid}", name)
+                        _it.setText(0, new_text)
+                        _it.setData(0, Qt.UserRole + 3, "")
+                        _it.setToolTip(0, _it.toolTip(0).replace(f"Steam AppID {appid}", name))
+                    else:
+                        QMessageBox.information(
+                            self, "ExtremeCleaner",
+                            "Could not fetch the game name (offline or Steam unreachable).\n"
+                            f"Manual lookup: steamdb.info/app/{appid}",
+                        )
+
+                get_name = QAction(f"Get game name (check store, AppID {appid_tail})", menu)
+                get_name.triggered.connect(_lookup)
+                menu.addAction(get_name)
         shown_name = item.data(0, Qt.UserRole + 3) or item.text(0)
         query = item.data(0, Qt.UserRole + 6) or self._web_query(shown_name, path)
         web_act = QAction(f"Search the web: {query[:60]}", menu)

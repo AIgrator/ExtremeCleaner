@@ -9,7 +9,7 @@ from pathlib import Path
 
 from dataclasses import replace
 
-from .loader import expand_rule_path
+from .loader import data_dir, expand_rule_path
 from .models import Rule, RuleOption
 
 # One process-wide tracking of physical file ids: the same hardlinked file is
@@ -537,10 +537,67 @@ def _discover_gse_saves(rule: Rule) -> list[tuple[str, Path, int]]:
     try:
         for d in sorted(base.iterdir(), key=lambda p: p.name.lower()):
             if d.is_dir() and d.name.lower() != "settings":  # settings = emu config, not saves
-                out.append((_EMU_APPID_NAMES.get(d.name.lower(), f"Steam AppID {d.name}"), d, 0))
+                out.append((_emu_app_name(d.name), d, 0))
     except OSError:
         pass
     return out
+
+
+def _emu_app_name(appid: str, online: bool = False) -> str:
+    """Game name for a Goldberg-family AppID folder.
+
+    Scan path (online=False, default) is fully offline: small verified map,
+    then the machine cache file — anything unresolved stays "Steam AppID <id>"
+    with NO network chatter (games-store savers may just want to delete).
+    The GUI calls _emu_app_name(appid, online=True) on explicit user request:
+    public Steam store API (no key, filters=basic), resurfacing in the cache
+    so the name is stored in the app and survives restarts.
+    """
+    import json
+
+    name = _EMU_APPID_NAMES.get(appid.lower(), "")
+    if name:
+        return name
+    cache_file = data_dir() / "emu_appid_names.json"
+    known: dict = {}
+    try:
+        known = json.loads(cache_file.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        pass
+    if appid in known and known[appid]:
+        return str(known[appid])
+    if not online:
+        # unresolved at scan time: show the bare id, never poll the network
+        # (consumers may only care about the sizes), never disable a later
+        # explicit lookup
+        return f"Steam AppID {appid}"
+    name = ""
+    try:
+        import urllib.request
+
+        with urllib.request.urlopen(
+            f"https://store.steampowered.com/api/appdetails?appids={appid}&filters=basic",
+            timeout=2,
+        ) as r:
+            data = json.loads(r.read().decode("utf-8", "replace"))
+        entry = data.get(appid) or {}
+        if isinstance(entry, dict) and entry.get("success"):
+            name = str((entry.get("data") or {}).get("name") or "")
+    except Exception:  # noqa: BLE001 - offline/slow network is normal, stay with the id
+        return f"Steam AppID {appid}"
+    if not name:
+        return f"Steam AppID {appid}"
+    known[appid] = name
+    try:
+        cache_file.write_text(json.dumps(known, ensure_ascii=False, indent=1), encoding="utf-8")
+    except OSError:
+        pass
+    return name
+
+
+def resolve_emu_app_name(appid: str) -> str:
+    """GUI entry: look the name up online once, store it in the app's cache file."""
+    return _emu_app_name(appid, online=True)
 
 
 def _scan_discovered_gse_saves(rule: Rule) -> ScanResult:
