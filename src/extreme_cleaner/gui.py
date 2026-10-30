@@ -1025,18 +1025,24 @@ class MainWindow(QMainWindow):
             except ImportError:  # pragma: no cover
                 _resolve = None
             if _resolve:
-                def _lookup(appid: str = appid_tail, _it=item, _res=_resolve) -> None:
-                    name = _res(appid)
+                def _lookup(_checked: bool = False, _appid: str = appid_tail, _it=item, _res=_resolve) -> None:
+                    # NOTE: QAction.triggered passes its checked flag as the first
+                    # argument — accept it here, real appid travels via default.
+                    try:
+                        name = _res(_appid)
+                    except Exception as e:  # noqa: BLE001 - a Qt slot must never fail silently (no console in a windowed exe)
+                        QMessageBox.warning(self, "ExtremeCleaner", f"Name lookup failed: {e}")
+                        return
                     if not name.startswith("Steam AppID"):
-                        new_text = _it.text(0).replace(f"Steam AppID {appid}", name)
+                        new_text = _it.text(0).replace(f"Steam AppID {_appid}", name)
                         _it.setText(0, new_text)
                         _it.setData(0, Qt.UserRole + 3, "")
-                        _it.setToolTip(0, _it.toolTip(0).replace(f"Steam AppID {appid}", name))
+                        _it.setToolTip(0, _it.toolTip(0).replace(f"Steam AppID {_appid}", name))
                     else:
                         QMessageBox.information(
                             self, "ExtremeCleaner",
                             "Could not fetch the game name (offline or Steam unreachable).\n"
-                            f"Manual lookup: steamdb.info/app/{appid}",
+                            f"Manual lookup: steamdb.info/app/{_appid}",
                         )
 
                 get_name = QAction(f"Get game name (check store, AppID {appid_tail})", menu)
