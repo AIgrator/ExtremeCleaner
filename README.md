@@ -5,7 +5,7 @@ and understand what each of them is before you delete anything.
 
 ![Status](https://img.shields.io/badge/status-beta-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-1.2.0-brightgreen)
+![Version](https://img.shields.io/badge/version-1.2.1-brightgreen)
 
 ## What's new in 1.1.2 (honest sizes)
 
@@ -18,6 +18,20 @@ and understand what each of them is before you delete anything.
   overlaps (Cherry Studio/Chatbox caches vs their data rows, Documents root,
   Adobe, Ubisoft, goose) were found and fixed with a per-rule `exclude` field:
   umbrella rows now show only the files they own.
+
+## What's new in 1.2.1 (privacy hardening + save-name lookups)
+
+Follow-up on 1.2.0's Goldberg save discovery:
+
+- **Zero background network traffic.** The scan itself is now fully offline;
+  unknown emulator AppIDs stay as honest `Steam AppID <id>` rows with a
+  steamdb hint. A game name is fetched only when the user explicitly clicks
+  "Get game name" in the row's context menu — one request to the official
+  Steam Store API, stored next to the exe (`emu_appid_names.json`), so every
+  later scan shows the name without touching the network.
+- Fixed a silently dying lookup: QAction's `triggered(bool)` argument
+  clobbered the first slot parameter, so clicks did nothing in the windowed
+  exe. Any error now shows a dialog instead of vanishing.
 
 ## What's new in 1.2.0 (AI-IDE + game-store saves)
 
