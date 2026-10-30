@@ -81,8 +81,10 @@ class DeleteWorker(QThread):
             else:
                 try:
                     # NOTE: Russian Windows console speaks cp866, not the locale default.
+                    # 5 min cap: some tools (pip cache purge) hang on huge caches and
+                    # a silent dialog looked like a freeze — nothing user-visible happens.
                     r = subprocess.run(a.command, shell=True, capture_output=True, text=True,
-                                       encoding="cp866", errors="replace", timeout=900, **C.no_console())
+                                       encoding="cp866", errors="replace", timeout=300, **C.no_console())
                     if r.returncode != 0:
                         errors.append(f"{a.label}: exit {r.returncode}: {(r.stderr or r.stdout or '')[:300]}")
                 except Exception as e:  # noqa: BLE001 - report, keep going

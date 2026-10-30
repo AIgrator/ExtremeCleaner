@@ -10,6 +10,16 @@
   discover: gse-saves
   describe: "Your saves for games run via the Goldberg Steam emulator fork (gbe_fork official README: %appdata%\\GSE Saves). Rows below are one per game folder, named by its Steam AppID (check steamdb.info/app/<ID>); 'settings' = emu config, not saves"
   os: [windows]
+- id: goldberg-emu-saves
+  name: Goldberg SteamEmu Saves (classic emulator)
+  path: "%APPDATA%/Goldberg SteamEmu Saves"
+  kind: manual
+  category: games
+  safe: careful
+  tier: userdata
+  discover: goldberg-saves
+  describe: "Your saves for games run via the classic Goldberg emulator (official Readme_release.txt: C:\\Users\\<user>\\AppData\\Roaming\\Goldberg SteamEmu Saves\\; one folder per game named by its Steam AppID, emu settings in 'settings')"
+  os: [windows]
 - id: publisher-hubs
   name: Publisher save hubs
   path: ""

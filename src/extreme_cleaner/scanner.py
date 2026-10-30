@@ -515,24 +515,29 @@ def _scan_discovered_steam(rule: Rule) -> ScanResult:
     )
 
 
-# GSE (Goldberg Steam emulator fork, gbe_fork) save folders live in
-# %APPDATA%/GSE Saves and are named by Steam AppID (official README.release.md).
-# Offline name map, verified on SteamDB 2026-10; unknown ids stay as "Steam AppID <id>"
-# and resolve via steamdb.info/app/<id>.
-_GSE_APPID_NAMES = {
+# Goldberg-emu-family save folders (gbe_fork + classic) live in %APPDATA% and are
+# named by Steam AppID (official Readme/README.release.md). Offline name map,
+# verified on SteamDB 2026-10; unknown ids stay as "Steam AppID <id>" and resolve
+# via steamdb.info/app/<id>. Same app IDs serve both emulators.
+_EMU_APPID_NAMES = {
     "3764200": "Resident Evil Requiem",
     "2677660": "Indiana Jones and the Great Circle",
     "1941540": "Mafia: The Old Country",
+    "1065310": "Evil West",
 }
 
 
 def _discover_gse_saves(rule: Rule) -> list[tuple[str, Path, int]]:
-    base = Path(os.environ.get("APPDATA", "")) / "GSE Saves"
+    """Children = one row per game folder; base dir comes from rule.path."""
+    try:
+        base = expand_rule_path(rule.path)
+    except Exception:
+        return []
     out: list[tuple[str, Path, int]] = []
     try:
         for d in sorted(base.iterdir(), key=lambda p: p.name.lower()):
-            if d.is_dir() and d.name.lower() != "settings":
-                out.append((_GSE_APPID_NAMES.get(d.name.lower(), f"Steam AppID {d.name}"), d, 0))
+            if d.is_dir() and d.name.lower() != "settings":  # settings = emu config, not saves
+                out.append((_EMU_APPID_NAMES.get(d.name.lower(), f"Steam AppID {d.name}"), d, 0))
     except OSError:
         pass
     return out
@@ -541,7 +546,7 @@ def _discover_gse_saves(rule: Rule) -> list[tuple[str, Path, int]]:
 def _scan_discovered_gse_saves(rule: Rule) -> ScanResult:
     return _scan_discovered_list(
         rule, _discover_gse_saves(rule),
-        "Save folder of a game run via the Goldberg Steam emulator — review/back up by hand; deleting loses progress",
+        "Save folder of a game run via a Goldberg-family Steam emulator (Goldberg/GSE/ALI213) — review/back up by hand; deleting loses progress",
         describe="Game saves via emulator — never auto-deleted, open and review",
     )
 
@@ -602,7 +607,7 @@ def _scan_discovered_virtualbox(rule: Rule) -> ScanResult:
 def scan_rule(rule: Rule) -> ScanResult:
     if rule.discover == "virtualbox":
         return _scan_discovered_virtualbox(rule)
-    if rule.discover == "gse-saves":
+    if rule.discover == "gse-saves" or rule.discover == "goldberg-saves":
         return _scan_discovered_gse_saves(rule)
     if rule.discover == "steam":
         return _scan_discovered_steam(rule)

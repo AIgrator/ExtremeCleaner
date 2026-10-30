@@ -2,10 +2,8 @@
 - id: npm-cache
   name: NPM cache
   path: "%LOCALAPPDATA%/npm-cache"
-  kind: run_command
-  command: "npm cache clean --force"
-  exec: true
+  kind: clean_contents
   group: Node.js
   safe: safe
-  describe: "Redownloaded on next install, projects not affected"
+  describe: "npm docs: cache dir = %LocalAppData%\\npm-cache, 'npm cache is strictly a cache... clear only to reclaim disk space' - same as npm cache clean --force without freezing npm itself, redownloaded on next install"
   os: [windows]

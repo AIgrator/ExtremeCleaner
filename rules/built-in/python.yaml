@@ -2,10 +2,8 @@
 - id: pip-cache
   name: pip cache
   path: "%LOCALAPPDATA%/pip/cache"
-  kind: run_command
-  command: "pip cache purge"
-  exec: true
+  kind: clean_contents
   group: Python
   safe: safe
-  describe: "Safe, redownloaded on next pip install"
+  describe: "Default wheel cache (pip docs: pip cache dir = %LocalAppData%\\pip\\cache, purge = remove all items); equivalent of pip cache purge without freezing pip itself, redownloaded on next install"
   os: [windows]
