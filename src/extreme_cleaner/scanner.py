@@ -484,14 +484,15 @@ def _discover_epic_games(manifest_dir: Path | None = None) -> list[tuple[str, Pa
     return sorted(games, key=lambda g: g[0].lower())
 
 
-def _scan_discovered_list(rule: Rule, games: list[tuple[str, Path, int]], hint: str) -> ScanResult:
+def _scan_discovered_list(rule: Rule, games: list[tuple[str, Path, int]], hint: str,
+                          describe: str = "Installed game — uninstall via its launcher") -> ScanResult:
     children: list[ScanResult] = []
     for name, path, size in games:
         sub = Rule(
             id=f"{rule.id}:{name[:40]}", name=name,
             path=str(path), kind="run_command",
             command=hint,
-            safe="careful", describe="Installed game — uninstall via its launcher",
+            safe="careful", describe=describe,
             os=list(rule.os), category=rule.category,
         )
         c = scan_rule(sub)
@@ -511,6 +512,37 @@ def _scan_discovered_steam(rule: Rule) -> ScanResult:
     return _scan_discovered_list(
         rule, _discover_steam_games(),
         "Uninstall via Steam (or delete; cloud saves stay in Steam Cloud)",
+    )
+
+
+# GSE (Goldberg Steam emulator fork, gbe_fork) save folders live in
+# %APPDATA%/GSE Saves and are named by Steam AppID (official README.release.md).
+# Offline name map, verified on SteamDB 2026-10; unknown ids stay as "Steam AppID <id>"
+# and resolve via steamdb.info/app/<id>.
+_GSE_APPID_NAMES = {
+    "3764200": "Resident Evil Requiem",
+    "2677660": "Indiana Jones and the Great Circle",
+    "1941540": "Mafia: The Old Country",
+}
+
+
+def _discover_gse_saves(rule: Rule) -> list[tuple[str, Path, int]]:
+    base = Path(os.environ.get("APPDATA", "")) / "GSE Saves"
+    out: list[tuple[str, Path, int]] = []
+    try:
+        for d in sorted(base.iterdir(), key=lambda p: p.name.lower()):
+            if d.is_dir() and d.name.lower() != "settings":
+                out.append((_GSE_APPID_NAMES.get(d.name.lower(), f"Steam AppID {d.name}"), d, 0))
+    except OSError:
+        pass
+    return out
+
+
+def _scan_discovered_gse_saves(rule: Rule) -> ScanResult:
+    return _scan_discovered_list(
+        rule, _discover_gse_saves(rule),
+        "Save folder of a game run via the Goldberg Steam emulator — review/back up by hand; deleting loses progress",
+        describe="Game saves via emulator — never auto-deleted, open and review",
     )
 
 
@@ -570,6 +602,8 @@ def _scan_discovered_virtualbox(rule: Rule) -> ScanResult:
 def scan_rule(rule: Rule) -> ScanResult:
     if rule.discover == "virtualbox":
         return _scan_discovered_virtualbox(rule)
+    if rule.discover == "gse-saves":
+        return _scan_discovered_gse_saves(rule)
     if rule.discover == "steam":
         return _scan_discovered_steam(rule)
     if rule.discover == "gog":

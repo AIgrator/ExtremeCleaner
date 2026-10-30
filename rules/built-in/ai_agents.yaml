@@ -174,6 +174,29 @@
   tier: safe
   describe: 'Official docs: personalization vector DB + logs. Can balloon hugely (official issue #731: 109 GB); Tabnine staff: close IDE, delete - rebuilt on reindex'
   os: [windows]
+- id: qoder-cache
+  program: Qoder
+  name: Qoder IDE logs/tmp
+  path: '%USERPROFILE%/.Qoder'
+  kind: clean_selected
+  subpaths: [logs, tmp]
+  category: devtools
+  safe: safe
+  describe: 'Diagnostics trash; official FAQ "Clear the local cache": quit Qoder EXE, wipe contents of ~/.Qoder, IDE recreates them'
+  processes: [Qoder.exe]
+  os: [windows]
+- id: qoder-data
+  program: Qoder
+  name: Qoder IDE data (~/.Qoder)
+  path: '%USERPROFILE%/.Qoder'
+  kind: manual
+  category: devtools
+  safe: careful
+  tier: userdata
+  exclude: [logs, tmp]
+  describe: 'Projects context, file-history (restore points!), plugins, settings.json. Full reset (logs you out): official FAQ deletes whole ~/.Qoder; program itself is %LOCALAPPDATA%\Programs\Qoder - never touched'
+  processes: [Qoder.exe]
+  os: [windows]
 - id: pearai-caches
   program: PearAI
   name: PearAI editor caches

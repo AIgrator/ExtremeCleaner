@@ -1101,7 +1101,7 @@ class MainWindow(QMainWindow):
         top.addWidget(icon_lbl)
         info = QLabel(
             "<b>ExtremeCleaner</b><br>"
-            "Version: 1.1.2<br>"
+            "Version: 1.1.3<br>"
             "Author: Yaroslav Litovchenko<br>"
             'Email: <a href="mailto:aigrator@gmail.com">aigrator@gmail.com</a><br>'
             'GitHub page: <a href="https://github.com/AIgrator/ExtremeCleaner">github.com/AIgrator/ExtremeCleaner</a><br>'

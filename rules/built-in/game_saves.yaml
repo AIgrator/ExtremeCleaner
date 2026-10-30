@@ -1,5 +1,15 @@
 # Publisher save hubs: one entry covers all titles of that publisher.
 # Verified from Checkpoint64/pcgamingwiki/Steam forums. Missing = not installed, harmless.
+- id: gse-saves
+  name: GSE Saves (Goldberg Steam emulator)
+  path: "%APPDATA%/GSE Saves"
+  kind: manual
+  category: games
+  safe: careful
+  tier: userdata
+  discover: gse-saves
+  describe: "Your saves for games run via the Goldberg Steam emulator fork (gbe_fork official README: %appdata%\\GSE Saves). Rows below are one per game folder, named by its Steam AppID (check steamdb.info/app/<ID>); 'settings' = emu config, not saves"
+  os: [windows]
 - id: publisher-hubs
   name: Publisher save hubs
   path: ""

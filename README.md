@@ -5,7 +5,7 @@ and understand what each of them is before you delete anything.
 
 ![Status](https://img.shields.io/badge/status-beta-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-1.1.2-brightgreen)
+![Version](https://img.shields.io/badge/version-1.1.3-brightgreen)
 
 ## What's new in 1.1.2 (honest sizes)
 
@@ -67,7 +67,7 @@ Deletion is gentle by design: console tools are cleaned through their own
 official commands, everything else goes to the Recycle Bin — never wiped
 permanently by the program.
 
-## Places we check (294 rules and counting)
+## Places we check (297 rules and counting)
 
 - **Cache (31 places)**: Python (pip, uv, poetry, conda), Node.js (npm, yarn, pnpm, bun, deno),
   Java/Android (gradle, maven), Rust (cargo), Go, C++ (vcpkg, conan), .NET (nuget),
