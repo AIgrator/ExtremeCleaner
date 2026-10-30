@@ -5,7 +5,7 @@ and understand what each of them is before you delete anything.
 
 ![Status](https://img.shields.io/badge/status-beta-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-1.1.3-brightgreen)
+![Version](https://img.shields.io/badge/version-1.2.0-brightgreen)
 
 ## What's new in 1.1.2 (honest sizes)
 
@@ -18,6 +18,26 @@ and understand what each of them is before you delete anything.
   overlaps (Cherry Studio/Chatbox caches vs their data rows, Documents root,
   Adobe, Ubisoft, goose) were found and fixed with a per-rule `exclude` field:
   umbrella rows now show only the files they own.
+
+## What's new in 1.2.0 (AI-IDE + game-store saves)
+
+Rule count grew 294 → **298**, plus the honest-scan fixes:
+
+- **Qoder IDE (Alibaba)** covered from the official FAQ: deletable `logs`/`tmp`
+  inside `~/.Qoder` (512 MB found on a real machine), chats/projects/file-history
+  stay a review-only row.
+- **Goldberg-emulator save folders**, one rule per emulator state, auto-expand
+  per game named by its Steam AppID:
+  - classic `Goldberg SteamEmu Saves` (official Readme_release.txt),
+  - `GSE Saves` (gbe_fork fork, official README).
+  Known AppIDs resolve to game names (Resident Evil Requiem, Indiana Jones,
+  Mafia: The Old Country, Evil West); unknown ones get a steamdb hint.
+- **pip/npm caches no longer freeze the cleaner**: deleting the cache files
+  directly (official pip/npm docs call both dirs pure caches) instead of
+  running `pip cache purge` / `npm cache clean --force`, which could sit silent
+  for minutes. Remaining command-based rules are capped at 5 minutes.
+- Fixed in 1.1.1/1.1.2 earlier: Android Studio caches deletable, no double
+  counting of AI model folders, NTFS hardlink dedup, overlap watchdog on CI.
 
 ## What's new in 1.1.1 (bug fixes)
 
