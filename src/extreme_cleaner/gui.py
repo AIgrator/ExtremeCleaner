@@ -376,48 +376,65 @@ class MainWindow(QMainWindow):
         name, sep, _tail = base.rpartition(" — ")
         return name if sep else base
 
-    def _collect_covered_paths(self) -> set:
-        """Absolute lowercase paths of rules measured at their own path.
+    def _collect_covered_paths(self) -> dict:
+        """Path -> set of rule ids claiming it (loader._claim_paths semantics).
 
-        A rule that resolves to a concrete folder covers everything beneath it;
-        other rules whose (or whose options') paths nest inside must not add
-        the same bytes to the totals (e.g. OneDrive/Pictures ⊂ OneDrive/).
+        Another rule claiming the same path or an ancestor of it means the
+        bytes are already on record under that rule — a second claim must not
+        add them again to the totals (OneDrive/Pictures vs OneDrive mirror,
+        VirtualBox discovered-vs-snapshots, user folders nested in built-ins).
         """
-        covered: set = set()
+        from extreme_cleaner.loader import _claim_paths
+
+        entries: dict = {}
         for r in self._results:
-            if r.rule.path and r.exists:
-                p = str(r.resolved or r.rule.path).lower().rstrip("\\/")
+            for cp in _claim_paths(r.rule):
+                p = str(cp).lower().rstrip("\\/")
                 if p:
-                    covered.add(p)
-            else:
-                for c in r.children or []:
-                    if c.exists and c.resolved:
-                        covered.add(str(c.resolved).lower().rstrip("\\/"))
-        return covered
+                    entries.setdefault(p, set()).add(r.rule.id)
+        return entries
 
     @staticmethod
-    def _covered_by_other(path: str, covered: set) -> bool:
+    def _covered_by_other(path: str, covered: dict, own_rid: str = "") -> bool:
         p = str(path or "").lower().rstrip("\\/")
         if not p or not covered:
             return False
-        for q in covered:
-            if p == q:
-                return False  # own footprint; dedup applies only to strict nesting
+        for q, rids in covered.items():
+            if q == p:
+                if any(rid != own_rid for rid in rids):
+                    return True  # another rule claims THIS exact path too
+                continue
             if p.startswith(q) and len(p) > len(q) and p[len(q)] in "\\/":
-                # nested inside a folder we (as another rule) already measure
-                return True
+                return True  # nested inside a folder another rule claims
         return False
 
-    def _counted_size(self, res: ScanResult, covered: set) -> int:
-        """Rule's contribution to totals: parts nested in other rules are skipped."""
+    def _counted_size(self, res: ScanResult, covered: dict) -> int:
+        """Rule's contribution to totals: parts claimed by other rules are skipped."""
+        from extreme_cleaner.loader import _claim_paths
+
+        rid = res.rule.id
         if not res.exists:
             return 0
-        if res.rule.path or not (res.children or []):
-            return 0 if self._covered_by_other(res.resolved, covered) else res.size_bytes
-        return sum(
-            0 if self._covered_by_other(c.resolved, covered) else c.size_bytes
-            for c in res.children if c.exists
-        )
+        if res.children and not res.rule.path:
+            # option hub: children carry exact per-path sizes
+            return sum(
+                res_child.size_bytes
+                if not self._covered_by_other(res_child.resolved or res_child.rule.path, covered, rid)
+                else 0
+                for res_child in res.children if res_child.exists
+            )
+        claims = [str(c).lower().rstrip("\\/") for c in _claim_paths(res.rule)]
+        if not claims:
+            if res.rule.path and res.rule.subpaths:
+                # glob-only clean_selected: its content lives under the claimed
+                # base dir of (usually) a sibling rule or itself
+                base_p = str(getattr(res, "resolved", "") or "").lower()
+                return 0 if self._covered_by_other(base_p.split(";")[0], covered, rid) else res.size_bytes
+            return res.size_bytes
+        hit = [c for c in claims if self._covered_by_other(c, covered, rid)]
+        if len(hit) == len(claims):
+            return 0  # everywhere claimed by other rules already
+        return res.size_bytes  # partial overlaps stay pessimistic (display-only)
 
     def _dedup_totals(self) -> dict:
         covered = self._collect_covered_paths()

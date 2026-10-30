@@ -7,7 +7,7 @@
   category: media
   safe: careful
   tier: userdata
-  describe: "Win+Shift+S and app shots land here (plain Pictures or OneDrive mirror). YOUR images — review yourself"
+  describe: "Win+Shift+S and app shots land here (plain Pictures/Screenshots; the OneDrive cloud mirror has its own row below). YOUR images — review yourself"
   os: [windows]
   options:
     - id: standard
@@ -16,18 +16,6 @@
       kind: manual
       safe: careful
       describe: ""
-    - id: onedrive-en
-      name: OneDrive/Pictures
-      path: "%USERPROFILE%/OneDrive/Pictures"
-      kind: manual
-      safe: careful
-      describe: "OneDrive mirror of Pictures"
-    - id: onedrive-ru
-      name: OneDrive/Изображения
-      path: "%USERPROFILE%/OneDrive/Изображения"
-      kind: manual
-      safe: careful
-      describe: "Localized OneDrive mirror"
 - id: screen-recorder-output
   name: Screen captures & recordings (recorder defaults)
   path: ""
@@ -43,13 +31,7 @@
       path: "%SystemDrive%/Fraps"
       kind: manual
       safe: careful
-      describe: "fraps.com FAQ: screenshot/movie folder defaults to the Fraps install directory; huge uncompressed AVI/BMP piles accumulate there"
-    - id: videos
-      name: Videos library (OBS/ShadowPlay defaults)
-      path: "%USERPROFILE%/Videos"
-      kind: manual
-      safe: careful
-      describe: "OBS docs: Recording Path lives under Settings > Output (default Videos library); ShadowPlay likewise. Check where YOUR recorder saves"
+      describe: "fraps.com FAQ: screenshot/movie folder defaults to the Fraps install directory; huge uncompressed AVI/BMP piles accumulate there. OBS/ShadowPlay save into the Videos row instead"
 - id: gamebar-captures
   name: Xbox Game Bar captures
   path: ""
@@ -140,13 +122,63 @@
   describe: "Old downloads/rips. YOUR files — review yourself"
   os: [windows]
 - id: onedrive-mirror
-  name: OneDrive local mirror
-  path: "%USERPROFILE%/OneDrive"
+  name: OneDrive cloud mirror
+  path: ""
   kind: manual
   category: other
   safe: careful
   tier: userdata
-  describe: "Deleting local files DELETES them in the cloud too. Review in Explorer, use Free up space per file"
+  describe: "Deleting local files DELETES them in the cloud too — review per folder below; one folder = one row, no duplicates elsewhere. To free disk without losing cloud copies use OneDrive's own 'Free up space'"
+  os: [windows]
+  options:
+    - id: pictures-en
+      name: OneDrive/Pictures
+      path: "%USERPROFILE%/OneDrive/Pictures"
+      kind: manual
+      safe: careful
+      describe: "Screenshots may land here when sync is on (Win+Shift+S default capture folder)"
+    - id: pictures-ru
+      name: OneDrive/Изображения
+      path: "%USERPROFILE%/OneDrive/Изображения"
+      kind: manual
+      safe: careful
+      describe: "Localised Pictures / Screenshots may land here when sync is on"
+    - id: videos-en
+      name: OneDrive/Videos
+      path: "%USERPROFILE%/OneDrive/Videos"
+      kind: manual
+      safe: careful
+      describe: ""
+    - id: videos-ru
+      name: OneDrive/Видео
+      path: "%USERPROFILE%/OneDrive/Видео"
+      kind: manual
+      safe: careful
+      describe: ""
+    - id: docs-en
+      name: OneDrive/Documents
+      path: "%USERPROFILE%/OneDrive/Documents"
+      kind: manual
+      safe: careful
+      describe: "Office files and Know-Your-Notes; Office file cache is measured separately in the Files row"
+    - id: docs-ru
+      name: OneDrive/Документы
+      path: "%USERPROFILE%/OneDrive/Документы"
+      kind: manual
+      safe: careful
+      describe: ""
+    - id: desktop-en
+      name: OneDrive/Desktop
+      path: "%USERPROFILE%/OneDrive/Desktop"
+      kind: manual
+      safe: careful
+      describe: ""
+    - id: desktop-ru
+      name: OneDrive/Рабочий стол
+      path: "%USERPROFILE%/OneDrive/Рабочий стол"
+      kind: manual
+      safe: careful
+      describe: ""
   os: [windows]
 - id: outlook-ost
   name: Outlook offline mail (OST)
