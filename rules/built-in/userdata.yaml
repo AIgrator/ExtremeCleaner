@@ -28,6 +28,28 @@
       kind: manual
       safe: careful
       describe: "Localized OneDrive mirror"
+- id: screen-recorder-output
+  name: Screen captures & recordings (recorder defaults)
+  path: ""
+  kind: manual
+  category: media
+  safe: careful
+  tier: userdata
+  describe: "Fraps and other recorders save captures here by default. YOUR shots/videos — review, delete by hand"
+  os: [windows]
+  options:
+    - id: fraps
+      name: Fraps captures
+      path: "%SystemDrive%/Fraps"
+      kind: manual
+      safe: careful
+      describe: "fraps.com FAQ: screenshot/movie folder defaults to the Fraps install directory; huge uncompressed AVI/BMP piles accumulate there"
+    - id: videos
+      name: Videos library (OBS/ShadowPlay defaults)
+      path: "%USERPROFILE%/Videos"
+      kind: manual
+      safe: careful
+      describe: "OBS docs: Recording Path lives under Settings > Output (default Videos library); ShadowPlay likewise. Check where YOUR recorder saves"
 - id: gamebar-captures
   name: Xbox Game Bar captures
   path: ""

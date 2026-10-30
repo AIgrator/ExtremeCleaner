@@ -349,6 +349,7 @@ class MainWindow(QMainWindow):
     def _fill_tree(self) -> None:
         self._updating = True
         try:
+            self._covered_paths = self._collect_covered_paths()
             tiers: dict[str, list[ScanResult]] = {"safe": [], "userdata": [], "system": []}
             for res in self._results:
                 tiers.setdefault(res.rule.tier or "safe", tiers["safe"]).append(res)
@@ -374,6 +375,53 @@ class MainWindow(QMainWindow):
         base = item.data(0, Qt.UserRole) or item.text(0)
         name, sep, _tail = base.rpartition(" — ")
         return name if sep else base
+
+    def _collect_covered_paths(self) -> set:
+        """Absolute lowercase paths of rules measured at their own path.
+
+        A rule that resolves to a concrete folder covers everything beneath it;
+        other rules whose (or whose options') paths nest inside must not add
+        the same bytes to the totals (e.g. OneDrive/Pictures ⊂ OneDrive/).
+        """
+        covered: set = set()
+        for r in self._results:
+            if r.rule.path and r.exists:
+                p = str(r.resolved or r.rule.path).lower().rstrip("\\/")
+                if p:
+                    covered.add(p)
+            else:
+                for c in r.children or []:
+                    if c.exists and c.resolved:
+                        covered.add(str(c.resolved).lower().rstrip("\\/"))
+        return covered
+
+    @staticmethod
+    def _covered_by_other(path: str, covered: set) -> bool:
+        p = str(path or "").lower().rstrip("\\/")
+        if not p or not covered:
+            return False
+        for q in covered:
+            if p == q:
+                return False  # own footprint; dedup applies only to strict nesting
+            if p.startswith(q) and len(p) > len(q) and p[len(q)] in "\\/":
+                # nested inside a folder we (as another rule) already measure
+                return True
+        return False
+
+    def _counted_size(self, res: ScanResult, covered: set) -> int:
+        """Rule's contribution to totals: parts nested in other rules are skipped."""
+        if not res.exists:
+            return 0
+        if res.rule.path or not (res.children or []):
+            return 0 if self._covered_by_other(res.resolved, covered) else res.size_bytes
+        return sum(
+            0 if self._covered_by_other(c.resolved, covered) else c.size_bytes
+            for c in res.children if c.exists
+        )
+
+    def _dedup_totals(self) -> dict:
+        covered = self._collect_covered_paths()
+        return {r.rule.id: self._counted_size(r, covered) for r in self._results}  # kept for tests
 
     def _build_tree(self, tree: QTreeWidget, results: list[ScanResult], checkable: bool,
                     cat_rename: dict | None = None) -> int:
@@ -413,8 +461,15 @@ class MainWindow(QMainWindow):
         ordered = [c for c in CATEGORY_ORDER if c in groups] + [c for c in groups if c not in CATEGORY_ORDER]
         mine = [r for r in results if r.rule.user_made]
         visible_mine = [r for r in mine if self._is_visible(r)]
+        def _rule_bytes(res: ScanResult) -> int:
+            """Totals never double-count one folder across nested rules."""
+            try:
+                return self._counted_size(res, self._covered_paths)
+            except Exception:
+                return res.size_bytes
+
         if visible_mine:
-            mine_total = sum(r.size_bytes for r in mine)
+            mine_total = sum(_rule_bytes(r) for r in mine)
             user_node = self._mid_node(f"User \u2014 {fmt_size(mine_total)}", checkable)
             tree.addTopLevelItem(user_node)
             for res in sorted(visible_mine, key=lambda r: r.size_bytes, reverse=True):
@@ -422,14 +477,14 @@ class MainWindow(QMainWindow):
             user_node.setToolTip(0, "<b>User</b><br>Folders you added yourself (Add folder button)")
             if "User" in expanded:
                 user_node.setExpanded(True)
-        total = sum(r.size_bytes for r in mine)
+        total = sum(_rule_bytes(r) for r in mine)
         pinned = sorted(
             [r for r in results if r.rule.pin and self._is_visible(r)],
             key=lambda r: r.size_bytes, reverse=True,
         )
         for res in pinned:
             self._add_rule(tree, res, checkable)
-            total += res.size_bytes
+            total += _rule_bytes(res)
         single_cat = len(ordered) == 1
 
         def attach(parent, node):
@@ -440,7 +495,7 @@ class MainWindow(QMainWindow):
 
         for cat in ordered:
             items = groups[cat]
-            cat_total = sum(r.size_bytes for r in all_groups.get(cat, []))
+            cat_total = sum(_rule_bytes(r) for r in all_groups.get(cat, []))
             total += cat_total
             if single_cat:
                 cat_node = None
@@ -459,13 +514,13 @@ class MainWindow(QMainWindow):
                 full = all_buckets.get((gname, pname), sub)
                 parent = cat_node if cat_node is not None else tree
                 if gname:
-                    g_total = sum(r.size_bytes for r in full)
+                    g_total = sum(_rule_bytes(r) for r in full)
                     g_node = self._mid_node(f"{gname} \u2014 {fmt_size(g_total)}", checkable)
                     g_node.setData(0, Qt.UserRole + 9, "folder")  # never flattened by _collapse_singles
                     attach(parent, g_node)
                     parent = g_node
                 if pname:
-                    p_total = sum(r.size_bytes for r in full)
+                    p_total = sum(_rule_bytes(r) for r in full)
                     p_node = self._mid_node(f"{pname} \u2014 {fmt_size(p_total)}", checkable)
                     p_node.setData(0, Qt.UserRole + 9, "folder")  # keep the browser/program name visible
                     attach(parent, p_node)

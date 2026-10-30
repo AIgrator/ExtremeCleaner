@@ -101,7 +101,7 @@ Deletion is gentle by design: console tools are cleaned through their own
 official commands, everything else goes to the Recycle Bin — never wiped
 permanently by the program.
 
-## Places we check (298 rules and counting)
+## Places we check (299 rules and counting)
 
 - **Cache (31 places)**: Python (pip, uv, poetry, conda), Node.js (npm, yarn, pnpm, bun, deno),
   Java/Android (gradle, maven), Rust (cargo), Go, C++ (vcpkg, conan), .NET (nuget),
