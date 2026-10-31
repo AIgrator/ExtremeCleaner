@@ -94,14 +94,14 @@
   describe: "The classic junkyard. YOUR files — review yourself"
   os: [windows]
 - id: documents-root
-  name: Documents root
+  name: Documents root (outside game hubs)
   path: "%USERPROFILE%/Documents"
   kind: manual
   category: other
   safe: careful
   tier: userdata
-  exclude: [Bandicam, ShareX, ViberDownloads, Zoom, "Virtual Machines", ComfyUI]
-  describe: "Years of forgotten files. Note: game hubs (My Games/EA/Rockstar) inside are counted separately too"
+  exclude: [Bandicam, ShareX, ViberDownloads, Zoom, "Virtual Machines", ComfyUI, "My Games", "EA Games", "Rockstar Games", "Paradox Interactive", NBGI, Klei, "Sports Interactive", KoeiTecmo, "Call of Duty", "Diablo IV", "StarCraft II", "Warcraft III", "The Witcher 3", "Witcher 2", BioWare, "Euro Truck Simulator 2", "GTA San Andreas User Files", "Mount&Blade Warband Savegames", "NFS Most Wanted", "Heroes of the Storm", "Black Desert", "Guild Wars 2", "WB Games", "Tomb Raider", "Rise of the Tomb Raider", "Shadow of the Tomb Raider", "STAR WARS Battlefront II", "The Crew Motorfest", "Assetto Corsa Competizione", "Battlefield Hardline", BnS, "STAR WARS Battlefront", Shootmania, "Alpha Protocol", "Endless Space", "ANNO 1404", "Cossacks 3", Banished, "Project CARS", "Project CARS 2", "Driver San Francisco", TrackMania, Blur, Stronghold, "Combat Mission", "FC 24", "FC 25", "FC 26", Aion, "Lineage II", "Elder Scrolls Online", "Dead Space", "Anno 1800", "Battlefield 2042", "STAR WARS Squadrons", "Mount and Blade II Bannerlord", "Larian Studios", "Dyson Sphere Program", Respawn, Overwatch, "Battlefield 1"]
+  describe: "Only folders NOT covered by game-save rows (those are counted once, in their own rules) - your real documents stay here. YOUR files — review yourself"
   os: [windows]
 - id: videos-folder
   name: Videos folder
