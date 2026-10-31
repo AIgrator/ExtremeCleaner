@@ -12,7 +12,7 @@
   options:
     - id: standard
       name: Pictures/Screenshots
-      path: "%USERPROFILE%/Pictures/Screenshots"
+      path: "{PICTURES}/Screenshots"
       kind: manual
       safe: careful
       describe: ""
@@ -45,19 +45,19 @@
   options:
     - id: clips
       name: Videos/Captures
-      path: "%USERPROFILE%/Videos/Captures"
+      path: "{VIDEOS}/Captures"
       kind: manual
       safe: careful
       describe: ""
     - id: shots
       name: Pictures/Xbox Screenshots
-      path: "%USERPROFILE%/Pictures/Xbox Screenshots"
+      path: "{PICTURES}/Xbox Screenshots"
       kind: manual
       safe: careful
       describe: ""
 - id: sharex-shots
   name: ShareX screenshots
-  path: "%USERPROFILE%/Documents/ShareX"
+  path: "{DOCUMENTS}/ShareX"
   kind: manual
   category: media
   program: ShareX
@@ -67,7 +67,7 @@
   os: [windows]
 - id: bandicam-output
   name: Bandicam output
-  path: "%USERPROFILE%/Documents/Bandicam"
+  path: "{DOCUMENTS}/Bandicam"
   kind: manual
   category: media
   program: Bandicam
@@ -75,51 +75,63 @@
   tier: userdata
   describe: "Default output folder; check Output settings if customized"
   os: [windows]
-- id: downloads-folder
-  name: Downloads folder
-  path: "%USERPROFILE%/Downloads"
+- id: user-libraries
+  name: Your folders (Explorer sidebar)
+  path: ""
   kind: manual
   category: other
   safe: careful
   tier: userdata
-  describe: "Installers/zips you forgot. YOUR files — review yourself"
+  always_show: true
+  describe: "The five folders Explorer shows in the sidebar - each counted ONCE here, subfolders owned by other rules excluded, zero means empty but real. OneDrive folders are a separate real location (OneDrive row below), NOT a mirror of these"
   os: [windows]
+  options:
+    - id: downloads
+      name: Downloads
+      path: "{DOWNLOADS}"
+      kind: manual
+      safe: careful
+      always_show: true
+      describe: "Installers/zips you forgot. YOUR files — review yourself"
+    - id: documents
+      name: Documents (outside game hubs)
+      path: "{DOCUMENTS}"
+      kind: manual
+      safe: careful
+      always_show: true
+      exclude: [Bandicam, ShareX, ViberDownloads, Zoom, "Virtual Machines", ComfyUI, "My Games", "EA Games", "Rockstar Games", "Paradox Interactive", NBGI, Klei, "Sports Interactive", KoeiTecmo, "Call of Duty", "Diablo IV", "StarCraft II", "Warcraft III", "The Witcher 3", "Witcher 2", BioWare, "Euro Truck Simulator 2", "GTA San Andreas User Files", "Mount&Blade Warband Savegames", "NFS Most Wanted", "Heroes of the Storm", "Black Desert", "Guild Wars 2", "WB Games", "Tomb Raider", "Rise of the Tomb Raider", "Shadow of the Tomb Raider", "STAR WARS Battlefront II", "The Crew Motorfest", "Assetto Corsa Competizione", "Battlefield Hardline", BnS, "STAR WARS Battlefront", Shootmania, "Alpha Protocol", "Endless Space", "ANNO 1404", "Cossacks 3", Banished, "Project CARS", "Project CARS 2", "Driver San Francisco", TrackMania, Blur, Stronghold, "Combat Mission", "FC 24", "FC 25", "FC 26", Aion, "Lineage II", "Elder Scrolls Online", "Dead Space", "Anno 1800", "Battlefield 2042", "STAR WARS Squadrons", "Mount and Blade II Bannerlord", "Larian Studios", "Dyson Sphere Program", Respawn, Overwatch, "Battlefield 1"]
+      describe: "Game-save folders inside are shown once, in their own rules (Games tab) - this row is your real documents. YOUR files — review yourself"
+    - id: pictures
+      name: Pictures (outside Screenshots)
+      path: "{PICTURES}"
+      kind: manual
+      safe: careful
+      always_show: true
+      exclude: [Screenshots, "Xbox Screenshots"]
+      describe: "Screenshots have their own row above; Xbox shots too. Rest of your images — review yourself"
+    - id: music
+      name: Music
+      path: "{MUSIC}"
+      kind: manual
+      safe: careful
+      always_show: true
+      describe: "Old downloads/rips. YOUR files — review yourself"
+    - id: videos
+      name: Videos (outside Game Bar Captures)
+      path: "{VIDEOS}"
+      kind: manual
+      safe: careful
+      always_show: true
+      exclude: [Captures]
+      describe: "OBS Recording Path and ShadowPlay default here (set in Settings > Output if changed); Xbox Game Bar clips have their own row. Recordings, downloads, exports. YOUR files — review yourself"
 - id: desktop-pile
   name: Desktop pile
-  path: "%USERPROFILE%/Desktop"
+  path: "{DESKTOP}"
   kind: manual
   category: other
   safe: careful
   tier: userdata
   describe: "The classic junkyard. YOUR files — review yourself"
-  os: [windows]
-- id: documents-root
-  name: Documents root (outside game hubs)
-  path: "%USERPROFILE%/Documents"
-  kind: manual
-  category: other
-  safe: careful
-  tier: userdata
-  exclude: [Bandicam, ShareX, ViberDownloads, Zoom, "Virtual Machines", ComfyUI, "My Games", "EA Games", "Rockstar Games", "Paradox Interactive", NBGI, Klei, "Sports Interactive", KoeiTecmo, "Call of Duty", "Diablo IV", "StarCraft II", "Warcraft III", "The Witcher 3", "Witcher 2", BioWare, "Euro Truck Simulator 2", "GTA San Andreas User Files", "Mount&Blade Warband Savegames", "NFS Most Wanted", "Heroes of the Storm", "Black Desert", "Guild Wars 2", "WB Games", "Tomb Raider", "Rise of the Tomb Raider", "Shadow of the Tomb Raider", "STAR WARS Battlefront II", "The Crew Motorfest", "Assetto Corsa Competizione", "Battlefield Hardline", BnS, "STAR WARS Battlefront", Shootmania, "Alpha Protocol", "Endless Space", "ANNO 1404", "Cossacks 3", Banished, "Project CARS", "Project CARS 2", "Driver San Francisco", TrackMania, Blur, Stronghold, "Combat Mission", "FC 24", "FC 25", "FC 26", Aion, "Lineage II", "Elder Scrolls Online", "Dead Space", "Anno 1800", "Battlefield 2042", "STAR WARS Squadrons", "Mount and Blade II Bannerlord", "Larian Studios", "Dyson Sphere Program", Respawn, Overwatch, "Battlefield 1"]
-  describe: "Only folders NOT covered by game-save rows (those are counted once, in their own rules) - your real documents stay here. YOUR files — review yourself"
-  os: [windows]
-- id: videos-folder
-  name: Videos folder
-  path: "%USERPROFILE%/Videos"
-  kind: manual
-  category: media
-  safe: careful
-  tier: userdata
-  describe: "Recordings, downloads, exports. YOUR files — review yourself"
-  os: [windows]
-- id: music-folder
-  name: Music folder
-  path: "%USERPROFILE%/Music"
-  kind: manual
-  category: media
-  safe: careful
-  tier: userdata
-  describe: "Old downloads/rips. YOUR files — review yourself"
   os: [windows]
 - id: onedrive-mirror
   name: OneDrive cloud mirror
@@ -133,49 +145,49 @@
   options:
     - id: pictures-en
       name: OneDrive/Pictures
-      path: "%USERPROFILE%/OneDrive/Pictures"
+      path: "{ONEDRIVE}/Pictures"
       kind: manual
       safe: careful
       describe: "Screenshots may land here when sync is on (Win+Shift+S default capture folder)"
     - id: pictures-ru
       name: OneDrive/Изображения
-      path: "%USERPROFILE%/OneDrive/Изображения"
+      path: "{ONEDRIVE}/Изображения"
       kind: manual
       safe: careful
       describe: "Localised Pictures / Screenshots may land here when sync is on"
     - id: videos-en
       name: OneDrive/Videos
-      path: "%USERPROFILE%/OneDrive/Videos"
+      path: "{ONEDRIVE}/Videos"
       kind: manual
       safe: careful
       describe: ""
     - id: videos-ru
       name: OneDrive/Видео
-      path: "%USERPROFILE%/OneDrive/Видео"
+      path: "{ONEDRIVE}/Видео"
       kind: manual
       safe: careful
       describe: ""
     - id: docs-en
       name: OneDrive/Documents
-      path: "%USERPROFILE%/OneDrive/Documents"
+      path: "{ONEDRIVE}/Documents"
       kind: manual
       safe: careful
       describe: "Office files and Know-Your-Notes; Office file cache is measured separately in the Files row"
     - id: docs-ru
       name: OneDrive/Документы
-      path: "%USERPROFILE%/OneDrive/Документы"
+      path: "{ONEDRIVE}/Документы"
       kind: manual
       safe: careful
       describe: ""
     - id: desktop-en
       name: OneDrive/Desktop
-      path: "%USERPROFILE%/OneDrive/Desktop"
+      path: "{ONEDRIVE}/Desktop"
       kind: manual
       safe: careful
       describe: ""
     - id: desktop-ru
       name: OneDrive/Рабочий стол
-      path: "%USERPROFILE%/OneDrive/Рабочий стол"
+      path: "{ONEDRIVE}/Рабочий стол"
       kind: manual
       safe: careful
       describe: ""

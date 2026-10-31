@@ -25,6 +25,8 @@ def _dict_to_option(d: dict) -> RuleOption:
         match=str(d.get("match", "*")),
         keep=list(d.get("keep", [])),
         processes=list(d.get("processes", [])),
+        exclude=list(d.get("exclude", [])),
+        always_show=bool(d.get("always_show", False)),
     )
 
 _CURRENT_OS = {"windows": "windows", "linux": "linux", "darwin": "darwin"}.get(
@@ -32,8 +34,61 @@ _CURRENT_OS = {"windows": "windows", "linux": "linux", "darwin": "darwin"}.get(
 )
 
 
+_KNOWN_FOLDER_REGNAMES = {
+    # HKCU ...Explorer\User Shell Folders value names (Microsoft-documented;
+    # this is what Explorer itself uses when Known Folder Move redirects
+    # Documents/Pictures/Desktop into OneDrive).
+    "DESKTOP": "Desktop",
+    "DOCUMENTS": "Personal",
+    "DOWNLOADS": "{374DE290-123F-4565-9164-39C4925E467B}",
+    "MUSIC": "My Music",
+    "PICTURES": "My Pictures",
+    "VIDEOS": "My Video",
+}
+_KNOWN_FALLBACK = {
+    # %USERPROFILE%-relative default if the registry value is missing.
+    "DESKTOP": "Desktop",
+    "DOCUMENTS": "Documents",
+    "DOWNLOADS": "Downloads",
+    "MUSIC": "Music",
+    "PICTURES": "Pictures",
+    "VIDEOS": "Videos",
+}
+
+
+def _known_folder(name: str) -> str:
+    """Real current location of a user library (redirect-aware), or '' outside Windows."""
+    if platform.system() != "Windows":
+        return ""
+    import winreg
+
+    try:
+        with winreg.OpenKey(
+            winreg.HKEY_CURRENT_USER,
+            r"Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders",
+        ) as k:
+            raw, _ = winreg.QueryValueEx(k, _KNOWN_FOLDER_REGNAMES[name])
+    except OSError:
+        raw = ""
+    p = str(raw).strip() or str(Path.home() / _KNOWN_FALLBACK[name])
+    return os.path.expandvars(os.path.expanduser(p))
+
+
+def _onedrive_root() -> str:
+    """Current OneDrive root folder: %OneDrive% set by the OneDrive client
+    (documented user env var), covering 'OneDrive' and 'OneDrive - Company'."""
+    for var in ("OneDrive", "OneDriveConsumer", "OneDriveCommercial"):
+        v = os.environ.get(var, "").strip()
+        if v:
+            return v
+    return str(Path.home() / "OneDrive")
+
+
 def expand_rule_path(raw: str) -> Path:
-    """Expand %VAR% (Windows), $VAR, ~ and {HOME}/{LOCALAPPDATA}/{APPDATA}."""
+    """Expand %VAR% (Windows), $VAR, ~ and {HOME}/{LOCALAPPDATA}/{APPDATA},
+    plus redirect-aware library tokens {DESKTOP}/{DOCUMENTS}/{DOWNLOADS}/
+    {MUSIC}/{PICTURES}/{VIDEOS} (real Explorer locations, not hardcoded)
+    and {ONEDRIVE} (actual OneDrive root)."""
     s = (raw or "").strip().strip('"').strip("'")
     if not s:
         return Path("")  # never resolve empty to cwd — missing by design
@@ -42,6 +97,11 @@ def expand_rule_path(raw: str) -> Path:
         s = s.replace("{LOCALAPPDATA}", os.environ["LOCALAPPDATA"])
     if "APPDATA" in os.environ:
         s = s.replace("{APPDATA}", os.environ["APPDATA"])
+    for token in set(_KNOWN_FOLDER_REGNAMES) | {"ONEDRIVE"}:
+        marker = "{" + token + "}"
+        if marker in s:
+            resolved = _onedrive_root() if token == "ONEDRIVE" else _known_folder(token)
+            s = s.replace(marker, resolved)
     s = os.path.expandvars(os.path.expanduser(s))
     return Path(s)
 
@@ -83,6 +143,7 @@ def _dict_to_rule(d: dict, file_group: str = "", user_made: bool = False) -> Rul
         docs=str(d.get("docs", "")),
         user_made=user_made,
         pin=bool(d.get("pin", False)),
+        always_show=bool(d.get("always_show", False)),
         exec=bool(d.get("exec", False)),
         processes=list(d.get("processes", [])),
     )
@@ -147,7 +208,9 @@ def _claim_paths(rule: Rule) -> list[str]:
                 continue
             outs.append(str(Path(base) / sub))
         return outs  # the base dir itself stays constrained by its subpaths
-    outs.append(base)
+    if not rule.options:
+        # an option hub measures only its option folders, not the base
+        outs.append(base)
     for opt in rule.options:
         if opt.path:
             try:

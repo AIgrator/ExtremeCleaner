@@ -21,6 +21,8 @@ class RuleOption:
     match: str = "*"
     keep: list[str] = field(default_factory=list)
     processes: list[str] = field(default_factory=list)
+    exclude: list[str] = field(default_factory=list)  # option-level dirs owned by other rules
+    always_show: bool = False  # visible even when 0 bytes (e.g. Explorer libraries)
 
 @dataclass
 class Rule:
@@ -50,6 +52,7 @@ class Rule:
     docs: str = ""
     user_made: bool = False
     pin: bool = False
+    always_show: bool = False  # row stays visible with 0 bytes (library-style rules)
     exec: bool = False
     processes: list[str] = field(default_factory=list)  # exe names to warn about if running
 

@@ -331,6 +331,10 @@ class MainWindow(QMainWindow):
     def _is_visible(self, res: ScanResult) -> bool:
         if res.rule.pin:
             return True  # pinned rows (Recycle Bin) are always shown
+        if res.rule.always_show:
+            return True  # library-style rows show even when 0 (user asked: zeros beat guess-work)
+        if self._tie_covered(res.resolved or "", res.rule.id):
+            return False  # same folder shown once, under the better-ranked row (Known Folder Move tie)
         if self.show_all_box.isChecked():
             return True
         if res.rule.tier == "system":
@@ -343,7 +347,12 @@ class MainWindow(QMainWindow):
         if res.errors:
             return True  # denied/locked places stay visible (status explains why)
         if res.children:
-            return any(c.exists and (c.size_bytes > 0 or c.files > 0) for c in res.children)
+            return any(
+                c.exists
+                and (c.size_bytes > 0 or c.files > 0)
+                and not self._tie_covered(c.resolved or "", c.rule.id)
+                for c in res.children
+            )
         return res.exists and (res.size_bytes > 0 or res.files > 0)
 
     def _fill_tree(self) -> None:
@@ -377,36 +386,101 @@ class MainWindow(QMainWindow):
         return name if sep else base
 
     def _collect_covered_paths(self) -> dict:
-        """Path -> set of rule ids claiming it (loader._claim_paths semantics).
+        """Claimed path -> {rule id: (excluded subfolder names, tie rank)}.
 
-        Another rule claiming the same path or an ancestor of it means the
-        bytes are already on record under that rule — a second claim must not
-        add them again to the totals (OneDrive/Pictures vs OneDrive mirror,
-        VirtualBox discovered-vs-snapshots, user folders nested in built-ins).
+        Claims follow loader._claim_paths semantics: what the rule actually
+        measures (option paths for hubs, fixed subpaths for clean_selected,
+        nothing for glob-only or discovered rules). Another rule claiming the
+        same path or an ancestor of it means the bytes are already on record
+        under that rule — unless that claimant explicitly excludes the nested
+        first-level subfolder (then that folder belongs to its own rule).
+        Exact same-path ties (Known Folder Move: the Documents library IS
+        OneDrive/Documents) are won by the lower-ranked claimant:
+        always_show rows ("Your folders") beat plain rows, otherwise the
+        earlier-loaded rule wins.
         """
-        from extreme_cleaner.loader import _claim_paths
+        from extreme_cleaner.loader import _claim_paths, expand_rule_path
 
         entries: dict = {}
-        for r in self._results:
-            for cp in _claim_paths(r.rule):
-                p = str(cp).lower().rstrip("\\/")
-                if p:
-                    entries.setdefault(p, set()).add(r.rule.id)
+
+        def put(p: str, rid: str, excl: list[str], rank) -> None:
+            p = str(p).lower().rstrip("\\/")
+            if not p:
+                return
+            owners = entries.setdefault(p, {})
+            owners.setdefault(rid, (frozenset(x.lower() for x in excl), rank))
+
+        for idx, r in enumerate(self._results):
+            rule = r.rule
+            rank = (0 if rule.always_show else 1, idx)
+            try:
+                claims = _claim_paths(rule)
+            except Exception:
+                claims = []
+            for cp in claims:
+                put(cp, rule.id, rule.exclude or [], rank)
+            for o in rule.options:
+                if o.path:
+                    try:
+                        put(expand_rule_path(o.path), f"{rule.id}:{o.id}", o.exclude or [], rank)
+                    except Exception:
+                        continue
         return entries
+
+    @staticmethod
+    def _own_state(owners: dict, rid: str):
+        """Rank of OWN claim: exact rid, or any child claim '<rid>:*' —
+        a rule and its expanded options are one family on the same side."""
+        if rid in owners:
+            return owners[rid][1]
+        pref = rid + ":"
+        for k, v in owners.items():
+            if k.startswith(pref):
+                return v[1]
+        return None
 
     @staticmethod
     def _covered_by_other(path: str, covered: dict, own_rid: str = "") -> bool:
         p = str(path or "").lower().rstrip("\\/")
         if not p or not covered:
             return False
-        for q, rids in covered.items():
+        import re as _re
+
+        base = _re.split(r"[/\\]", p)[-1]
+        for q, owners in covered.items():
+            own_rank = MainWindow._own_state(owners, own_rid) if own_rid else None
             if q == p:
-                if any(rid != own_rid for rid in rids):
-                    return True  # another rule claims THIS exact path too
+                if own_rank is None:
+                    own_rank = (2, 1 << 30)
+                for rid, (excl, rank) in owners.items():
+                    foreign = rid != own_rid and not (own_rid and rid.startswith(own_rid + ":"))
+                    if foreign and rank < own_rank and base not in excl:
+                        return True  # another rule claims THIS exact path and wins the tie
                 continue
             if p.startswith(q) and len(p) > len(q) and p[len(q)] in "\\/":
+                direct = _re.split(r"[/\\]", p[len(q) + 1:])[0].lower()
+                others = [(excl, _rk) for rid, (excl, _rk) in owners.items()
+                          if rid != own_rid and not (own_rid and rid.startswith(own_rid + ":"))]
+                if others and all(excl and direct in excl for excl, _rk in others):
+                    continue  # every claimant explicitly gave up this first-level subfolder
                 return True  # nested inside a folder another rule claims
         return False
+
+    def _tie_covered(self, path: str, rid: str) -> bool:
+        """Exact same-path duplicate: this path is claimed by a better-ranked
+        row too (Known Folder Move: the Documents library IS OneDrive/Documents).
+        The loser row must hide so one folder = one row."""
+        p = str(path or "").lower().rstrip("\\/")
+        if not p:
+            return False
+        owners = (getattr(self, "_covered_paths", None) or {}).get(p)
+        if not owners:
+            return False
+        own_rank = self._own_state(owners, rid)
+        if own_rank is None:
+            return False
+        return any(rid2 != rid and not rid2.startswith(rid + ":") and rank < own_rank
+                   for rid2, (_excl, rank) in owners.items())
 
     def _counted_size(self, res: ScanResult, covered: dict) -> int:
         """Rule's contribution to totals: parts claimed by other rules are skipped."""
@@ -419,9 +493,12 @@ class MainWindow(QMainWindow):
             # option hub: children carry exact per-path sizes
             return sum(
                 res_child.size_bytes
-                if not self._covered_by_other(res_child.resolved or res_child.rule.path, covered, rid)
+                if not self._covered_by_other(
+                    res_child.resolved or res_child.rule.path, covered, res_child.rule.id
+                )
                 else 0
-                for res_child in res.children if res_child.exists
+                for res_child in res.children
+                if res_child.exists
             )
         claims = [str(c).lower().rstrip("\\/") for c in _claim_paths(res.rule)]
         if not claims:
@@ -810,8 +887,13 @@ class MainWindow(QMainWindow):
         # checkboxes would only end in the "manual steps" dialog after Delete.
         chk = checkable and not (res.rule.kind == "run_command" and not res.rule.exec)
         if res.children:
+            covered = getattr(self, "_covered_paths", None)
+            if covered and not res.rule.path:
+                shown = self._counted_size(res, covered)  # bytes owned by other rules are shown there
+            else:
+                shown = res.size_bytes
             mid = self._mid_node(res.rule.name, chk)
-            mid.setText(1, fmt_size(res.size_bytes))
+            mid.setText(1, fmt_size(shown))
             mid.setText(2, str(res.files))
             mid.setText(4, res.rule.describe or "")
             mid.setTextAlignment(1, Qt.AlignRight | Qt.AlignVCenter)
