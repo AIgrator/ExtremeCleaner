@@ -135,62 +135,14 @@
   os: [windows]
 - id: onedrive-mirror
   name: OneDrive cloud mirror
-  path: ""
+  path: "{ONEDRIVE}"
+  discover: subfolders
   kind: manual
   category: other
   safe: careful
   tier: userdata
-  describe: "Deleting local files DELETES them in the cloud too — review per folder below; one folder = one row, no duplicates elsewhere. To free disk without losing cloud copies use OneDrive's own 'Free up space'"
+  describe: "Every real subfolder of OneDrive, one row each, nothing invented. Deleting local files DELETES them in the cloud too - review in Explorer; to free disk without losing cloud copies use OneDrive's own 'Free up space'. Library folders redirected here (Known Folder Move: Documents/Pictures/Desktop) are shown once, under 'Your folders' above"
   os: [windows]
-  options:
-    - id: pictures-en
-      name: OneDrive/Pictures
-      path: "{ONEDRIVE}/Pictures"
-      kind: manual
-      safe: careful
-      describe: "Screenshots may land here when sync is on (Win+Shift+S default capture folder)"
-    - id: pictures-ru
-      name: OneDrive/Изображения
-      path: "{ONEDRIVE}/Изображения"
-      kind: manual
-      safe: careful
-      describe: "Localised Pictures / Screenshots may land here when sync is on"
-    - id: videos-en
-      name: OneDrive/Videos
-      path: "{ONEDRIVE}/Videos"
-      kind: manual
-      safe: careful
-      describe: ""
-    - id: videos-ru
-      name: OneDrive/Видео
-      path: "{ONEDRIVE}/Видео"
-      kind: manual
-      safe: careful
-      describe: ""
-    - id: docs-en
-      name: OneDrive/Documents
-      path: "{ONEDRIVE}/Documents"
-      kind: manual
-      safe: careful
-      describe: "Office files and Know-Your-Notes; Office file cache is measured separately in the Files row"
-    - id: docs-ru
-      name: OneDrive/Документы
-      path: "{ONEDRIVE}/Документы"
-      kind: manual
-      safe: careful
-      describe: ""
-    - id: desktop-en
-      name: OneDrive/Desktop
-      path: "{ONEDRIVE}/Desktop"
-      kind: manual
-      safe: careful
-      describe: ""
-    - id: desktop-ru
-      name: OneDrive/Рабочий стол
-      path: "{ONEDRIVE}/Рабочий стол"
-      kind: manual
-      safe: careful
-      describe: ""
   os: [windows]
 - id: outlook-ost
   name: Outlook offline mail (OST)

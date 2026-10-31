@@ -489,8 +489,8 @@ class MainWindow(QMainWindow):
         rid = res.rule.id
         if not res.exists:
             return 0
-        if res.children and not res.rule.path:
-            # option hub: children carry exact per-path sizes
+        if res.children and (not res.rule.path or res.rule.options):
+            # option hub: children carry exact per-path sizes (dynamic or static)
             return sum(
                 res_child.size_bytes
                 if not self._covered_by_other(
@@ -888,11 +888,14 @@ class MainWindow(QMainWindow):
         chk = checkable and not (res.rule.kind == "run_command" and not res.rule.exec)
         if res.children:
             covered = getattr(self, "_covered_paths", None)
-            if covered and not res.rule.path:
+            if covered and (not res.rule.path or res.rule.options):
                 shown = self._counted_size(res, covered)  # bytes owned by other rules are shown there
             else:
                 shown = res.size_bytes
             mid = self._mid_node(res.rule.name, chk)
+            if res.rule.discover:
+                # dynamic hub (OneDrive root etc.): identity matters - do not flatten
+                mid.setData(0, Qt.UserRole + 9, "folder")
             mid.setText(1, fmt_size(shown))
             mid.setText(2, str(res.files))
             mid.setText(4, res.rule.describe or "")

@@ -663,6 +663,43 @@ def _scan_discovered_virtualbox(rule: Rule) -> ScanResult:
     return res
 
 
+def _expand_subfolder_options(rule: Rule) -> list:
+    """One folder inside the base directory = one row (OneDrive hub pattern).
+
+    Real subfolders present right now — nothing invented, nothing guessed.
+    Library folders redirected into the base (Known Folder Move) still appear
+    here, but the GUI tie logic hides them: those bytes are shown once under
+    the 'Your folders' rows that Explorer resolves to the same path.
+    """
+    import hashlib
+    import re as _re
+
+    base = expand_rule_path(rule.path)
+    try:
+        dirs = sorted((p for p in base.iterdir() if p.is_dir()), key=lambda p: p.name.lower())
+    except OSError:
+        return []
+    opts: list = []
+    for p in dirs:
+        name = p.name
+        if name.startswith((".", "~$")):
+            continue  # service clutter, temp sync stubs
+        slug = _re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-") or "sub"
+        opts.append(
+            RuleOption(
+                id=f"{slug}-{hashlib.md5(name.encode('utf-8')).hexdigest()[:8]}",
+                name=name,
+                path=str(p),
+                kind="manual",
+                safe=rule.safe or "careful",
+                describe="",
+            )
+        )
+        if len(opts) >= 200:
+            break
+    return opts
+
+
 def scan_rule(rule: Rule) -> ScanResult:
     if rule.discover == "virtualbox":
         return _scan_discovered_virtualbox(rule)
@@ -680,6 +717,9 @@ def scan_rule(rule: Rule) -> ScanResult:
         return _scan_restore_points(rule)
     if rule.kind == "empty_bin":
         return _scan_bin(rule)
+    if rule.discover == "subfolders" and rule.path and not rule.options:
+        # One real subfolder = one row (OneDrive root, library roots, ...)
+        rule = replace(rule, options=_expand_subfolder_options(rule))
     if not rule.options and rule.kind == "clean_selected" and rule.subpaths and rule.path:
         # Every subfolder gets its own checkbox: Chrome Cache vs IndexedDB etc.
         opts = _expand_selected_options(rule)
