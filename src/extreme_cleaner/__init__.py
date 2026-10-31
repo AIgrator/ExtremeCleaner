@@ -1,3 +1,3 @@
 """ExtremeCleaner — extreme cache cleaner with user-expandable rules."""
 
-__version__ = "1.2.1"
+__version__ = "1.3.0"

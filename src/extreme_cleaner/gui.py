@@ -412,7 +412,11 @@ class MainWindow(QMainWindow):
 
         for idx, r in enumerate(self._results):
             rule = r.rule
-            rank = (0 if rule.always_show else 1, idx)
+            # Tie rank: 'Your folders' (always_show) first, then static rules
+            # (curated rows), then dynamic hubs (discovered rows: their content
+            # is invented per machine, curated rows keep the folder) — order
+            # inside a group is load order, deterministic via sorted file list.
+            rank = (0 if rule.always_show else 1, 1 if rule.discover else 0, idx)
             try:
                 claims = _claim_paths(rule)
             except Exception:
@@ -1298,7 +1302,7 @@ class MainWindow(QMainWindow):
         top.addWidget(icon_lbl)
         info = QLabel(
             "<b>ExtremeCleaner</b><br>"
-            "Version: 1.2.1<br>"
+            "Version: 1.3.0<br>"
             "Author: Yaroslav Litovchenko<br>"
             'Email: <a href="mailto:aigrator@gmail.com">aigrator@gmail.com</a><br>'
             'GitHub page: <a href="https://github.com/AIgrator/ExtremeCleaner">github.com/AIgrator/ExtremeCleaner</a><br>'
@@ -1695,6 +1699,12 @@ def main() -> int:
             f"probe={probe}",
         ]
         lines += [f"{r.rule.id}={r.size_bytes}/{r.files}" for r in top]
+        # Rendered User-data rows after dedup ties: one folder = one row check.
+        _stack2 = [window.user_tree.topLevelItem(i) for i in range(window.user_tree.topLevelItemCount())]
+        while _stack2:
+            _it2 = _stack2.pop()
+            lines.append(f"row|{_it2.text(0)} = {_it2.text(1)}")
+            _stack2.extend(_it2.child(i) for i in range(_it2.childCount()))
         (data_dir() / "smoke_result.txt").write_text("\n".join(lines), encoding="utf-8")
         return 0
     app = QApplication(sys.argv)

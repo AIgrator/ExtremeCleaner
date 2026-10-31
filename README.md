@@ -5,7 +5,7 @@ and understand what each of them is before you delete anything.
 
 ![Status](https://img.shields.io/badge/status-beta-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-1.2.1-brightgreen)
+![Version](https://img.shields.io/badge/version-1.3.0-brightgreen)
 
 ## What's new in 1.1.2 (honest sizes)
 
@@ -18,6 +18,26 @@ and understand what each of them is before you delete anything.
   overlaps (Cherry Studio/Chatbox caches vs their data rows, Documents root,
   Adobe, Ubisoft, goose) were found and fixed with a per-rule `exclude` field:
   umbrella rows now show only the files they own.
+
+## What's new in 1.3.0 (OneDrive done right: one folder = one row)
+
+- **Redirect-aware library paths.** The app no longer guesses `%USERPROFILE%\Documents`.
+  Real Explorer locations (Documents/Pictures/Music/Videos/Downloads/Desktop)
+  come from the official `User Shell Folders` registry key — the same source
+  Windows itself uses. On machines where OneDrive's Known Folder Move moved
+  Documents/Pictures/Desktop *into* the OneDrive folder, the app follows
+  (and the OneDrive root comes from the `%OneDrive%` variable the OneDrive
+  client sets, so "OneDrive - Company" layouts work too).
+- **OneDrive hub scans its real subfolders** (Apps, Attachments, videos,
+  whatever is actually there): one folder = one row, nothing invented.
+  Library folders that OneDrive redirected are shown once — under
+  "Your folders"/"Desktop pile" — not duplicated inside the OneDrive section.
+- **Your folders (Explorer sidebar)** — one hub with Downloads/Documents/
+  Pictures/Music/Videos; empty is honest 0 B, not a hidden row.
+- **Totals count every folder once.** When two rules cover the same folder
+  (nesting, redirects, emulator-vs-fallback), the bytes are added to the
+  totals exactly once, deterministically — no more "theoretical total" that
+  is 2× real disk usage.
 
 ## What's new in 1.2.1 (privacy hardening + save-name lookups)
 
