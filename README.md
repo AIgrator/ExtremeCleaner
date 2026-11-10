@@ -19,6 +19,17 @@ and understand what each of them is before you delete anything.
   Adobe, Ubisoft, goose) were found and fixed with a per-rule `exclude` field:
   umbrella rows now show only the files they own.
 
+## What's new in 1.3.1 (per-model rows for Scribe speech models)
+
+- **Scribe speech-recognition models** now get their own spot on the User data
+  tab: the hub scans `%LOCALAPPDATA%\Scribe\models` (developer-confirmed
+  layout `models/<language>/<model>`) and lists every model that is actually
+  installed — vosk language packs, punctuation models — one row per model.
+  Nothing installed means no row at all.
+- Generic mechanism: any future rule can set `discover: subfolders` +
+  `discover_depth: N` to turn real folders into per-folder rows, like the
+  OneDrive hub does.
+
 ## What's new in 1.3.0 (OneDrive done right: one folder = one row)
 
 - **Redirect-aware library paths.** The app no longer guesses `%USERPROFILE%\Documents`.
