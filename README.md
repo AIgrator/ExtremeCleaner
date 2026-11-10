@@ -5,7 +5,7 @@ and understand what each of them is before you delete anything.
 
 ![Status](https://img.shields.io/badge/status-beta-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-1.3.0-brightgreen)
+![Version](https://img.shields.io/badge/version-1.3.1-brightgreen)
 
 ## What's new in 1.1.2 (honest sizes)
 

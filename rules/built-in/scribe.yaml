@@ -1,0 +1,15 @@
+# Scribe (this project family's speech-to-text app) keeps its downloaded
+# speech models as user data: deleting a model only makes the app re-download
+# it on next use. Official source: the Scribe app itself - developer-confirmed
+# layout models/<language>/<model> under %LOCALAPPDATA%\Scribe.
+- id: scribe-speech-models
+  name: Scribe speech-recognition models
+  path: "{LOCALAPPDATA}/Scribe/models"
+  discover: subfolders
+  discover_depth: 2
+  kind: manual
+  category: ai_models
+  safe: careful
+  tier: userdata
+  describe: "Voice models downloaded by Scribe (vosk language packs, punctuation). One installed model = one row; nothing here if Scribe has none. Deleting a model deletes YOUR download - the app re-downloads it on next use, so remove only if you no longer use that language/model"
+  os: [windows]

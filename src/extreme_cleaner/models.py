@@ -53,6 +53,7 @@ class Rule:
     user_made: bool = False
     pin: bool = False
     always_show: bool = False  # row stays visible with 0 bytes (library-style rules)
+    discover_depth: int = 1  # for discover: subfolders — how deep model folders nest
     exec: bool = False
     processes: list[str] = field(default_factory=list)  # exe names to warn about if running
 

@@ -670,25 +670,41 @@ def _expand_subfolder_options(rule: Rule) -> list:
     Library folders redirected into the base (Known Folder Move) still appear
     here, but the GUI tie logic hides them: those bytes are shown once under
     the 'Your folders' rows that Explorer resolves to the same path.
+    With discover_depth > 1 each row is a directory `depth` levels under the
+    base, named by its relative path (Scribe's models/<lang>/<model> pattern).
     """
     import hashlib
     import re as _re
 
     base = expand_rule_path(rule.path)
-    try:
-        dirs = sorted((p for p in base.iterdir() if p.is_dir()), key=lambda p: p.name.lower())
-    except OSError:
-        return []
+    depth = max(1, int(rule.discover_depth or 1))
+    dirs: list = []
+
+    def walk(cur, level: int) -> None:
+        try:
+            subs = sorted((p for p in cur.iterdir() if p.is_dir()), key=lambda p: p.name.lower())
+        except OSError:
+            return
+        for p in subs:
+            if p.name.startswith((".", "~$")):
+                continue
+            if level >= depth:
+                dirs.append(p)
+            else:
+                walk(p, level + 1)
+
+    walk(base, 1)
     opts: list = []
     for p in dirs:
-        name = p.name
+        rel = p.relative_to(base).as_posix() if depth > 1 else p.name
+        name = p.name if depth > 1 else rel
         if name.startswith((".", "~$")):
             continue  # service clutter, temp sync stubs
         slug = _re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-") or "sub"
         opts.append(
             RuleOption(
                 id=f"{slug}-{hashlib.md5(name.encode('utf-8')).hexdigest()[:8]}",
-                name=name,
+                name=rel,
                 path=str(p),
                 kind="manual",
                 safe=rule.safe or "careful",

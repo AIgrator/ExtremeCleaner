@@ -135,6 +135,7 @@ def _dict_to_rule(d: dict, file_group: str = "", user_made: bool = False) -> Rul
         keep=list(d.get("keep", [])),
         options=[_dict_to_option(o) for o in d.get("options", []) if isinstance(o, dict)],
         discover=str(d.get("discover", "")),
+        discover_depth=int(d.get("discover_depth", 1) or 1),
         auto_keep=str(d.get("auto_keep", "")),
         exe=str(d.get("exe", "")),
         exclude=list(d.get("exclude", [])),
