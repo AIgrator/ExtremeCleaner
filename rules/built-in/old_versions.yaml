@@ -1,6 +1,11 @@
 # Old program versions: versioned siblings next to the ACTIVE one.
 # `keep` = manual active-version names; auto_keep: exe = active detected from
-# FileVersion of `exe` in the parent dir (falls back to the child holding the exe).
+# FileVersion of `exe` in the parent dir (fallback: installer_status.json in
+# the parent, then the child holding the exe).
+# Safety invariants: the NEWEST version dir is never offered for deletion, and
+# neither is a dir newer than the detected active one (a staged update). The
+# 1.3.x Opera incident: launcher still reported .18, the .36 update had already
+# landed, .36 was deleted as "old" and the browser stopped starting.
 - id: opera-old-versions
   name: Opera old versions
   path: ""
@@ -12,7 +17,7 @@
   exe: opera.exe
   category: old_versions
   safe: careful
-  describe: "Updates leave old version dirs (~400MB each); active detected from opera.exe FileVersion"
+  describe: "Updates leave old version dirs (~400MB each). The newest version and the one opera.exe/installation_status.json reports are never offered"
   processes: [opera.exe]
   os: [windows]
 - id: chrome-old-versions-machine

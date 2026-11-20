@@ -122,6 +122,40 @@ def _safe_exists(p: Path) -> bool:
         return False
 
 
+def _version_race_reason(p: str) -> str:
+    """Block deleting a version dir that became the newest/installed after the scan.
+
+    The scan is a snapshot; a browser/IDE update may finish between the scan and
+    the click. Re-check at planning time: an installer looks like a directory
+    with an exe (or installation_status.json) at the top and version-named
+    subdirectories. Deleting the newest one is exactly the 1.3.x Opera breakage.
+    """
+    from .scanner import _installed_version, _version_key
+
+    path = Path(p)
+    try:
+        if not path.is_dir() or not _version_key(path.name):
+            return ""
+    except OSError:
+        return ""
+    parent = path.parent
+    installed = _installed_version(parent)
+    if installed and installed.lower() == path.name.lower():
+        return "installer now reports this version as installed"
+    try:
+        looks_like_install = bool(installed) or any(
+            c.is_file() and c.suffix.lower() == ".exe" for c in parent.iterdir()
+        )
+        if not looks_like_install:
+            return ""
+        versions = [c for c in parent.iterdir() if c.is_dir() and _version_key(c.name)]
+    except OSError:
+        return ""
+    if versions and max(versions, key=lambda c: _version_key(c.name)).name.lower() == path.name.lower():
+        return "this is now the newest version (an update finished after the scan)"
+    return ""
+
+
 def plan_deletion(results: list[ScanResult]) -> tuple[list[CleanAction], list[str]]:
     """Build actions for CHECKED safe-tab leaves. Returns (actions, blocked_reasons)."""
     actions: list[CleanAction] = []
@@ -161,13 +195,17 @@ def plan_deletion(results: list[ScanResult]) -> tuple[list[CleanAction], list[st
                 if is_sacred(p):
                     blocked.append(f"{p}: sacred name, skipped")
                     continue
+                race = _version_race_reason(p)
+                if race:
+                    blocked.append(f"{p}: blocked ({race})")
+                    continue
                 actions.append(CleanAction(f"{rule.name}: {p}", "delete", [p], size_bytes=leaf.size_bytes))
     # Drop file actions nested inside dir actions (dir delete covers them; avoids double estimate).
-    dirs = {a.paths[0] for a in actions if a.kind == "delete" and Path(a.paths[0]).is_dir()}
+    dirs = {a.paths[0] for a in actions if a.kind == "delete" and a.paths and Path(a.paths[0]).is_dir()}
     if dirs:
         kept = []
         for a in actions:
-            if a.kind == "delete" and any(
+            if a.kind == "delete" and a.paths and any(
                 _norm(a.paths[0]) != _norm(d) and _norm(a.paths[0]).startswith(_norm(d) + os.sep) for d in dirs
             ):
                 continue

@@ -5,7 +5,27 @@ and understand what each of them is before you delete anything.
 
 ![Status](https://img.shields.io/badge/status-beta-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-1.3.1-brightgreen)
+![Version](https://img.shields.io/badge/version-1.3.2-brightgreen)
+
+## What's new in 1.3.2 (old versions: never touch a fresh update)
+
+- **Update-race fix (Opera).** The "Old versions" rules could delete a version
+  folder while the product was updating: Opera had already unpacked
+  `140.0.6074.36`, but its launcher still reported `140.0.6074.18`, so `.36`
+  looked like junk. Once the update finished, the launcher pointed at the
+  deleted folder and the browser stopped starting ("parallel configuration is
+  incorrect"). Four safeguards now prevent that class of bug:
+  - the **newest version directory is never offered** for deletion;
+  - a directory **newer than the detected active version** is treated as a
+    staged update, not as junk;
+  - the installer's own `installation_status.json` (the version the product
+    says it has installed) counts as active, not just the launcher exe's
+    FileVersion;
+  - **plan-time re-check**: if an update finishes between the scan and the
+    "Delete" click, the path is blocked with a reason instead of deleted.
+- **Regression tests** cover all four cases (scan + plan) in
+  `tests/test_rules.py`.
+- Empty fallback delete actions no longer crash the deletion planner.
 
 ## What's new in 1.1.2 (honest sizes)
 

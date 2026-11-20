@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 import threading
 from dataclasses import dataclass
 from pathlib import Path
@@ -1001,12 +1002,44 @@ def _exe_file_version(path) -> str:
         return ""
 
 
+def _version_key(name: str) -> tuple[int, ...]:
+    """Numeric version tuple from a dir name: '140.0.6074.36' -> (140,0,6074,36)."""
+    return tuple(int(p) for p in re.findall(r"\d+", name))
+
+
+def _installed_version(parent: Path) -> str:
+    """Version dir named by the installer's own status file (Opera/Chromium style).
+
+    The product writes `installation_status.json` with `_subfolder`/`version`
+    as the last thing its updater does — more authoritative than the launcher
+    stub's FileVersion, which can lag one update behind.
+    """
+    import json
+
+    try:
+        data = json.loads((parent / "installation_status.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return ""
+    if not isinstance(data, dict):
+        return ""
+    for key in ("_subfolder", "version"):
+        val = str(data.get(key) or "").strip()
+        if val:
+            return val
+    return ""
+
+
 def _scan_old_versions(rule: Rule) -> ScanResult:
     """Enumerate versioned children in parent, skip active (keep) ones.
 
     Active version is never touched: manual `keep` names, plus
-    auto_keep=exe (FileVersion of rule.exe at the parent root, else the
-    child dir containing the exe) and auto_keep=android-avd.
+    auto_keep=exe (FileVersion of rule.exe at the parent root, installer
+    status file, else the child dir containing the exe) and
+    auto_keep=android-avd.
+    Safety invariants (the 1.3.x Opera incident): the newest version dir is
+    never offered for deletion, and neither is a dir NEWER than the detected
+    active one — that is a staged update, not junk. Deleting the newest dir
+    can break the product when the launcher switches to it afterwards.
     Returns one child ScanResult per stale version dir so the GUI gets
     per-version checkboxes and deletion gets concrete paths.
     """
@@ -1022,8 +1055,14 @@ def _scan_old_versions(rule: Rule) -> ScanResult:
         children = sorted(parent.glob(rule.match), key=lambda p: p.name.lower())
     except OSError:
         return ScanResult(rule, True, 0, 0, 1, str(parent))
+    active = ""
     if rule.auto_keep == "exe" and rule.exe:
         active = _exe_file_version(parent / rule.exe)
+        status = _installed_version(parent)
+        if status and (parent / status).is_dir():
+            keep.add(status.lower())
+            if _version_key(status) > _version_key(active or ""):
+                active = status  # updater already switched, stub not yet
         if active and (parent / active).is_dir():
             keep.add(active.lower())
         else:  # no exe at root: keep dirs that contain it (their copy is in use)
@@ -1031,12 +1070,29 @@ def _scan_old_versions(rule: Rule) -> ScanResult:
                 keep |= {c.name.lower() for c in children if c.is_dir() and (c / rule.exe).is_file()}
             except OSError:
                 pass
+    active_key = _version_key(active) if active else ()
+    keys: dict[str, tuple[int, ...]] = {}
+    for c in children:
+        try:
+            if c.is_dir():
+                k = _version_key(c.name)
+                if k:
+                    keys[c.name.lower()] = k
+        except OSError:
+            continue
+    newest = max(keys.values(), default=())
     total, count, errors, found = 0, 0, 0, False
     scored: list[tuple[str, int]] = []
     kids: list[ScanResult] = []
     for child in children:
         if child.name.lower() in keep:
             continue
+        vk = keys.get(child.name.lower())
+        if vk:
+            if newest and vk >= newest:
+                continue  # never propose the newest version (rollback/update in flight)
+            if active_key and vk > active_key:
+                continue  # newer than the version in use: a staged update, not junk
         try:
             if child.is_symlink():
                 continue

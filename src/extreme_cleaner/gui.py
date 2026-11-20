@@ -667,7 +667,7 @@ class MainWindow(QMainWindow):
         "empty_bin": "EMPTY the Recycle Bin permanently (no undo!)",
         "run_command": "Official cleanup / instructions",
         "clean_selected": "Delete selected subfolders",
-        "old_versions": "Delete only inactive versions (active one excluded)",
+        "old_versions": "Delete only inactive versions (newest + active one excluded)",
         "manual": "Manual review in Explorer (program never deletes)",
     }
     SAFE_LABEL = {
@@ -1302,11 +1302,12 @@ class MainWindow(QMainWindow):
         top.addWidget(icon_lbl)
         info = QLabel(
             "<b>ExtremeCleaner</b><br>"
-            "Version: 1.3.1<br>"
+            "Version: 1.3.2<br>"
             "Author: Yaroslav Litovchenko<br>"
             'Email: <a href="mailto:aigrator@gmail.com">aigrator@gmail.com</a><br>'
+            'Website: <a href="https://aigrator.github.io/extremecleaner/">aigrator.github.io/extremecleaner</a><br>'
             'GitHub page: <a href="https://github.com/AIgrator/ExtremeCleaner">github.com/AIgrator/ExtremeCleaner</a><br>'
-            'Home page: <a href="https://ExtremeCleaner.sourceforge.net">ExtremeCleaner.sourceforge.net</a><br>'
+            'SourceForge: <a href="https://sourceforge.net/projects/extremecleaner/">sourceforge.net/projects/extremecleaner</a><br>'
             'Bugs/Suggestions: <a href="https://github.com/AIgrator/ExtremeCleaner/issues">github.com/AIgrator/ExtremeCleaner/issues</a>'
         )
         info.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse
@@ -1669,6 +1670,11 @@ def main() -> int:
             time.sleep(0.05)
         app.processEvents()
         scanned = window._worker is None or not window._worker.isRunning()
+        # Drain queued partial-chunk signals: a windowed exe has no stdout, and
+        # reading _results too early made smoke counts flaky by one rule.
+        for _ in range(40):
+            app.processEvents()
+            time.sleep(0.02)
         top = sorted(window._results, key=lambda r: r.size_bytes, reverse=True)[:10]
         from extreme_cleaner import cleaner as _C
 
@@ -1694,6 +1700,7 @@ def main() -> int:
             f"scan_done={scanned}",
             f"build={build_label()}",
             f"results={len(window._results)}",
+            "ids=" + ",".join(sorted(r.rule.id for r in window._results)),
             "bin=" + repr([(r.size_bytes, r.files) for r in window._results if r.rule.id == "recycle-bin"]),
             f"sub={sub_procs}",
             f"probe={probe}",
